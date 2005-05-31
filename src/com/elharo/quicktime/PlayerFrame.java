@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 
 import quicktime.*;
 import quicktime.app.view.*;
+import quicktime.qd.GDevice;
 import quicktime.qd.QDDimension;
 import quicktime.qd.QDRect;
 import quicktime.std.StdQTException;
@@ -29,7 +30,7 @@ public final class PlayerFrame extends JFrame {
     private final static int CONTROL_BAR_HEIGHT = 16;
     // surely there's  way to get the height of the title bar programmatically????
     private int frameExtras;
-    private static final int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+    static final int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
     public PlayerFrame() throws QTException {
         this("Amateur Player");
@@ -334,23 +335,7 @@ public final class PlayerFrame extends JFrame {
         
         JMenu fileMenu = new JMenu("File");
         
-        JMenuItem newPlayer = new JMenuItem("New Player");
-        newPlayer.setAccelerator(KeyStroke.getKeyStroke('N', menuShortcutKeyMask));        
-        newPlayer.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    PlayerFrame f = new PlayerFrame();
-                    f.show();
-                }
-                catch (QTException e) {
-                    // ???? Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            
-        });
-        fileMenu.add(newPlayer);
+        fileMenu.add(new NewPlayerAction());
         
         JMenuItem newMovieRecording = new JMenuItem("New Movie Recording");
         newMovieRecording.setAccelerator(KeyStroke.getKeyStroke('N', menuShortcutKeyMask | InputEvent.ALT_MASK));        
@@ -449,18 +434,25 @@ public final class PlayerFrame extends JFrame {
     
     private class FullScreenListener implements ActionListener {
     
+        private FullScreen f = new FullScreen();
+        
         public void actionPerformed(ActionEvent event) {
             if (fullScreen) {
                 fullScreen = false;
+                try {
+                    f.endFullScreen();
+                }
+                catch (StdQTException e) {
+                    // ???? Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
             else {
-                fullScreen = true;
-                FullScreen f = new FullScreen();
+                
                 try {
-                    f.beginFullScreen(0); // int constants????
-                    QDDimension size = f.getSizeOfMainScreen();
+                    f.beginFullScreen(GDevice.get(), movieWidth, movieHeight, 0); // int constants????
                     // XXX need to maintain ratio
-                    setSize(size.getWidth(), size.getHeight());
+                    fullScreen = true;
                 }
                 catch (StdQTException e) {
                     // ???? Auto-generated catch block
