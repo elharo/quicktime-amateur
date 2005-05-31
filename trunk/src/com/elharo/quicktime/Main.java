@@ -10,6 +10,11 @@ public class Main {
         System.setProperty("apple.awt.showGrowBox", "true");
         QuicktimeInit.setup();
         PlayerFrame frame = new PlayerFrame();
+        WindowList.INSTANCE.add(frame);
+        // move this off the screen
+        // first frame is just for menu bar
+        frame.setSize(1, 1);
+        frame.setLocation(10000, 10000);
         frame.show();
     }
 

@@ -24,6 +24,7 @@ class NewPlayerAction extends AbstractAction {
     public void actionPerformed(ActionEvent event) {
         try {
             PlayerFrame f = new PlayerFrame();
+            WindowList.INSTANCE.add(f);
             f.show();
         }
         catch (QTException e) {
