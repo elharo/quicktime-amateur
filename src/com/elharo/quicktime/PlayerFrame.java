@@ -151,9 +151,7 @@ public final class PlayerFrame extends JFrame {
         
         windowMenu.addSeparator();
  
-        JMenuItem bringAllToFront = new JMenuItem("Bring All To Front");
-        bringAllToFront.setEnabled(false);
-        windowMenu.add(bringAllToFront);
+        windowMenu.add(new BringAllToFrontAction());
         
         menubar.add(windowMenu);
     }

@@ -27,6 +27,7 @@ class CloseAction extends AbstractAction {
     public void actionPerformed(ActionEvent event) {
         frame.hide();
         frame.dispose();
+        WindowList.INSTANCE.remove(frame);
     }
 
 }
