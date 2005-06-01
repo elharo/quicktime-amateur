@@ -3,11 +3,15 @@ package com.elharo.quicktime;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import quicktime.*;
 import quicktime.app.view.*;
@@ -50,6 +54,26 @@ public final class PlayerFrame extends JFrame {
         c = qc.asComponent();
         this.getContentPane().add(c);
         this.pack();
+        this.addKeyListener(new KeyListener() {
+
+            public void keyTyped(KeyEvent event) {
+
+                System.err.println((int) event.getKeyChar());
+                if (fullScreen) {
+                    if (event.getKeyChar() == KeyEvent.VK_ESCAPE || event.getKeyChar() == KeyEvent.VK_F) {
+                        GraphicsEnvironment.getLocalGraphicsEnvironment().
+                          getDefaultScreenDevice().setFullScreenWindow(null);
+                        fullScreen = false;
+                    }
+                }
+                
+            }
+
+            public void keyPressed(KeyEvent event) {}
+            public void keyReleased(KeyEvent event) {}
+            
+        
+        });
         initMovieDimensions();
     }
 
@@ -165,7 +189,7 @@ public final class PlayerFrame extends JFrame {
         
         JMenuItem fullScreen = new JMenuItem("Full Screen");
         fullScreen.setAccelerator(KeyStroke.getKeyStroke('F', menuShortcutKeyMask));
-        fullScreen.addActionListener(new FullScreenListener());
+        fullScreen.addActionListener(new FullScreenListener(this));
         viewMenu.add(fullScreen);
         
         viewMenu.addSeparator();
@@ -432,28 +456,41 @@ public final class PlayerFrame extends JFrame {
     private class FullScreenListener implements ActionListener {
     
         private FullScreen f = new FullScreen();
+        private Frame frame;
+        
+        FullScreenListener(Frame f) {
+            this.frame = f;
+        }
         
         public void actionPerformed(ActionEvent event) {
+            
             if (fullScreen) {
                 fullScreen = false;
                 try {
-                    f.endFullScreen();
+                    GraphicsEnvironment.getLocalGraphicsEnvironment().
+                      getDefaultScreenDevice().setFullScreenWindow(null);
+                    // f.endFullScreen();
                 }
-                catch (StdQTException e) {
+                catch (Exception ex) {
                     // ???? Auto-generated catch block
-                    e.printStackTrace();
+                    ex.printStackTrace();
                 }
             }
             else {
                 
                 try {
-                    f.beginFullScreen(GDevice.get(), movieWidth, movieHeight, 0); // int constants????
+                    
+                    // turn off frame decoration????
+                    
+                    GraphicsEnvironment.getLocalGraphicsEnvironment().
+                      getDefaultScreenDevice().setFullScreenWindow(frame);
+                    // f.beginFullScreen(GDevice.get(), movieWidth, movieHeight, 0); // int constants????
                     // XXX need to maintain ratio
                     fullScreen = true;
                 }
-                catch (StdQTException e) {
+                catch (Exception ex) {
                     // ???? Auto-generated catch block
-                    e.printStackTrace();
+                    ex.printStackTrace();
                 }
             }
         }
