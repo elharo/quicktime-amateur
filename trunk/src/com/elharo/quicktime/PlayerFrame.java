@@ -368,10 +368,7 @@ public final class PlayerFrame extends JFrame {
         openRecent.setEnabled(false);
         fileMenu.add(openRecent);
         
-        JMenuItem close = new JMenuItem("Close");
-        close.setAccelerator(KeyStroke.getKeyStroke('W', menuShortcutKeyMask));        
-        close.setEnabled(false);
-        fileMenu.add(close);
+        fileMenu.add(new CloseAction(this));
         
         fileMenu.addSeparator();
         
