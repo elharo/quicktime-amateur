@@ -26,6 +26,7 @@ public class FileOpener implements ActionListener {
             OpenMovieFile omFile = OpenMovieFile.asRead(file);
             Movie m = Movie.fromFile(omFile);
             PlayerFrame f = new PlayerFrame(file.getName(), m);
+            WindowList.INSTANCE.add(f);
             f.show();
         }
         catch (QTIOException ex) {

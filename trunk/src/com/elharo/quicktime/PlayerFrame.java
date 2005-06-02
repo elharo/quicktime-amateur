@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
+import java.awt.MenuComponent;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Iterator;
 
 import quicktime.*;
 import quicktime.app.view.*;
@@ -31,11 +33,13 @@ public final class PlayerFrame extends JFrame {
     private int movieWidth = -1;
     private Component c;
     private boolean fullScreen = false;
+    private JMenu windowMenu;
     
     private final static int CONTROL_BAR_HEIGHT = 16;
     // surely there's  way to get the height of the title bar programmatically????
     private int frameExtras;
     static final int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+    private static final int NUMBER_OF_WINDOW_MENU_ITEMS = 10;
 
     public PlayerFrame() throws QTException {
         this("Amateur Player");
@@ -98,7 +102,7 @@ public final class PlayerFrame extends JFrame {
     }
 
     private void initWindowMenu(JMenuBar menubar) {
-        JMenu windowMenu = new JMenu("Window");
+        windowMenu = new JMenu("Window");
         
         JMenuItem minimize = new JMenuItem("Minimize");
         minimize.setAccelerator(KeyStroke.getKeyStroke('M', menuShortcutKeyMask));
@@ -153,7 +157,52 @@ public final class PlayerFrame extends JFrame {
  
         windowMenu.add(new BringAllToFrontAction());
         
+        windowMenu.addSeparator();
+        
+        WindowList list = WindowList.INSTANCE;
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext()) {
+            PlayerFrame frame = (PlayerFrame) iterator.next();
+            this.windowMenu.add(new WindowMenuItem(frame));
+        }        
+        
         menubar.add(windowMenu);
+    }
+    
+    public void show() {
+        WindowList list = WindowList.INSTANCE;
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext()) {
+            PlayerFrame frame = (PlayerFrame) iterator.next();
+            frame.windowMenu.add(new WindowMenuItem(this));
+        }
+        super.show();
+    }
+    
+
+    public void hide() {
+        super.hide();
+        Iterator iterator = WindowList.INSTANCE.iterator();
+        while (iterator.hasNext()) {
+            PlayerFrame frame = (PlayerFrame) iterator.next();
+            frame.removeWindowMenuItem(this);
+        }        
+    }
+
+    private void removeWindowMenuItem(PlayerFrame frame) {
+
+        Component[] items = windowMenu.getMenuComponents();
+        for (int i = items.length-1; i > NUMBER_OF_WINDOW_MENU_ITEMS; i--) {
+            if (items[i] instanceof WindowMenuItem) {
+                WindowMenuItem item = (WindowMenuItem) items[i];
+                if (item.getFrame() == frame) {
+                    windowMenu.remove(item);
+                    break;   
+                }    
+            }
+            else break;
+        }
+        
     }
 
     private void initViewMenu(JMenuBar menubar) {
