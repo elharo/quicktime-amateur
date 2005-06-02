@@ -316,11 +316,7 @@ public final class PlayerFrame extends JFrame {
         
         editMenu.addSeparator();
 
-        JMenuItem cut = new JMenuItem("Cut");
-        cut.setAccelerator(KeyStroke.getKeyStroke('X', menuShortcutKeyMask, false));
-        cut.setEnabled(false);
-        editMenu.add(cut);
-        
+        editMenu.add(new CutAction(movie));
         editMenu.add(new CopyAction(movie));
         
         JMenuItem paste = new JMenuItem("Paste");
