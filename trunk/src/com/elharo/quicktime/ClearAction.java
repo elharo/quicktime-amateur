@@ -1,5 +1,5 @@
 /*
- * Created on May 31, 2005
+ * Created on Jun 2, 2005
  *
  * To change the template for this generated file go to
  * Window>Preferences>Java>Code Generation>Code and Comments
@@ -13,23 +13,21 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import quicktime.QTException;
-import quicktime.app.players.QTPlayer;
+import quicktime.std.movies.Movie;
 
-class NewPlayerAction extends AbstractAction {
+class ClearAction extends AbstractAction {
+
+    private Movie movie;
+
+    ClearAction(Movie movie) {
+        this.movie = movie;
+        putValue(Action.NAME, "Delete");  
+    } 
     
-    private static int untitledCount = 1;
-
-    NewPlayerAction() {
-        putValue(Action.NAME, "New Player");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('N', PlayerFrame.menuShortcutKeyMask));  
-    }
     
     public void actionPerformed(ActionEvent event) {
         try {
-            PlayerFrame f = new PlayerFrame("Untitled " + untitledCount++);
-            WindowList.INSTANCE.add(f);
-            f.show();
-            
+            movie.clearSelection();
         }
         catch (QTException e) {
             // ???? Auto-generated catch block

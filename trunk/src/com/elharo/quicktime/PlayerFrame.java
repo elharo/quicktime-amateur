@@ -17,6 +17,7 @@ import java.awt.event.MouseListener;
 import java.util.Iterator;
 
 import quicktime.*;
+import quicktime.app.players.QTPlayer;
 import quicktime.app.view.*;
 import quicktime.qd.GDevice;
 import quicktime.qd.QDDimension;
@@ -35,7 +36,7 @@ public final class PlayerFrame extends JFrame {
     private boolean fullScreen = false;
     private JMenu windowMenu;
     
-    private final static int CONTROL_BAR_HEIGHT = 16;
+    private final static int CONTROL_BAR_HEIGHT = 16; // ???? MovieController.getRequiredSize()? getWindowRgn?
     // surely there's  way to get the height of the title bar programmatically????
     private int frameExtras;
     static final int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -52,9 +53,9 @@ public final class PlayerFrame extends JFrame {
 
     public PlayerFrame(String title, Movie m) throws QTException {
         super(title);
-        setupMenuBar();
         this.movie = m;
         controller = new MovieController(m);
+        setupMenuBar();
         QTComponent qc = QTFactory.makeQTComponent(controller);
         c = qc.asComponent();
         this.getContentPane().add(c);
@@ -320,19 +321,14 @@ public final class PlayerFrame extends JFrame {
         cut.setEnabled(false);
         editMenu.add(cut);
         
-        JMenuItem copy = new JMenuItem("Copy");
-        copy.setAccelerator(KeyStroke.getKeyStroke('C', menuShortcutKeyMask, false));
-        copy.setEnabled(false);
-        editMenu.add(copy);
+        editMenu.add(new CopyAction(movie));
         
         JMenuItem paste = new JMenuItem("Paste");
         paste.setAccelerator(KeyStroke.getKeyStroke('V', menuShortcutKeyMask, false));
         paste.setEnabled(false);
         editMenu.add(paste);
         
-        JMenuItem delete = new JMenuItem("Delete");
-        delete.setEnabled(false);
-        editMenu.add(delete);
+        editMenu.add(new ClearAction(movie));
         
         editMenu.addSeparator();
 
