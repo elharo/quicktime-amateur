@@ -29,8 +29,8 @@ class CopyAction extends AbstractAction {
     
     public void actionPerformed(ActionEvent arg0) {
         try {
-            movie.copySelection();
-            // XXX does this get on the clipboard automatically? or do we need to put it there?
+            Movie copy = movie.copySelection();
+            copy.putOnScrap(0);
         }
         catch (QTException e) {
             // ???? Auto-generated catch block
