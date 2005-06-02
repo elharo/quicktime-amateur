@@ -332,10 +332,7 @@ public final class PlayerFrame extends JFrame {
         
         editMenu.addSeparator();
 
-        JMenuItem selectAll = new JMenuItem("Select All");
-        selectAll.setAccelerator(KeyStroke.getKeyStroke('A', menuShortcutKeyMask));
-        selectAll.setEnabled(false);
-        editMenu.add(selectAll);
+        editMenu.add(new SelectAllAction(movie));
         
         JMenuItem selectNone = new JMenuItem("Select None");
         selectNone.setAccelerator(KeyStroke.getKeyStroke('B', menuShortcutKeyMask, false));
