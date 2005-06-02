@@ -50,7 +50,6 @@ public final class PlayerFrame extends JFrame {
     public PlayerFrame(String title) throws QTException {
         this(title, new Movie(StdQTConstants.newMovieActive));
         this.setSize(640, 480);
-        this.controller.enableEditing(true);
     }
 
     public PlayerFrame(String title, Movie m) throws QTException {
@@ -72,6 +71,7 @@ public final class PlayerFrame extends JFrame {
             }
         });  
         initMovieDimensions();
+        this.controller.enableEditing(true);
     }
 
     public PlayerFrame(Movie m) throws QTException {
