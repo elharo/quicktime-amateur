@@ -15,6 +15,8 @@ import javax.swing.KeyStroke;
 import quicktime.QTException;
 
 class NewPlayerAction extends AbstractAction {
+    
+    private static int untitledCount = 1;
 
     NewPlayerAction() {
         putValue(Action.NAME, "New Player");  
@@ -23,7 +25,7 @@ class NewPlayerAction extends AbstractAction {
     
     public void actionPerformed(ActionEvent event) {
         try {
-            PlayerFrame f = new PlayerFrame();
+            PlayerFrame f = new PlayerFrame("Untitled " + untitledCount++);
             WindowList.INSTANCE.add(f);
             f.show();
         }
