@@ -333,11 +333,7 @@ public final class PlayerFrame extends JFrame {
         editMenu.addSeparator();
 
         editMenu.add(new SelectAllAction(movie));
-        
-        JMenuItem selectNone = new JMenuItem("Select None");
-        selectNone.setAccelerator(KeyStroke.getKeyStroke('B', menuShortcutKeyMask, false));
-        selectNone.setEnabled(false);
-        editMenu.add(selectNone);
+        editMenu.add(new SelectNoneAction(movie));
         
         editMenu.addSeparator();
         
