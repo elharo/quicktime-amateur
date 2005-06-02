@@ -280,10 +280,7 @@ public final class PlayerFrame extends JFrame {
 
         viewMenu.addSeparator();
 
-        JMenuItem playAllMovies = new JMenuItem("Play All Movies");
-        playAllMovies.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, menuShortcutKeyMask));
-        playAllMovies.setEnabled(false);
-        viewMenu.add(playAllMovies);
+        viewMenu.add(new PlayAllMoviesAction());
 
         viewMenu.addSeparator();
 
@@ -532,6 +529,12 @@ public final class PlayerFrame extends JFrame {
             }
         }
 
+    }
+
+    public void play() throws StdQTException {
+        if (movie != null) {
+            controller.play(1.0f);
+        }
     }
 
     
