@@ -25,7 +25,7 @@ public class FileOpener implements ActionListener {
             QTFile file = QTFile.standardGetFilePreview(QTFile.kStandardQTFileTypes);
             OpenMovieFile omFile = OpenMovieFile.asRead(file);
             Movie m = Movie.fromFile(omFile);
-            PlayerFrame f = new PlayerFrame(m);
+            PlayerFrame f = new PlayerFrame(file.getName(), m);
             f.show();
         }
         catch (QTIOException ex) {

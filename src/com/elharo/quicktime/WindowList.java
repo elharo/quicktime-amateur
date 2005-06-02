@@ -6,7 +6,9 @@
  */
 package com.elharo.quicktime;
 
+import java.awt.Frame;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 class WindowList {
@@ -21,5 +23,13 @@ class WindowList {
     
     static WindowList INSTANCE = new WindowList();
     
+    
+    Iterator iterator() {
+        return windows.iterator();
+    }
+
+    public void remove(Frame frame) {
+        windows.remove(frame);
+    }
     
 }
