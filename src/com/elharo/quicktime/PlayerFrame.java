@@ -22,6 +22,7 @@ import quicktime.app.view.*;
 import quicktime.qd.GDevice;
 import quicktime.qd.QDDimension;
 import quicktime.qd.QDRect;
+import quicktime.std.StdQTConstants;
 import quicktime.std.StdQTException;
 import quicktime.std.movies.*;
 import javax.swing.*;
@@ -47,8 +48,9 @@ public final class PlayerFrame extends JFrame {
     }
 
     public PlayerFrame(String title) throws QTException {
-        this(title, new Movie());
+        this(title, new Movie(StdQTConstants.newMovieActive));
         this.setSize(640, 480);
+        this.controller.enableEditing(true);
     }
 
     public PlayerFrame(String title, Movie m) throws QTException {
@@ -318,12 +320,7 @@ public final class PlayerFrame extends JFrame {
 
         editMenu.add(new CutAction(movie));
         editMenu.add(new CopyAction(movie));
-        
-        JMenuItem paste = new JMenuItem("Paste");
-        paste.setAccelerator(KeyStroke.getKeyStroke('V', menuShortcutKeyMask, false));
-        paste.setEnabled(false);
-        editMenu.add(paste);
-        
+        editMenu.add(new PasteAction(controller, this));
         editMenu.add(new ClearAction(movie));
         
         editMenu.addSeparator();
