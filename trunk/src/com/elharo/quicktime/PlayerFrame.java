@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
 import java.awt.MenuComponent;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -518,6 +519,29 @@ public final class PlayerFrame extends JFrame {
             controller.play(1.0f);
         }
     }
+    
+    
+   public Dimension getPreferredSize() {
+
+      try {
+          QDRect controllerRect = controller.getBounds();
+          Dimension componentPreferredSize = c.getPreferredSize( );
+          Insets insets = this.getInsets();
+          if (controllerRect.getHeight() > componentPreferredSize.height) {
+              return new Dimension (
+                controllerRect.getWidth() + insets.left + insets.right,
+                controllerRect.getHeight() + insets.top + insets.bottom);
+          } 
+          else {
+              return new Dimension (
+                componentPreferredSize.width + insets.left + insets.right,
+                componentPreferredSize.height + insets.top + insets.bottom);
+          }
+      } 
+      catch (QTException ex) {
+          return new Dimension (0,0);
+      }
+  }
 
     
 }
