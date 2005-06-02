@@ -308,10 +308,7 @@ public final class PlayerFrame extends JFrame {
     private void initEditMenu(JMenuBar menubar) {
         JMenu editMenu = new JMenu("Edit");
         
-        JMenuItem undo = new JMenuItem("Undo");
-        undo.setEnabled(false);
-        undo.setAccelerator(KeyStroke.getKeyStroke('Z', menuShortcutKeyMask, false));
-        editMenu.add(undo);
+        editMenu.add(new UndoAction(controller));
         
         JMenuItem redo = new JMenuItem("Redo");
         redo.setEnabled(false);
