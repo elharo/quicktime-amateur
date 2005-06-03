@@ -26,7 +26,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import quicktime.QTException;
-import quicktime.std.StdQTException;
 import quicktime.std.clocks.TimeRecord;
 import quicktime.std.movies.Movie;
 import quicktime.std.movies.MovieController;
@@ -50,8 +49,9 @@ class GoToPosterFrameAction extends AbstractAction {
                 controller.movieChanged();
             }
             else {
-                TimeRecord tr = new TimeRecord(600, movie.getTimeScale());
-                controller.goToTime(tr);
+                TimeRecord tr = new TimeRecord(posterTime, movie.getTimeScale());
+                movie.setTime(tr);
+                controller.movieChanged();
             }
         }
         catch (QTException e) {
