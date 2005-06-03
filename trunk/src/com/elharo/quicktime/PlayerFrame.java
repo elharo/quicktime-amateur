@@ -361,9 +361,7 @@ public final class PlayerFrame extends JFrame {
         
         editMenu.addSeparator();
         
-        JMenuItem trimToSelection = new JMenuItem("Trim to Selection");
-        trimToSelection.setEnabled(false);
-        editMenu.add(trimToSelection);
+        editMenu.add(new TrimToSelectionAction(controller));
         
         editMenu.addSeparator();
 
