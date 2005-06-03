@@ -32,10 +32,10 @@ import quicktime.std.movies.MovieController;
 
 class CutAction extends AbstractAction {
 
-    private MovieController controller;
+    private PlayerFrame frame;
 
-    CutAction(MovieController controller) {
-        this.controller = controller;
+    CutAction(PlayerFrame frame) {
+        this.frame = frame;
         putValue(Action.NAME, "Cut");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('X', PlayerFrame.menuShortcutKeyMask));  
     } 
@@ -43,10 +43,7 @@ class CutAction extends AbstractAction {
     
     public void actionPerformed(ActionEvent event) {
         try {
-            Movie movie = controller.getMovie();
-            Movie copy = controller.cut();
-            copy.putOnScrap(0);
-            controller.movieEdited();
+            frame.undoableCut();
         }
         catch (QTException e) {
             // ???? Auto-generated catch block

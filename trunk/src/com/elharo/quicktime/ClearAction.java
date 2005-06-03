@@ -32,21 +32,21 @@ import quicktime.std.movies.MovieController;
 
 class ClearAction extends AbstractAction {
 
-    private MovieController controller;
+    private PlayerFrame frame;
 
-    ClearAction(MovieController controller) {
-        this.controller = controller;
-        putValue(Action.NAME, "Delete");  
+    ClearAction(PlayerFrame frame) {
+        this.frame = frame;
+        putValue(Action.NAME, "Delete");   
     } 
     
     
     public void actionPerformed(ActionEvent event) {
         try {
-            controller.clear();
+            frame.undoableClear();
         }
-        catch (QTException e) {
+        catch (QTException ex) {
             // ???? Auto-generated catch block
-            e.printStackTrace();
+            ex.printStackTrace();
         }
     }
 

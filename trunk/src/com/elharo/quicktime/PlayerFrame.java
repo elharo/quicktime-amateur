@@ -25,28 +25,26 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
-import java.awt.MenuComponent;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Iterator;
 
 import quicktime.*;
 import quicktime.app.players.QTPlayer;
 import quicktime.app.view.*;
-import quicktime.qd.GDevice;
-import quicktime.qd.QDDimension;
 import quicktime.qd.QDRect;
 import quicktime.std.StdQTConstants;
 import quicktime.std.StdQTException;
 import quicktime.std.movies.*;
 import javax.swing.*;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 
 public final class PlayerFrame extends JFrame {
     
@@ -57,6 +55,7 @@ public final class PlayerFrame extends JFrame {
     private Component c;
     private boolean fullScreen = false;
     private JMenu windowMenu;
+    private UndoManager undoer = new UndoManager();
     
     private final static int CONTROL_BAR_HEIGHT = 16; // ???? MovieController.getRequiredSize()? getWindowRgn?
     // surely there's  way to get the height of the title bar programmatically????
@@ -341,18 +340,15 @@ public final class PlayerFrame extends JFrame {
     private void initEditMenu(JMenuBar menubar) {
         JMenu editMenu = new JMenu("Edit");
         
-        editMenu.add(new UndoAction(controller));
-        
-        JMenuItem redo = new JMenuItem("Redo");
-        redo.setEnabled(false);
-        editMenu.add(redo);
+        editMenu.add(new UndoAction(this));
+        editMenu.add(new RedoAction(this));
         
         editMenu.addSeparator();
 
-        editMenu.add(new CutAction(controller));
+        editMenu.add(new CutAction(this));
         editMenu.add(new CopyAction(movie));
-        editMenu.add(new PasteAction(controller, this));
-        editMenu.add(new ClearAction(controller));
+        editMenu.add(new PasteAction(this));
+        editMenu.add(new ClearAction(this));
         
         editMenu.addSeparator();
 
@@ -361,6 +357,7 @@ public final class PlayerFrame extends JFrame {
         
         editMenu.addSeparator();
         
+        // XXX make this undoable
         editMenu.add(new TrimToSelectionAction(controller));
         
         editMenu.addSeparator();
@@ -549,9 +546,9 @@ public final class PlayerFrame extends JFrame {
     }
     
     
-   public Dimension getPreferredSize() {
+    public Dimension getPreferredSize() {
 
-      try {
+        try {
           QDRect controllerRect = controller.getBounds();
           Dimension componentPreferredSize = c.getPreferredSize( );
           Insets insets = this.getInsets();
@@ -565,11 +562,113 @@ public final class PlayerFrame extends JFrame {
                 componentPreferredSize.width + insets.left + insets.right,
                 componentPreferredSize.height + insets.top + insets.bottom);
           }
-      } 
-      catch (QTException ex) {
-          return new Dimension (0,0);
-      }
-  }
+        } 
+        catch (QTException ex) {
+            return new Dimension (0,0);
+        }
+    }
 
+    void undo() {
+        if (undoer.canUndo()) {
+            undoer.undo();
+        }
+        else {
+            System.err.println("FIXME can't undo");
+            return;
+        }
+    }
+  
+
+    void redo() {
+        if (undoer.canRedo()) {
+            undoer.redo();
+        }
+        else {
+            System.err.println("FIXME can't redo");
+            return;
+        }
+    }
+  
+
+    private class MovieEdit extends AbstractUndoableEdit {
+
+        private MovieEditState oldState;
+        private MovieEditState newState;
+        private String name;
+    
+        MovieEdit(MovieEditState oldState, MovieEditState newState, String name) {
+            this.oldState = oldState;
+            this.newState = newState;
+            this.name = name;
+        }
+    
+        public String getPresentationName() {
+            return name;
+        }
+    
+        public void redo() throws CannotRedoException {
+          super.redo();
+          try {
+              movie.useEditState(newState);
+              controller.movieChanged();
+          } 
+          catch (QTException ex) {
+              ex.printStackTrace();
+          }
+        }
+    
+        public void undo() throws CannotUndoException {
+          super.undo();
+          try {
+              movie.useEditState(oldState);
+              controller.movieChanged();
+          } 
+          catch (QTException ex) {
+              ex.printStackTrace();
+          }
+        }
+    
+        public void die() {
+          oldState = null;
+          newState = null;
+        }
+
+    }
+
+    void undoableCut() throws QTException {
+        
+        MovieEditState oldState = movie.newEditState();
+        Movie cut = movie.cutSelection();
+        MovieEditState newState = movie.newEditState();
+        MovieEdit edit = new MovieEdit(oldState, newState, "Cut");
+        undoer.addEdit(edit);
+        cut.putOnScrap(0);
+        controller.movieChanged();
+        
+    }
+     
+    void undoableClear() throws QTException {
+        
+        MovieEditState oldState = movie.newEditState();
+        movie.clearSelection();
+        MovieEditState newState = movie.newEditState();
+        MovieEdit edit = new MovieEdit(oldState, newState, "Clear");
+        undoer.addEdit(edit);
+        controller.movieChanged();
+        
+    }
+     
+    void undoablePaste() throws QTException {
+        
+        MovieEditState oldState = movie.newEditState();
+        Movie pasted = Movie.fromScrap(0);
+        movie.pasteSelection(pasted);
+        MovieEditState newState = movie.newEditState();
+        MovieEdit edit = new MovieEdit(oldState, newState, "Paste");
+        undoer.addEdit (edit);
+        controller.movieChanged();
+        this.pack();
+        
+    }    
     
 }

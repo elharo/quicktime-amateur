@@ -20,36 +20,26 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import quicktime.QTException;
-import quicktime.std.movies.MovieController;
-
-class PasteAction extends AbstractAction {
+class RedoAction extends AbstractAction {
 
     private PlayerFrame frame;
-
-    PasteAction(PlayerFrame frame) {
+    
+    RedoAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Paste");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('V', PlayerFrame.menuShortcutKeyMask));  
+        putValue(Action.NAME, "Redo");  
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('Z', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));  
     } 
     
     
     public void actionPerformed(ActionEvent event) {
-        try {
-            frame.undoablePaste();
-            frame.pack();
-        }
-        catch (QTException e) {
-            // ???? Auto-generated catch block
-            e.printStackTrace();
-        }
+        frame.redo();
     }
 
 }
