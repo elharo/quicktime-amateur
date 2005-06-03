@@ -28,20 +28,21 @@ import javax.swing.KeyStroke;
 
 import quicktime.QTException;
 import quicktime.std.movies.Movie;
+import quicktime.std.movies.MovieController;
 
 class ClearAction extends AbstractAction {
 
-    private Movie movie;
+    private MovieController controller;
 
-    ClearAction(Movie movie) {
-        this.movie = movie;
+    ClearAction(MovieController controller) {
+        this.controller = controller;
         putValue(Action.NAME, "Delete");  
     } 
     
     
     public void actionPerformed(ActionEvent event) {
         try {
-            movie.clearSelection();
+            controller.clear();
         }
         catch (QTException e) {
             // ???? Auto-generated catch block
