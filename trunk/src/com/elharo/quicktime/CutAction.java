@@ -28,13 +28,14 @@ import javax.swing.KeyStroke;
 
 import quicktime.QTException;
 import quicktime.std.movies.Movie;
+import quicktime.std.movies.MovieController;
 
 class CutAction extends AbstractAction {
 
-    private Movie movie;
+    private MovieController controller;
 
-    CutAction(Movie movie) {
-        this.movie = movie;
+    CutAction(MovieController controller) {
+        this.controller = controller;
         putValue(Action.NAME, "Cut");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('X', PlayerFrame.menuShortcutKeyMask));  
     } 
@@ -42,8 +43,10 @@ class CutAction extends AbstractAction {
     
     public void actionPerformed(ActionEvent event) {
         try {
+            Movie movie = controller.getMovie();
             Movie copy = movie.cutSelection();
             copy.putOnScrap(0);
+            controller.movieChanged();
         }
         catch (QTException e) {
             // ???? Auto-generated catch block
