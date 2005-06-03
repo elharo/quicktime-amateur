@@ -25,32 +25,29 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import quicktime.QTException;
-import quicktime.std.clocks.TimeRecord;
+import quicktime.std.StdQTException;
 import quicktime.std.movies.Movie;
 import quicktime.std.movies.MovieController;
 
-class GoToPosterFrameAction extends AbstractAction {
+class SetPosterFrameAction extends AbstractAction {
 
     private MovieController controller;
     
-    public GoToPosterFrameAction(MovieController controller) {
+    public SetPosterFrameAction(MovieController controller) {
         this.controller = controller;
-        putValue(Action.NAME, "Go To Poster Frame");  
+        putValue(Action.NAME, "Set Poster Frame");  
     }
 
     public void actionPerformed(ActionEvent event) {
         
         try {
             Movie movie = controller.getMovie();
-            int posterTime = movie.getPosterTime(); 
-            TimeRecord tr = new TimeRecord(movie.getTimeScale(), posterTime);
-            movie.setTime(tr);
-            controller.movieChanged();
+            int time = movie.getTime();
+            movie.setPosterTime(time);
         }
-        catch (QTException ex) {
+        catch (StdQTException e) {
             // ???? Auto-generated catch block
-            ex.printStackTrace();
+            e.printStackTrace();
         }
         
     }
