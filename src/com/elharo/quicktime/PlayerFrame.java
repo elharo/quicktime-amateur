@@ -352,7 +352,7 @@ public final class PlayerFrame extends JFrame {
         editMenu.add(new CutAction(controller));
         editMenu.add(new CopyAction(movie));
         editMenu.add(new PasteAction(controller, this));
-        editMenu.add(new ClearAction(movie));
+        editMenu.add(new ClearAction(controller));
         
         editMenu.addSeparator();
 
