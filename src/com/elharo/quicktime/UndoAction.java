@@ -42,6 +42,7 @@ class UndoAction extends AbstractAction {
     
     public void actionPerformed(ActionEvent event) {
         try {
+            System.err.println("Undoing");
             controller.undo();
         }
         catch (StdQTException e) {
