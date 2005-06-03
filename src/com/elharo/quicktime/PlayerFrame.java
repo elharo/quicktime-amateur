@@ -326,9 +326,7 @@ public final class PlayerFrame extends JFrame {
 
         viewMenu.addSeparator();
 
-        JMenuItem gotoPosterFrame = new JMenuItem("Go To Poster Frame");
-        gotoPosterFrame.setEnabled(false);
-        viewMenu.add(gotoPosterFrame);
+        viewMenu.add(new GoToPosterFrameAction(controller));
 
         JMenuItem setPosterFrame = new JMenuItem("Set Poster Frame");
         setPosterFrame.setEnabled(false);
