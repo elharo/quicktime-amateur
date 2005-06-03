@@ -20,6 +20,7 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -42,12 +43,13 @@ class NewPlayerAction extends AbstractAction {
         try {
             PlayerFrame f = new PlayerFrame("Untitled " + untitledCount++);
             WindowList.INSTANCE.add(f);
-            f.show();
+            Runnable runner = new FrameDisplayer(f);
+            EventQueue.invokeLater(runner);
             
         }
-        catch (QTException e) {
+        catch (QTException ex) {
             // ???? Auto-generated catch block
-            e.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
