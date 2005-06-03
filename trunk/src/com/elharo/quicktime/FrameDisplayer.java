@@ -20,25 +20,22 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
-import java.awt.EventQueue;
+import java.awt.Frame;
 
-import quicktime.QTException;
-
-public class Main {
-
-    public static void main(String[] args) throws QTException {
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Amateur");
-        System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("apple.awt.showGrowBox", "true");
-        QuicktimeInit.setup();
-        PlayerFrame frame = new PlayerFrame();
-        WindowList.INSTANCE.add(frame);
-        // move this off the screen
-        // first frame is just for menu bar
-        frame.setSize(1, 1);
-        frame.setLocation(10000, 10000);
-        Runnable runner = new FrameDisplayer(frame);
-        EventQueue.invokeLater(runner);
+/**
+ * For an explanation of this class see John Zukowski's artile at
+ * http://java.sun.com/developer/JDCTechTips/2003/tt1208.html
+ */
+public class FrameDisplayer implements Runnable {
+    
+    private final Frame frame;
+    
+    public FrameDisplayer(Frame frame) {
+        this.frame = frame;
     }
-
+    
+    public void run() {
+        frame.show();
+    }
+    
 }

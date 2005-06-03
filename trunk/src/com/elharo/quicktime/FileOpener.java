@@ -20,6 +20,7 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -41,7 +42,8 @@ public class FileOpener implements ActionListener {
             Movie m = Movie.fromFile(omFile);
             PlayerFrame f = new PlayerFrame(file.getName(), m);
             WindowList.INSTANCE.add(f);
-            f.show();
+            Runnable runner = new FrameDisplayer(f);
+            EventQueue.invokeLater(runner);
         }
         catch (QTIOException ex) {
            if (ex.errorCode() == USER_CANCELLED) return;
