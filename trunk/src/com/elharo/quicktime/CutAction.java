@@ -44,9 +44,9 @@ class CutAction extends AbstractAction {
     public void actionPerformed(ActionEvent event) {
         try {
             Movie movie = controller.getMovie();
-            Movie copy = movie.cutSelection();
+            Movie copy = controller.cut();
             copy.putOnScrap(0);
-            controller.movieChanged();
+            controller.movieEdited();
         }
         catch (QTException e) {
             // ???? Auto-generated catch block
