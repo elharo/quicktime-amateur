@@ -26,29 +26,19 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import quicktime.std.StdQTException;
-import quicktime.std.movies.MovieController;
-
 class UndoAction extends AbstractAction {
 
-    private MovieController controller;
-
-    UndoAction(MovieController controller) {
-        this.controller = controller;
+    private PlayerFrame frame;
+    
+    UndoAction(PlayerFrame frame) {
+        this.frame = frame;
         putValue(Action.NAME, "Undo");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('Z', PlayerFrame.menuShortcutKeyMask));  
     } 
     
     
     public void actionPerformed(ActionEvent event) {
-        try {
-            System.err.println("Undoing");
-            controller.undo();
-        }
-        catch (StdQTException e) {
-            // ???? Auto-generated catch block
-            e.printStackTrace();
-        }
+        frame.undo();
     }
 
 }
