@@ -42,23 +42,37 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.util.Iterator;
 
-import quicktime.*;
-import quicktime.app.view.*;
-import quicktime.qd.Pict;
-import quicktime.qd.QDRect;
-import quicktime.std.StdQTConstants;
-import quicktime.std.StdQTException;
-import quicktime.std.movies.*;
-import javax.swing.*;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
+import quicktime.QTException;
+import quicktime.app.view.GraphicsImporterDrawer;
+import quicktime.app.view.QTComponent;
+import quicktime.app.view.QTFactory;
+import quicktime.app.view.QTImageProducer;
+import quicktime.qd.Pict;
+import quicktime.qd.QDRect;
+import quicktime.std.StdQTConstants;
+import quicktime.std.StdQTException;
+import quicktime.std.image.GraphicsImporter;
+import quicktime.std.movies.Movie;
+import quicktime.std.movies.MovieController;
+import quicktime.std.movies.MovieEditState;
+import quicktime.std.movies.media.DataRef;
+
 // XXX Use Pageable instead of Printable
 // XXX Move Pageable impl to a separate class
 public final class PlayerFrame extends JFrame implements Printable {
     
+    private static final int PICT_HEADER_SIZE = 512;
     private Movie movie;
     private MovieController controller;
     private int movieHeight = -1;
@@ -716,16 +730,40 @@ public final class PlayerFrame extends JFrame implements Printable {
         this.pack();
         
     }
+    
+    private Image getStill() throws QTException {
 
-    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) 
+          boolean wasPlaying = false;
+          if (movie.getRate() > 0) {
+              movie.stop();
+              wasPlaying = true;
+          }
+
+          Pict oldPict = movie.getPict(movie.getTime());
+          int pictSize = oldPict.getSize();
+          byte[] dataAndHeader = new byte[pictSize + PICT_HEADER_SIZE];
+          oldPict.copyToArray(0, dataAndHeader, PICT_HEADER_SIZE, pictSize);
+          Pict newPict = new Pict(dataAndHeader);
+
+          GraphicsImporter importer = new GraphicsImporter(StdQTConstants.kQTFileTypePicture);
+          DataRef ref = new DataRef(newPict, StdQTConstants.kDataRefQTFileTypeTag, "PICT");
+          importer.setDataReference(ref);
+          Dimension movieDim = new Dimension(movieWidth, movieHeight);
+          GraphicsImporterDrawer drawer = new GraphicsImporterDrawer(importer);
+          ImageProducer producer = new QTImageProducer(drawer, movieDim);
+ 
+          Image image = getToolkit().createImage(producer);
+          if (wasPlaying) movie.start();
+          
+          return image;
+          
+  }
+
+    public int print(Graphics graphics, PageFormat format, int pageIndex) 
       throws PrinterException {
         try {
             // XXX need to handle movies bigger than the page
-            Pict pict = movie.getPict(movie.getTime());
-            ImageProducer producer = new QTImageProducer(
-              new MoviePlayer(movie), 
-              new Dimension(movieWidth, movieHeight));
-            Image image = getToolkit().createImage(producer);
+            Image image = getStill();
             graphics.drawImage(image, 0, 0, movieWidth, movieHeight, this);
             if (pageIndex == 0) return Printable.PAGE_EXISTS;
             else return Printable.NO_SUCH_PAGE;
