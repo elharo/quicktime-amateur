@@ -57,6 +57,7 @@ public final class PlayerFrame extends JFrame {
     private boolean fullScreen = false;
     private JMenu windowMenu;
     private UndoManager undoer = new UndoManager();
+    private PageSetupAction pageSetup = new PageSetupAction();
     
     private final int CONTROL_BAR_HEIGHT;
     private int frameExtras;
@@ -309,6 +310,8 @@ public final class PlayerFrame extends JFrame {
                 
                 try {
                     if (playAllFrames.isSelected()) {
+                        // Setting this mutes the sound. This appears to be the normal
+                        // and expected behavior. See http://lists.apple.com/archives/quicktime-users/2003/Dec/msg00061.html
                         controller.setPlayEveryFrame(true);
                     }
                     else {
@@ -470,11 +473,8 @@ public final class PlayerFrame extends JFrame {
         
         fileMenu.addSeparator();
         
-        JMenuItem pageSetup = new JMenuItem("Page Setup...");
-        pageSetup.setAccelerator(KeyStroke.getKeyStroke('P', menuShortcutKeyMask | InputEvent.SHIFT_MASK));        
-        pageSetup.setEnabled(false);
         fileMenu.add(pageSetup);
-        
+
         JMenuItem print = new JMenuItem("Print");
         print.setAccelerator(KeyStroke.getKeyStroke('P', menuShortcutKeyMask));        
         print.setEnabled(false);
