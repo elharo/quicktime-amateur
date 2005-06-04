@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.print.PrinterJob;
 import java.util.Iterator;
 
 import quicktime.*;
@@ -57,7 +58,7 @@ public final class PlayerFrame extends JFrame {
     private boolean fullScreen = false;
     private JMenu windowMenu;
     private UndoManager undoer = new UndoManager();
-    private PageSetupAction pageSetup = new PageSetupAction();
+    private PrinterJob printerJob = PrinterJob.getPrinterJob();
     
     private final int CONTROL_BAR_HEIGHT;
     private int frameExtras;
@@ -473,12 +474,8 @@ public final class PlayerFrame extends JFrame {
         
         fileMenu.addSeparator();
         
-        fileMenu.add(pageSetup);
-
-        JMenuItem print = new JMenuItem("Print");
-        print.setAccelerator(KeyStroke.getKeyStroke('P', menuShortcutKeyMask));        
-        print.setEnabled(false);
-        fileMenu.add(print);
+        fileMenu.add(new PageSetupAction(printerJob));
+        fileMenu.add(new PrintAction(printerJob));
         
         menubar.add(fileMenu);
     }
