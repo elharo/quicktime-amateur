@@ -526,22 +526,18 @@ public final class PlayerFrame extends JFrame {
                     Rectangle bounds = device.getDefaultConfiguration().getBounds();
                     
                     double widthRatio = bounds.width / (double) movieWidth;
-                    int frameHeight = movieHeight + CONTROL_BAR_HEIGHT + frameExtras;
-                    double heightRatio = bounds.height / (double) frameHeight ;
+                    double heightRatio = bounds.height / (double) movieHeight ;
                     
                     int fullScreenWidth = movieWidth;
                     int fullScreenHeight = movieHeight;
                     if (widthRatio < heightRatio) {
                         fullScreenWidth = (int) (movieWidth * widthRatio);
-                        fullScreenHeight = (int) (frameHeight * widthRatio);
+                        fullScreenHeight = (int) (movieHeight * widthRatio) + CONTROL_BAR_HEIGHT + frameExtras;
                     }
                     else {
                         fullScreenWidth = (int) (movieWidth * heightRatio);
-                        fullScreenHeight = (int) (frameHeight * heightRatio);
+                        fullScreenHeight = (int) (movieHeight * heightRatio) + CONTROL_BAR_HEIGHT + frameExtras;
                     }
-                    
-                    System.out.println(movieWidth + " " + movieHeight);
-                    System.out.println(fullScreenWidth + " " + (fullScreenHeight - CONTROL_BAR_HEIGHT - frameExtras));
                     device.setFullScreenWindow(frame);
                     frame.setSize(fullScreenWidth, fullScreenHeight);
                     fullScreen = true;
