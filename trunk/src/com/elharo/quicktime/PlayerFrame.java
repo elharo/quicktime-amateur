@@ -261,6 +261,16 @@ public final class PlayerFrame extends JFrame implements Printable {
         doublesize.addActionListener(new SizeListener(2.0));
         viewMenu.add(doublesize);
         
+        JMenuItem triplesize = new JMenuItem("Triple Size");
+        triplesize.setAccelerator(KeyStroke.getKeyStroke('3', menuShortcutKeyMask));
+        triplesize.addActionListener(new SizeListener(3.0));
+        viewMenu.add(triplesize);
+        
+        JMenuItem quadrupleSize = new JMenuItem("Quadruple Size");
+        quadrupleSize.setAccelerator(KeyStroke.getKeyStroke('4', menuShortcutKeyMask));
+        quadrupleSize.addActionListener(new SizeListener(4.0));
+        viewMenu.add(quadrupleSize);
+        
         JMenuItem fullScreen = new JMenuItem("Full Screen");
         fullScreen.setAccelerator(KeyStroke.getKeyStroke('F', menuShortcutKeyMask));
         fullScreen.addActionListener(new FullScreenListener(this));
