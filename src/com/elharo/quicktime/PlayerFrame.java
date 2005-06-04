@@ -59,7 +59,6 @@ public final class PlayerFrame extends JFrame {
     private UndoManager undoer = new UndoManager();
     
     private final int CONTROL_BAR_HEIGHT;
-    // surely there's  way to get the height of the title bar programmatically????
     private int frameExtras;
     static final int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     private static final int NUMBER_OF_WINDOW_MENU_ITEMS = 10;
@@ -83,15 +82,6 @@ public final class PlayerFrame extends JFrame {
         c = qc.asComponent();
         this.getContentPane().add(c);
         this.pack();
-        this.addKeyListener(new KeyAdapter() {
-            public void keyPressed(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    GraphicsEnvironment.getLocalGraphicsEnvironment().
-                      getDefaultScreenDevice().setFullScreenWindow(null);
-                    fullScreen = false;
-                }
-            }
-        });  
         initMovieDimensions();
         this.controller.enableEditing(true);
     }
@@ -498,29 +488,28 @@ public final class PlayerFrame extends JFrame {
     }
     
     private class FullScreenListener implements ActionListener {
-    
-        private FullScreen f = new FullScreen();
-        private Frame frame;
+
+        private JFrame frame;
+        private JFrame fullScreenFrame;
         
-        FullScreenListener(Frame f) {
+        FullScreenListener(JFrame f) {
             this.frame = f;
+            fullScreenFrame = new JFrame();
+            fullScreenFrame.setUndecorated(true);
+            fullScreenFrame.addKeyListener(new KeyAdapter() {
+                public void keyPressed(KeyEvent event) {
+                    if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                        exitFullScreen();
+                    }
+                }
+            });  
         }
         
         public void actionPerformed(ActionEvent event) {
             
-            if (fullScreen) {
-                fullScreen = false;
-                try {
-                    GraphicsEnvironment.getLocalGraphicsEnvironment().
-                      getDefaultScreenDevice().setFullScreenWindow(null);
-                }
-                catch (Exception ex) {
-                    // ???? Auto-generated catch block
-                    ex.printStackTrace();
-                }
-            }
-            else {
-                try {
+            try {
+                if (fullScreen) exitFullScreen();
+                else {
                     GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
                     Rectangle bounds = device.getDefaultConfiguration().getBounds();
                     
@@ -531,23 +520,37 @@ public final class PlayerFrame extends JFrame {
                     int fullScreenHeight = movieHeight;
                     if (widthRatio < heightRatio) {
                         fullScreenWidth = (int) (movieWidth * widthRatio);
-                        fullScreenHeight = (int) (movieHeight * widthRatio) + CONTROL_BAR_HEIGHT + frameExtras;
+                        fullScreenHeight = (int) (movieHeight * widthRatio);
                     }
                     else {
                         fullScreenWidth = (int) (movieWidth * heightRatio);
-                        fullScreenHeight = (int) (movieHeight * heightRatio) + CONTROL_BAR_HEIGHT + frameExtras;
+                        fullScreenHeight = (int) (movieHeight * heightRatio);
                     }
+                    
+                    // need to center the fullscreen movie vertically or horizontally????
+                    
                     frame.setVisible(false);
-                    device.setFullScreenWindow(frame);
-                    frame.setSize(fullScreenWidth, fullScreenHeight);
-                    frame.setVisible(true);
+                    device.setFullScreenWindow(fullScreenFrame);
+                    QTComponent qc = QTFactory.makeQTComponent(movie);
+                    Component c = qc.asComponent();
+                    fullScreenFrame.getContentPane().add(c);
+                    fullScreenFrame.setSize(fullScreenWidth, fullScreenHeight);
+                    fullScreenFrame.setVisible(true);
                     fullScreen = true;
                 }
-                catch (Exception ex) {
-                    // ???? Auto-generated catch block
-                    ex.printStackTrace();
-                }
             }
+            catch (QTException ex) {
+                // XXX do better
+                ex.printStackTrace();
+            }
+        }
+
+        private void exitFullScreen() {
+            fullScreen = false;
+            GraphicsEnvironment.getLocalGraphicsEnvironment().
+              getDefaultScreenDevice().setFullScreenWindow(null);
+            frame.setVisible(true);
+            // XXX need to stop playing when we go out of fullscreen
         }
 
     }
