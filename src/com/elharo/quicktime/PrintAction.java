@@ -21,6 +21,8 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime;
 
 import java.awt.event.ActionEvent;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 
 import javax.swing.AbstractAction;
@@ -31,8 +33,9 @@ class PrintAction extends AbstractAction {
 
     private PrinterJob job;
     
-    PrintAction(PrinterJob job) {
+    PrintAction(PrinterJob job, Printable printable) {
         this.job = job;
+        job.setPrintable(printable);
         putValue(Action.NAME, "Print...");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('P', PlayerFrame.menuShortcutKeyMask));  
     } 
@@ -40,7 +43,13 @@ class PrintAction extends AbstractAction {
     public void actionPerformed(ActionEvent event) {
         boolean doPrint = job.printDialog();
         if (doPrint) {
-            System.err.println("Printing not implemented yet");
+            try {
+                job.print();
+            }
+            catch (PrinterException e) {
+                // ???? Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 
