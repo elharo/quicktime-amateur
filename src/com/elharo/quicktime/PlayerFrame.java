@@ -494,7 +494,10 @@ public final class PlayerFrame extends JFrame {
         
         FullScreenListener(JFrame f) {
             this.frame = f;
-            fullScreenFrame = new JFrame();
+        }
+        
+        private JFrame makeFullScreenFrame() {
+            JFrame fullScreenFrame = new JFrame();
             fullScreenFrame.setUndecorated(true);
             fullScreenFrame.addKeyListener(new KeyAdapter() {
                 public void keyPressed(KeyEvent event) {
@@ -502,8 +505,10 @@ public final class PlayerFrame extends JFrame {
                         exitFullScreen();
                     }
                 }
-            });  
+            });
+            return fullScreenFrame;
         }
+        
         
         public void actionPerformed(ActionEvent event) {
             
@@ -530,16 +535,19 @@ public final class PlayerFrame extends JFrame {
                     // need to center the fullscreen movie vertically or horizontally????
                     
                     frame.setVisible(false);
+                    fullScreenFrame = makeFullScreenFrame();
                     device.setFullScreenWindow(fullScreenFrame);
-                    QTComponent qc = QTFactory.makeQTComponent(movie);
+                    /* QTComponent qc = QTFactory.makeQTComponent(movie);
                     Component c = qc.asComponent();
-                    fullScreenFrame.getContentPane().add(c);
+                    fullScreenFrame.getContentPane().add(c); */
+                    frame.remove(c);
+                    fullScreenFrame.getContentPane().add(c); 
                     fullScreenFrame.setSize(fullScreenWidth, fullScreenHeight);
                     fullScreenFrame.setVisible(true);
                     fullScreen = true;
                 }
             }
-            catch (QTException ex) {
+            catch (Exception ex) {
                 // XXX do better
                 ex.printStackTrace();
             }
@@ -549,8 +557,12 @@ public final class PlayerFrame extends JFrame {
             fullScreen = false;
             GraphicsEnvironment.getLocalGraphicsEnvironment().
               getDefaultScreenDevice().setFullScreenWindow(null);
+            fullScreenFrame.setVisible(false);
+            fullScreenFrame.remove(c);
+            frame.getContentPane().add(c);
+            fullScreenFrame = null;
             frame.setVisible(true);
-            // XXX need to stop playing when we go out of fullscreen
+            frame.toFront();
         }
 
     }
