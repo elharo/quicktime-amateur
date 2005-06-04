@@ -142,10 +142,7 @@ public final class PlayerFrame extends JFrame {
         
         windowMenu.addSeparator();
 
-        JMenuItem showMovieInfo = new JMenuItem("Show Movie Info");
-        showMovieInfo.setAccelerator(KeyStroke.getKeyStroke('I', menuShortcutKeyMask));
-        showMovieInfo.setEnabled(false);
-        windowMenu.add(showMovieInfo);                
+        windowMenu.add(new MovieInfoAction(movie));   
         
         JMenuItem showMovieProperties = new JMenuItem("Show Movie Properties");
         showMovieProperties.setAccelerator(KeyStroke.getKeyStroke('J', menuShortcutKeyMask));
