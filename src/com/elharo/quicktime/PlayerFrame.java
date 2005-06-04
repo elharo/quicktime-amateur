@@ -388,6 +388,9 @@ public final class PlayerFrame extends JFrame implements Printable {
 
         editMenu.add(new CutAction(this));
         editMenu.add(new CopyAction(movie));
+        JMenuItem copyCurrentFrame = new JMenuItem("Copy Current Frame");
+        copyCurrentFrame.setEnabled(false);
+        editMenu.add(copyCurrentFrame);
         editMenu.add(new PasteAction(this));
         editMenu.add(new ClearAction(this));
         
@@ -504,6 +507,10 @@ public final class PlayerFrame extends JFrame implements Printable {
         export.setAccelerator(KeyStroke.getKeyStroke('E', menuShortcutKeyMask));        
         export.setEnabled(false);
         fileMenu.add(export);
+        
+        JMenuItem exportFrames = new JMenuItem("Export Frames...");        
+        exportFrames.setEnabled(false);
+        fileMenu.add(exportFrames);
         
         fileMenu.addSeparator();
         
