@@ -36,7 +36,6 @@ import java.awt.event.KeyEvent;
 import java.util.Iterator;
 
 import quicktime.*;
-import quicktime.app.players.QTPlayer;
 import quicktime.app.view.*;
 import quicktime.qd.QDRect;
 import quicktime.std.StdQTConstants;
@@ -59,7 +58,7 @@ public final class PlayerFrame extends JFrame {
     private JMenu windowMenu;
     private UndoManager undoer = new UndoManager();
     
-    private final static int CONTROL_BAR_HEIGHT = 16; // ???? MovieController.getRequiredSize()? getWindowRgn?
+    private final int CONTROL_BAR_HEIGHT;
     // surely there's  way to get the height of the title bar programmatically????
     private int frameExtras;
     static final int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -78,6 +77,7 @@ public final class PlayerFrame extends JFrame {
         super(title);
         this.movie = m;
         controller = new MovieController(m);
+        CONTROL_BAR_HEIGHT = controller.getRequiredSize().getHeight();
         setupMenuBar();
         QTComponent qc = QTFactory.makeQTComponent(controller);
         c = qc.asComponent();
@@ -513,7 +513,6 @@ public final class PlayerFrame extends JFrame {
                 try {
                     GraphicsEnvironment.getLocalGraphicsEnvironment().
                       getDefaultScreenDevice().setFullScreenWindow(null);
-                    // f.endFullScreen();
                 }
                 catch (Exception ex) {
                     // ???? Auto-generated catch block
@@ -538,8 +537,10 @@ public final class PlayerFrame extends JFrame {
                         fullScreenWidth = (int) (movieWidth * heightRatio);
                         fullScreenHeight = (int) (movieHeight * heightRatio) + CONTROL_BAR_HEIGHT + frameExtras;
                     }
+                    frame.setVisible(false);
                     device.setFullScreenWindow(frame);
                     frame.setSize(fullScreenWidth, fullScreenHeight);
+                    frame.setVisible(true);
                     fullScreen = true;
                 }
                 catch (Exception ex) {
