@@ -286,7 +286,6 @@ public final class PlayerFrame extends JFrame {
         playSelectionOnly.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
-                
                 try {
                     if (playSelectionOnly.isSelected()) {
                         controller.setPlaySelection(true);
@@ -299,13 +298,29 @@ public final class PlayerFrame extends JFrame {
                     ex.printStackTrace();
                 }
             }
-            
-            });
+        });
         
         viewMenu.add(playSelectionOnly);
         
-        JMenuItem playAllFrames = new JMenuItem("Play All Frames");
-        playAllFrames.setEnabled(false);
+        final JCheckBoxMenuItem playAllFrames = new JCheckBoxMenuItem("Play All Frames");
+        playAllFrames.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+                
+                try {
+                    if (playAllFrames.isSelected()) {
+                        controller.setPlayEveryFrame(true);
+                    }
+                    else {
+                        controller.setPlayEveryFrame(false);
+                    }
+                }
+                catch (QTException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            
+            });
         viewMenu.add(playAllFrames);
 
         viewMenu.addSeparator();
