@@ -22,6 +22,8 @@ package com.elharo.quicktime;
 
 import java.awt.Dialog;
 import java.awt.EventQueue;
+import java.awt.Frame;
+import java.util.Iterator;
 
 import com.apple.eawt.ApplicationAdapter;
 import com.apple.eawt.ApplicationEvent;
@@ -54,9 +56,14 @@ public class MacOSHandler extends Application {
             event.setHandled(true);
         }
         
-        /* public void handleQuit(ApplicationEvent event) {
-            frame.quit();
-        } */
+        public void handleQuit(ApplicationEvent event) {
+            Iterator iterator = WindowList.INSTANCE.iterator();
+            while (iterator.hasNext()) {
+                Frame f = (Frame) iterator.next();
+                frame.hide();
+            }
+            System.exit(0);
+        }
         
     }
     
