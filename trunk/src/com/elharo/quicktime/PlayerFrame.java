@@ -109,6 +109,7 @@ public final class PlayerFrame extends JFrame implements Printable {
         this.pack();
         initMovieDimensions();
         this.controller.enableEditing(true);
+        new MacOSHandler(this);
     }
 
     public PlayerFrame(Movie m) throws QTException {
