@@ -586,13 +586,12 @@ public final class PlayerFrame extends JFrame implements Printable {
                     frame.setVisible(false);
                     fullScreenFrame = makeFullScreenFrame();
                     device.setFullScreenWindow(fullScreenFrame);
-                    /* QTComponent qc = QTFactory.makeQTComponent(movie);
-                    Component c = qc.asComponent();
-                    fullScreenFrame.getContentPane().add(c); */
                     frame.remove(c);
-                    fullScreenFrame.getContentPane().add(c); 
+                    QTComponent qc = QTFactory.makeQTComponent(movie);
+                    fullScreenFrame.getContentPane().add(qc.asComponent());
                     fullScreenFrame.setSize(fullScreenWidth, fullScreenHeight);
                     fullScreenFrame.setVisible(true);
+                    movie.start();
                     fullScreen = true;
                 }
             }
