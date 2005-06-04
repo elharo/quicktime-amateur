@@ -23,8 +23,10 @@ package com.elharo.quicktime;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -519,15 +521,29 @@ public final class PlayerFrame extends JFrame {
                 }
             }
             else {
-                
                 try {
+                    GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+                    Rectangle bounds = device.getDefaultConfiguration().getBounds();
                     
-                    // turn off frame decoration????
+                    double widthRatio = bounds.width / (double) movieWidth;
+                    int frameHeight = movieHeight + CONTROL_BAR_HEIGHT + frameExtras;
+                    double heightRatio = bounds.height / (double) frameHeight ;
                     
-                    GraphicsEnvironment.getLocalGraphicsEnvironment().
-                      getDefaultScreenDevice().setFullScreenWindow(frame);
-                    // f.beginFullScreen(GDevice.get(), movieWidth, movieHeight, 0); // int constants????
-                    // XXX need to maintain ratio
+                    int fullScreenWidth = movieWidth;
+                    int fullScreenHeight = movieHeight;
+                    if (widthRatio < heightRatio) {
+                        fullScreenWidth = (int) (movieWidth * widthRatio);
+                        fullScreenHeight = (int) (frameHeight * widthRatio);
+                    }
+                    else {
+                        fullScreenWidth = (int) (movieWidth * heightRatio);
+                        fullScreenHeight = (int) (frameHeight * heightRatio);
+                    }
+                    
+                    System.out.println(movieWidth + " " + movieHeight);
+                    System.out.println(fullScreenWidth + " " + (fullScreenHeight - CONTROL_BAR_HEIGHT - frameExtras));
+                    device.setFullScreenWindow(frame);
+                    frame.setSize(fullScreenWidth, fullScreenHeight);
                     fullScreen = true;
                 }
                 catch (Exception ex) {
