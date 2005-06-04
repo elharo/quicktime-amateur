@@ -23,8 +23,10 @@ package com.elharo.quicktime;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -33,11 +35,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.ImageProducer;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.util.Iterator;
 
 import quicktime.*;
 import quicktime.app.view.*;
+import quicktime.qd.Pict;
 import quicktime.qd.QDRect;
 import quicktime.std.StdQTConstants;
 import quicktime.std.StdQTException;
@@ -48,7 +55,9 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
-public final class PlayerFrame extends JFrame {
+// XXX Use Pageable instead of Printable
+// XXX Move Pageable impl to a separate class
+public final class PlayerFrame extends JFrame implements Printable {
     
     private Movie movie;
     private MovieController controller;
@@ -475,7 +484,7 @@ public final class PlayerFrame extends JFrame {
         fileMenu.addSeparator();
         
         fileMenu.add(new PageSetupAction(printerJob));
-        fileMenu.add(new PrintAction(printerJob));
+        fileMenu.add(new PrintAction(printerJob, this));
         
         menubar.add(fileMenu);
     }
@@ -705,6 +714,25 @@ public final class PlayerFrame extends JFrame {
         undoer.addEdit (edit);
         controller.movieChanged();
         this.pack();
+        
+    }
+
+    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) 
+      throws PrinterException {
+        try {
+            // XXX need to handle movies bigger than the page
+            Pict pict = movie.getPict(movie.getTime());
+            ImageProducer producer = new QTImageProducer(
+              new MoviePlayer(movie), 
+              new Dimension(movieWidth, movieHeight));
+            Image image = getToolkit().createImage(producer);
+            graphics.drawImage(image, 0, 0, movieWidth, movieHeight, this);
+            if (pageIndex == 0) return Printable.PAGE_EXISTS;
+            else return Printable.NO_SUCH_PAGE;
+        }
+        catch (QTException e) {
+            throw new PrinterException(e.getMessage());
+        }
         
     }    
     
