@@ -20,9 +20,13 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JOptionPane;
 
 import quicktime.QTException;
 import quicktime.io.OpenMovieFile;
@@ -34,10 +38,12 @@ public class FileOpener implements ActionListener {
 
     private static final int USER_CANCELLED = -128;
 
-    public void actionPerformed(ActionEvent evt) {
+    public void actionPerformed(ActionEvent event) {
         
+        String title = "The movie in the file";
         try {
             QTFile file = QTFile.standardGetFilePreview(QTFile.kStandardQTFileTypes);
+            title = file.getName();
             OpenMovieFile omFile = OpenMovieFile.asRead(file);
             Movie m = Movie.fromFile(omFile);
             PlayerFrame f = new PlayerFrame(file.getName(), m);
@@ -50,8 +56,14 @@ public class FileOpener implements ActionListener {
            ex.printStackTrace();
         }
         catch (QTException ex) {
-           // ???? do better
-           ex.printStackTrace();
+            int code = ex.errorCode();
+            String errorMessage = ex.errorCodeToString();
+            if (code == -2048) {
+                errorMessage = title + " is not encoded in a format QuickTime understands.";
+            }
+            Component component = (Component) event.getSource();
+            Container parent = component.getParent();
+            JOptionPane.showMessageDialog(parent, errorMessage);
         }
     }
 
