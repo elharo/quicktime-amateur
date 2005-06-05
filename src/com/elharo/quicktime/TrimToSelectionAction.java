@@ -43,7 +43,7 @@ public class TrimToSelectionAction extends AbstractAction {
             // should the final result be unselected?
             original.setSelection(0, 0);
             MovieEditState newState = original.newEditState();
-            MovieEdit edit = frame.new MovieEdit(oldState, newState, "Cut");
+            MovieEdit edit = frame.new MovieEdit(oldState, newState, "Trim To Selection");
             frame.addEdit(edit);
             controller.movieEdited();
         }
