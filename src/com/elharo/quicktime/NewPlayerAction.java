@@ -28,7 +28,6 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import quicktime.QTException;
-import quicktime.app.players.QTPlayer;
 
 class NewPlayerAction extends AbstractAction {
     
@@ -42,7 +41,6 @@ class NewPlayerAction extends AbstractAction {
     public void actionPerformed(ActionEvent event) {
         try {
             PlayerFrame f = new PlayerFrame("Untitled " + untitledCount++);
-            WindowList.INSTANCE.add(f);
             Runnable runner = new FrameDisplayer(f);
             EventQueue.invokeLater(runner);
             
