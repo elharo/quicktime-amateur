@@ -31,14 +31,10 @@ public class Main {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("apple.awt.showGrowBox", "true");
         QuicktimeInit.setup();
-        PlayerFrame frame = new PlayerFrame();
-        WindowList.INSTANCE.add(frame);
-        // move this off the screen
+        PlayerFrame hidden = new PlayerFrame(true);
         // first frame is just for menu bar
-        frame.setSize(1, 1);
-        frame.setLocation(10000, 10000);
-        Runnable runner = new FrameDisplayer(frame);
+        Runnable runner = new FrameDisplayer(hidden);
         EventQueue.invokeLater(runner);
-    }
-
+    }    
+    
 }
