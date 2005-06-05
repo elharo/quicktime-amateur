@@ -23,7 +23,10 @@ package com.elharo.quicktime;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -40,13 +43,17 @@ public class PresentMovieDialog extends JDialog {
     private JComboBox size = new JComboBox();
     
     PresentMovieDialog() {
+        
         this.setUndecorated(true);
-        this.setLayout(new BorderLayout());
+        
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
         JPanel buttons = new JPanel();
         buttons.setLayout(new FlowLayout(FlowLayout.RIGHT));
         buttons.add(cancelButton);
         buttons.add(playButton);
-        this.getContentPane().add(BorderLayout.SOUTH, buttons);
+        this.getRootPane().setDefaultButton(playButton);
+        mainPanel.add(BorderLayout.SOUTH, buttons);
         
         JPanel radios = new JPanel();
         ButtonGroup group = new ButtonGroup();
@@ -54,22 +61,34 @@ public class PresentMovieDialog extends JDialog {
         group.add(movie);
         JRadioButton slideshow = new JRadioButton("Slide Show");
         group.add(slideshow);
-        JLabel label = new JLabel("Use the left and right arrows to direct the slide show");
+        JLabel label = new JLabel("Use the left and right arrow keys to control the slide show.");
         radios.add(movie);
         radios.add(slideshow);
         radios.add(label);
         
         radios.setLayout(new GridLayout(3, 1));
         
+        mainPanel.add(BorderLayout.CENTER, radios);
         
-        this.getContentPane().add(BorderLayout.CENTER, radios);
+        JPanel north = new JPanel();
+        north.setLayout(new FlowLayout(FlowLayout.LEFT));
+        north.add(new JLabel("Movie Size: "));
+        size.addItem("Normal");
+        size.addItem("Double");
+        size.addItem("Half");
+        size.addItem("Fullscreen");
+        size.addItem("Current");
+        north.add(size);
+        mainPanel.add(BorderLayout.NORTH, north);
         
-        /* size.("Normal");
-        size.add("Double");
-        size.add("Half");
-        size.add("Fullscreen");
-        size.add("Current"); */
-        this.getContentPane().add(BorderLayout.NORTH, size);
+        GridBagLayout layout = new GridBagLayout();
+        this.setLayout(layout);
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.insets = new Insets(10, 20, 10, 20);
+        layout.setConstraints(mainPanel, constraints);
+        this.getContentPane().add(mainPanel);
         this.pack();
         this.center();
     }
