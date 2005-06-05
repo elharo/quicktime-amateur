@@ -112,7 +112,7 @@ public final class PlayerFrame extends JFrame implements Printable {
         new MacOSHandler(this);
     }
 
-    // XXX Logically I shoudl split the menubar out into a separate class
+    // XXX Logically I should split the menubar out into a separate class
     // and then InvisibleFrame can be a separate class too.
     // ???? Setting up invisible frames on the Mac would make a nice Java tip
     PlayerFrame(boolean invisible) {
@@ -415,7 +415,7 @@ public final class PlayerFrame extends JFrame implements Printable {
         editMenu.addSeparator();
         
         // XXX make this undoable
-        editMenu.add(new TrimToSelectionAction(controller));
+        editMenu.add(new TrimToSelectionAction(controller, this));
         
         editMenu.addSeparator();
 
@@ -679,7 +679,8 @@ public final class PlayerFrame extends JFrame implements Printable {
     }
   
 
-    private class MovieEdit extends AbstractUndoableEdit {
+    // ???? move to separate class
+    class MovieEdit extends AbstractUndoableEdit {
 
         private MovieEditState oldState;
         private MovieEditState newState;
@@ -801,6 +802,10 @@ public final class PlayerFrame extends JFrame implements Printable {
             throw new PrinterException(e.getMessage());
         }
         
+    }
+
+    void addEdit(MovieEdit edit) {
+        undoer.addEdit(edit);
     }    
     
 }

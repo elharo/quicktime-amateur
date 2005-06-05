@@ -11,15 +11,20 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import com.elharo.quicktime.PlayerFrame.MovieEdit;
+
 import quicktime.QTException;
 import quicktime.std.movies.Movie;
 import quicktime.std.movies.MovieController;
+import quicktime.std.movies.MovieEditState;
 
 public class TrimToSelectionAction extends AbstractAction {
     
     private MovieController controller;
+    private PlayerFrame frame;
 
-    TrimToSelectionAction(MovieController controller) {
+    TrimToSelectionAction(MovieController controller, PlayerFrame frame) {
+        this.frame = frame;
         this.controller = controller;
         putValue(Action.NAME, "Trim To Selection");    
     } 
@@ -28,6 +33,7 @@ public class TrimToSelectionAction extends AbstractAction {
     public void actionPerformed(ActionEvent event) {
         try {
             Movie original = controller.getMovie();
+            MovieEditState oldState = original.newEditState();
             Movie selection = original.copySelection();
             
             // ???? what if there is no selection?
@@ -36,6 +42,9 @@ public class TrimToSelectionAction extends AbstractAction {
             
             // should the final result be unselected?
             original.setSelection(0, 0);
+            MovieEditState newState = original.newEditState();
+            MovieEdit edit = frame.new MovieEdit(oldState, newState, "Cut");
+            frame.addEdit(edit);
             controller.movieEdited();
         }
         catch (QTException ex) {
