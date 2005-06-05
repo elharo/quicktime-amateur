@@ -20,21 +20,25 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
-import java.awt.Frame;
 
 /**
- * For an explanation of this class see John Zukowski's artile at
+ * For an explanation of this class see John Zukowski's article at
  * http://java.sun.com/developer/JDCTechTips/2003/tt1208.html
  */
 public class FrameDisplayer implements Runnable {
     
-    private final Frame frame;
+    // ???? There should be a way to get these values programmatically
+    private static final int OFFSET = 23;
+    private static final int MENU_BAR_HEIGHT = 23;
+    private final PlayerFrame frame;
     
-    public FrameDisplayer(Frame frame) {
+    public FrameDisplayer(PlayerFrame frame) {
         this.frame = frame;
     }
     
     public void run() {
+        frame.setLocation(WindowList.getTotal()*OFFSET, MENU_BAR_HEIGHT + WindowList.getTotal()*OFFSET);
+        WindowList.INSTANCE.add(frame);
         frame.show();
     }
     
