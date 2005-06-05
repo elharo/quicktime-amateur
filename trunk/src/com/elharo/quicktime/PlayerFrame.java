@@ -112,6 +112,18 @@ public final class PlayerFrame extends JFrame implements Printable {
         new MacOSHandler(this);
     }
 
+    // XXX Logically I shoudl split the menubar out into a separate class
+    // and then InvisibleFrame can be a separate class too.
+    // ???? Setting up invisible frames on the Mac would make a nice Java tip
+    PlayerFrame(boolean invisible) {
+        super("");
+        this.setUndecorated(true);
+        this.setSize(0, 0);
+        CONTROL_BAR_HEIGHT = 0;
+        setupMenuBar();
+        this.pack();
+    }
+
     public PlayerFrame(Movie m) throws QTException {
         this("Amateur Player", m);
     }
@@ -640,7 +652,7 @@ public final class PlayerFrame extends JFrame implements Printable {
                 componentPreferredSize.height + insets.top + insets.bottom);
           }
         } 
-        catch (QTException ex) {
+        catch (Exception ex) {
             return new Dimension (0,0);
         }
     }
