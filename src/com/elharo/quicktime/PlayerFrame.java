@@ -401,9 +401,7 @@ public final class PlayerFrame extends JFrame implements Printable {
 
         editMenu.add(new CutAction(this));
         editMenu.add(new CopyAction(movie));
-        JMenuItem copyCurrentFrame = new JMenuItem("Copy Current Frame");
-        copyCurrentFrame.setEnabled(false);
-        editMenu.add(copyCurrentFrame);
+        editMenu.add(new CopyCurrentFrameAction(this));
         editMenu.add(new PasteAction(this));
         editMenu.add(new ClearAction(this));
         
@@ -761,7 +759,7 @@ public final class PlayerFrame extends JFrame implements Printable {
         
     }
     
-    private Image getStill() throws QTException {
+    Image getStill() throws QTException {
 
           boolean wasPlaying = false;
           if (movie.getRate() > 0) {
