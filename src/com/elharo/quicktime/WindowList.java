@@ -28,9 +28,36 @@ import java.util.List;
 class WindowList {
 
     private List windows = new ArrayList();
+    // for keeping track of where to put windows
+    private static int total = 0;
+    // ???? There should be a way to get these values programmatically
+    private static final int OFFSET = 23;
+    private static final int MENU_BAR_HEIGHT = 23;
+    private static int nextX = 0;
+    private static int xStart = 0; // or just keep a column count????
+    private static int nextY = MENU_BAR_HEIGHT;
+    
     
     void add(PlayerFrame frame) {
         windows.add(frame);
+        total++;
+        nextX += OFFSET;
+        nextY += OFFSET;
+        int screenHeight = frame.getToolkit().getScreenSize().height;
+        if (screenHeight < nextY + frame.getSize().height) {
+            xStart += OFFSET;
+            nextY = MENU_BAR_HEIGHT + xStart;
+            nextX = xStart;
+        }
+        
+    }
+    
+    static int getX() {
+        return nextX;
+    }
+    
+    static int getY() {
+        return nextY;
     }
     
     private WindowList() {}
@@ -42,8 +69,17 @@ class WindowList {
         return windows.iterator();
     }
 
-    public void remove(Frame frame) {
+    void remove(Frame frame) {
         windows.remove(frame);
+        if (windows.size() == 0) {
+            total = 0;
+            nextX = 0;
+            nextY = MENU_BAR_HEIGHT;;
+        }
+    }
+    
+    static int getTotal() {
+        return total;
     }
     
 }

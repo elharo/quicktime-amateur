@@ -27,9 +27,6 @@ package com.elharo.quicktime;
  */
 public class FrameDisplayer implements Runnable {
     
-    // ???? There should be a way to get these values programmatically
-    private static final int OFFSET = 23;
-    private static final int MENU_BAR_HEIGHT = 23;
     private final PlayerFrame frame;
     
     public FrameDisplayer(PlayerFrame frame) {
@@ -37,7 +34,11 @@ public class FrameDisplayer implements Runnable {
     }
     
     public void run() {
-        frame.setLocation(WindowList.getTotal()*OFFSET, MENU_BAR_HEIGHT + WindowList.getTotal()*OFFSET);
+        int xPosition = WindowList.getX();
+        int yPosition = WindowList.getY();
+        
+        
+        frame.setLocation(xPosition, yPosition);
         WindowList.INSTANCE.add(frame);
         frame.show();
     }
