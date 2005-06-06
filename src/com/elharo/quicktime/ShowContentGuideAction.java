@@ -21,49 +21,24 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import quicktime.QTException;
-import quicktime.std.StdQTConstants;
-import quicktime.std.movies.Movie;
-import quicktime.std.movies.media.DataRef;
 
-class URLOpener extends AbstractAction {
-    
-    // Test with http://www.vids-c.co.uk/vids/jem/jem002.mov
-    
-    URLOpener() {
-        putValue(Action.NAME, "Open URL...");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('U', PlayerFrame.menuShortcutKeyMask));  
+class ShowContentGuideAction extends AbstractAction {
+
+    ShowContentGuideAction() {
+        putValue(Action.NAME, "Show Content Guide");  
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('G', PlayerFrame.menuShortcutKeyMask | InputEvent.ALT_MASK));  
     } 
     
+    
     public void actionPerformed(ActionEvent event) {
-
-        String url = JOptionPane.showInputDialog (event.getSource(), "Enter URL");
-        if (url == null) return; // User cancelled
-        openURL(url);
-    }
-
-    static void openURL(String url) {
-
-        try {
-            DataRef dr = new DataRef (url);
-            Movie m = Movie.fromDataRef (dr, StdQTConstants.newMovieActive);
-            PlayerFrame f = new PlayerFrame("Amateur Player", m);
-            f.pack();
-            f.show();
-            m.prePreroll(0, 1.0f);
-            m.preroll(0, 1.0f);
-            m.start();
-        }
-        catch (QTException ex) {
-            // ???? do better
-            ex.printStackTrace();
-        }
+        URLOpener.openURL("http://qtpix.apple.com/qtpix/qtpix.mov");
     }
 
 }
