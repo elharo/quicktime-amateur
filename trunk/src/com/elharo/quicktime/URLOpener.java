@@ -20,10 +20,13 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
@@ -42,11 +45,12 @@ class URLOpener extends AbstractAction {
     } 
     
     public void actionPerformed(ActionEvent event) {
-
-        String url = JOptionPane.showInputDialog (event.getSource(), "Enter URL");
+        Component source = (JMenuItem) event.getSource();
+        Container parent = source.getParent();
+        String url = JOptionPane.showInputDialog(parent, "Movie URL:", "Open URL", JOptionPane.PLAIN_MESSAGE);
         if (url == null) return; // User cancelled
         openURL(url);
-    }
+    } 
 
     static void openURL(String url) {
 
