@@ -191,11 +191,7 @@ public final class PlayerFrame extends JFrame implements Printable {
         showAVControls.setAccelerator(KeyStroke.getKeyStroke('K', menuShortcutKeyMask));
         showAVControls.setEnabled(false);
         windowMenu.add(showAVControls);                
-        
-        JMenuItem showContentGuide = new JMenuItem("Show Content Guide");
-        showContentGuide.setAccelerator(KeyStroke.getKeyStroke('G', menuShortcutKeyMask | InputEvent.ALT_MASK));
-        showContentGuide.setEnabled(false);
-        windowMenu.add(showContentGuide);                
+        windowMenu.add(new ShowContentGuideAction());    
         
         windowMenu.addSeparator();
 
@@ -475,10 +471,7 @@ public final class PlayerFrame extends JFrame implements Printable {
         openFile.addActionListener(new FileOpener());
         fileMenu.add(openFile);
         
-        JMenuItem openURL = new JMenuItem("Open URL...");
-        openURL.setAccelerator(KeyStroke.getKeyStroke('U', menuShortcutKeyMask));        
-        openURL.addActionListener(new URLOpener());
-        fileMenu.add(openURL);
+        fileMenu.add(new URLOpener());
         
         JMenuItem openImageSequence = new JMenuItem("Open Image Sequence...");
         openImageSequence.setAccelerator(KeyStroke.getKeyStroke('O', menuShortcutKeyMask | InputEvent.SHIFT_MASK));        

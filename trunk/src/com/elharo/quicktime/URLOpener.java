@@ -21,17 +21,26 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 import quicktime.QTException;
 import quicktime.std.StdQTConstants;
 import quicktime.std.movies.Movie;
 import quicktime.std.movies.media.DataRef;
 
-class URLOpener implements ActionListener {
-
+class URLOpener extends AbstractAction {
+    
+    // Test with http://www.vids-c.co.uk/vids/jem/jem002.mov
+    
+    URLOpener() {
+        putValue(Action.NAME, "Open URL...");  
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('U', PlayerFrame.menuShortcutKeyMask));  
+    } 
+    
     public void actionPerformed(ActionEvent event) {
 
         String url = JOptionPane.showInputDialog (event.getSource(), "Enter URL");
