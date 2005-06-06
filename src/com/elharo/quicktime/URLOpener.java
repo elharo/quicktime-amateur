@@ -35,6 +35,7 @@ class URLOpener implements ActionListener {
     public void actionPerformed(ActionEvent event) {
 
         String url = JOptionPane.showInputDialog (event.getSource(), "Enter URL");
+        if (url == null) return; // User cancelled
         try {
             DataRef dr = new DataRef (url);
             Movie m = Movie.fromDataRef (dr, StdQTConstants.newMovieActive);
