@@ -491,10 +491,7 @@ public final class PlayerFrame extends JFrame implements Printable {
         save.setEnabled(false);
         fileMenu.add(save);
         
-        JMenuItem saveAs = new JMenuItem("Save As...");
-        saveAs.setAccelerator(KeyStroke.getKeyStroke('S', menuShortcutKeyMask | InputEvent.SHIFT_MASK));        
-        saveAs.setEnabled(false);
-        fileMenu.add(saveAs);
+        fileMenu.add(new SaveAsAction(movie));
         
         JMenuItem revertToSaved = new JMenuItem("Revert to Saved");
         revertToSaved.setEnabled(false);
