@@ -44,8 +44,8 @@ public class PlayerFrameTest extends TestCase {
         try {
             QuicktimeInit.setup();
         }
-        catch (QTException e) {
-            throw new RuntimeException(e);
+        catch (QTException ex) {
+            throw new RuntimeException(ex);
         }   
     }
     
@@ -54,48 +54,48 @@ public class PlayerFrameTest extends TestCase {
         menubar = frame.getJMenuBar();
     }
 
-    public void testTitleOfUntitledFrameIsAmateurPlayer() throws QTException {
+    public void testTitleOfUntitledFrameIsAmateurPlayer() {
         assertEquals("Amateur Player", frame.getTitle());
     }
     
-    public void testInitialFrameIsNotTooSmall() throws QTException { 
+    public void testInitialFrameIsNotTooSmall() { 
         Dimension d = frame.getSize();
         assertTrue(d.width > 300);
         assertTrue(d.height > 300);
     }
     
-    public void testAmateurPlayerHasHelpMenu() throws QTException {
+    public void testAmateurPlayerHasHelpMenu() {
 
         JMenu firstMenu = menubar.getMenu(4);
         assertEquals("Help", firstMenu.getText());
         
     }
     
-    public void testAmateurPlayerHasFileMenu() throws QTException {
+    public void testAmateurPlayerHasFileMenu() {
         JMenu firstMenu = menubar.getMenu(0);
         assertEquals("File", firstMenu.getText());
         
     }
     
-    public void testAmateurPlayerHasEditMenu() throws QTException {
+    public void testAmateurPlayerHasEditMenu() {
         JMenu firstMenu = menubar.getMenu(1);
         assertEquals("Edit", firstMenu.getText());
         
     }
     
-    public void testAmateurPlayerHasViewMenu() throws QTException {
+    public void testAmateurPlayerHasViewMenu() {
         JMenu firstMenu = menubar.getMenu(2);
         assertEquals("View", firstMenu.getText());
         
     }
     
-    public void testAmateurPlayerHasWindowMenu() throws QTException {
+    public void testAmateurPlayerHasWindowMenu() {
         JMenu firstMenu = menubar.getMenu(3);
         assertEquals("Window", firstMenu.getText());
         
     }
     
-    public void testOpenFileHasCommandKeyEquivalent() throws QTException {
+    public void testOpenFileHasCommandKeyEquivalent() {
         Component[] fileitems = menubar.getMenu(0).getMenuComponents();
         for (int i = 0; i < fileitems.length; i++) {
             if (fileitems[i] instanceof JMenuItem) {
@@ -108,9 +108,8 @@ public class PlayerFrameTest extends TestCase {
         
     }
     
-    public void testMinimizeCommandKeyEquivalent() throws QTException {
-        
-
+    public void testMinimizeCommandKeyEquivalent() {
+       
         Component[] fileitems = menubar.getMenu(3).getMenuComponents();
         for (int i = 0; i < fileitems.length; i++) {
             if (fileitems[i] instanceof JMenuItem) {
@@ -123,11 +122,11 @@ public class PlayerFrameTest extends TestCase {
         
     }
     
-    public void testPrintCommandKeyEquivalent() throws QTException {        
+    public void testPrintCommandKeyEquivalent() {        
         assertCommandKeyEquivalent("Print...", 'P');
     }
     
-    public void testSaveCommandKeyEquivalent() throws QTException {        
+    public void testSaveCommandKeyEquivalent() {        
         assertCommandKeyEquivalent("Save", 'S');
     }
     
