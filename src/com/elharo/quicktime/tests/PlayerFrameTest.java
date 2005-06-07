@@ -158,29 +158,6 @@ public class PlayerFrameTest extends TestCase {
     }
     
     
-    // move this into separate framedisplayertest class????
-    public void testOffset() throws QTException, InterruptedException {
-        FrameDisplayer.display(frame);
-        PlayerFrame frame2 = new PlayerFrame();
-        FrameDisplayer.display(frame2);
-        PlayerFrame frame3 = new PlayerFrame();
-        FrameDisplayer.display(frame3);
-        
-        // wait for frames to display
-        while (! frame3.isVisible() ) Thread.sleep(100);
-        
-        Point location1 = frame.getLocation();
-        Point location2 = frame2.getLocation();
-        Point location3 = frame3.getLocation();
-        assertTrue(location1.x < location2.x);
-        assertTrue(location2.x < location3.x);
-        assertTrue(location1.y < location2.y);
-        assertTrue(location2.y < location3.y);
-        frame2.dispose();
-        frame3.dispose();
-    }
-    
-    
     public void testCloseWindow() throws InterruptedException {
         
         FrameDisplayer.display(frame);
