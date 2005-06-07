@@ -20,6 +20,8 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
+import java.awt.EventQueue;
+
 
 /**
  * For an explanation of this class see John Zukowski's article at
@@ -37,10 +39,14 @@ public class FrameDisplayer implements Runnable {
         int xPosition = WindowList.getX();
         int yPosition = WindowList.getY();
         
-        
         frame.setLocation(xPosition, yPosition);
         WindowList.INSTANCE.add(frame);
         frame.show();
+    }
+    
+    public static void display(PlayerFrame frame) {
+        Runnable runner = new FrameDisplayer(frame);
+        EventQueue.invokeLater(runner);
     }
     
 }

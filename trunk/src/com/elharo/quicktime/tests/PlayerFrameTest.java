@@ -22,14 +22,15 @@ package com.elharo.quicktime.tests;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
 
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import quicktime.QTException;
 
+import com.elharo.quicktime.FrameDisplayer;
 import com.elharo.quicktime.PlayerFrame;
 import com.elharo.quicktime.QuicktimeInit;
 
@@ -37,7 +38,7 @@ import junit.framework.TestCase;
 
 public class PlayerFrameTest extends TestCase {
     
-    private JFrame frame;
+    private PlayerFrame frame;
     private JMenuBar menubar;
     
     static {
@@ -52,6 +53,10 @@ public class PlayerFrameTest extends TestCase {
     protected void setUp() throws QTException {
         frame = new PlayerFrame();
         menubar = frame.getJMenuBar();
+    }
+
+    protected void tearDown() {
+        frame.dispose();
     }
 
     public void testTitleOfUntitledFrameIsAmateurPlayer() {
@@ -145,6 +150,28 @@ public class PlayerFrameTest extends TestCase {
             }
         }
         
+    }
+    
+    
+    public void testOffset() throws QTException, InterruptedException {
+        FrameDisplayer.display(frame);
+        PlayerFrame frame2 = new PlayerFrame();
+        FrameDisplayer.display(frame2);
+        PlayerFrame frame3 = new PlayerFrame();
+        FrameDisplayer.display(frame3);
+        
+        // wait for frames to display
+        while (! frame3.isVisible() ) Thread.sleep(100);
+        
+        Point location1 = frame.getLocation();
+        Point location2 = frame2.getLocation();
+        Point location3 = frame3.getLocation();
+        assertTrue(location1.x < location2.x);
+        assertTrue(location2.x < location3.x);
+        assertTrue(location1.y < location2.y);
+        assertTrue(location2.y < location3.y);
+        frame2.dispose();
+        frame3.dispose();
     }
     
 }
