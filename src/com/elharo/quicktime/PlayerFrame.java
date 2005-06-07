@@ -151,6 +151,10 @@ public final class PlayerFrame extends JFrame implements Printable {
         help.setEnabled(false);
         helpMenu.add(help);
 
+        JMenuItem sendFeedback = new JMenuItem("Send Feedback");
+        sendFeedback.setEnabled(false);
+        helpMenu.add(sendFeedback);
+
         menubar.add(helpMenu);
     }
 
@@ -477,6 +481,11 @@ public final class PlayerFrame extends JFrame implements Printable {
         openImageSequence.setAccelerator(KeyStroke.getKeyStroke('O', menuShortcutKeyMask | InputEvent.SHIFT_MASK));        
         openImageSequence.setEnabled(false);
         fileMenu.add(openImageSequence);
+        
+        // XXX Use this to play all movies in a folder in order
+        JMenuItem openMovieSequence = new JMenuItem("Open Movie Sequence...");        
+        openMovieSequence.setEnabled(false);
+        fileMenu.add(openMovieSequence);
         
         JMenuItem openRecent = new JMenuItem("Open Recent");
         openRecent.setEnabled(false);
