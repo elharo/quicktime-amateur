@@ -31,7 +31,7 @@ public class FrameDisplayer implements Runnable {
     
     private final PlayerFrame frame;
     
-    public FrameDisplayer(PlayerFrame frame) {
+    private FrameDisplayer(PlayerFrame frame) {
         this.frame = frame;
     }
     
