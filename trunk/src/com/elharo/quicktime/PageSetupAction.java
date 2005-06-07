@@ -32,16 +32,17 @@ import javax.swing.KeyStroke;
 class PageSetupAction extends AbstractAction {
     
     private PageFormat format;
+    private PrinterJob job;
     
-    PageSetupAction() {
+    PageSetupAction(PrinterJob job) {
+        this.job = job;
         putValue(Action.NAME, "Page Setup...");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('P', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));  
     } 
     
     public void actionPerformed(ActionEvent event) {
-        PrinterJob printerJob = PrinterJob.getPrinterJob();
         PageFormat format = new PageFormat();
-        this.format = printerJob.pageDialog(format);
+        this.format = job.pageDialog(format);
     }
     
     PageFormat getFormat() {
