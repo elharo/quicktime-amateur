@@ -52,15 +52,15 @@ class SaveAsAction extends AbstractAction {
           StdQTConstants.createMovieFileDontCreateResFile |
           StdQTConstants.createMovieFileDeleteCurFile |
           StdQTConstants.showUserSettingsDialog;
-        
           try {
-              movie.convertToFile (file, 
+              movie.setProgressProc();
+              // why does this not bring up a progress dialog when saving????
+              movie.convertToFile(file, 
                 StdQTConstants.kQTFileTypeMovie, 
                 StdQTConstants.kMoviePlayer, // ???? change this to Amateur
                 IOConstants.smSystemScript, 
                 flags);
-              // ???? this can take a long time, need a progress dialog
-              // ???? why does this seem to lose sound when converting an MPEG?
+              // ???? why does this lose sound when converting an MPEG?
           }
           catch (StdQTException e) {
             if (e.errorCode() == -128) {
