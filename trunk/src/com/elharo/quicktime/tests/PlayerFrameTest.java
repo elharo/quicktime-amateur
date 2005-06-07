@@ -20,13 +20,18 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime.tests;
 
+import java.awt.AWTException;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.event.InputEvent;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 import quicktime.QTException;
 
@@ -153,6 +158,7 @@ public class PlayerFrameTest extends TestCase {
     }
     
     
+    // move this into separate framedisplayertest class????
     public void testOffset() throws QTException, InterruptedException {
         FrameDisplayer.display(frame);
         PlayerFrame frame2 = new PlayerFrame();
@@ -172,6 +178,26 @@ public class PlayerFrameTest extends TestCase {
         assertTrue(location2.y < location3.y);
         frame2.dispose();
         frame3.dispose();
+    }
+    
+    
+    public void testCloseWindow() throws InterruptedException {
+        
+        FrameDisplayer.display(frame);
+        while (! frame.isVisible() ) Thread.sleep(100);
+        
+        // ???? extract this as a find menu item method
+        Component[] fileitems = menubar.getMenu(0).getMenuComponents();
+        for (int i = 0; i < fileitems.length; i++) {
+            if (fileitems[i] instanceof JMenuItem) {
+                JMenuItem item = (JMenuItem) fileitems[i];
+                if (item.getText().equals("Close")) {
+                    item.doClick();
+                }
+            }
+        }        
+        assertFalse(frame.isVisible());
+        
     }
     
 }
