@@ -22,7 +22,6 @@ package com.elharo.quicktime;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -47,8 +46,7 @@ public class FileOpener implements ActionListener {
             OpenMovieFile omFile = OpenMovieFile.asRead(file);
             Movie m = Movie.fromFile(omFile);
             PlayerFrame f = new PlayerFrame(file.getName(), m);
-            Runnable runner = new FrameDisplayer(f);
-            EventQueue.invokeLater(runner);
+            FrameDisplayer.display(f);
         }
         catch (QTIOException ex) {
            if (ex.errorCode() == USER_CANCELLED) return;
