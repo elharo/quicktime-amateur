@@ -55,13 +55,11 @@ class URLOpener extends AbstractAction {
     static void openURL(String url) {
 
         try {
-            DataRef dr = new DataRef (url);
-            Movie m = Movie.fromDataRef (dr, StdQTConstants.newMovieActive);
+            DataRef ref = new DataRef(url);
+            Movie m = Movie.fromDataRef(ref, StdQTConstants.newMovieActive);
             PlayerFrame f = new PlayerFrame("Amateur Player", m);
             f.pack();
             f.show();
-            m.prePreroll(0, 1.0f);
-            m.preroll(0, 1.0f);
             m.start();
         }
         catch (QTException ex) {
