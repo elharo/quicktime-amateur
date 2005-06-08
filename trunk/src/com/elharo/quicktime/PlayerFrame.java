@@ -155,6 +155,23 @@ public final class PlayerFrame extends JFrame implements Printable {
         sendFeedback.setEnabled(false);
         helpMenu.add(sendFeedback);
 
+        // XXX This should open the user's default web browser ponted to the the 
+        // java.net bug report form
+        JMenuItem reportBug = new JMenuItem("Report Bug");
+        reportBug.setEnabled(false);
+        helpMenu.add(reportBug);
+
+        // XXX This should open the user's default web browser ponted to the the 
+        // java.net RFE form
+        JMenuItem requestFeature = new JMenuItem("Request Feature");
+        requestFeature.setEnabled(false);
+        helpMenu.add(requestFeature);
+
+        // XXX Check how CyberDuck does htis with PayPal
+        JMenuItem donate = new JMenuItem("Donate");
+        donate.setEnabled(false);
+        helpMenu.add(donate);
+
         menubar.add(helpMenu);
     }
 
