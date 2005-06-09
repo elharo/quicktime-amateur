@@ -27,14 +27,13 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import quicktime.QTException;
-import quicktime.std.movies.Movie;
 
 class SelectNoneAction extends AbstractAction {
 
-    private Movie movie;
+    private PlayerFrame frame;
 
-    SelectNoneAction(Movie movie) {
-        this.movie = movie;
+    SelectNoneAction(PlayerFrame frame) {
+        this.frame = frame;
         putValue(Action.NAME, "Select None"); 
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('B', PlayerFrame.menuShortcutKeyMask));
     } 
@@ -42,7 +41,7 @@ class SelectNoneAction extends AbstractAction {
     
     public void actionPerformed(ActionEvent event) {
         try {
-            movie.setSelection(0, 0);
+            frame.getMovie().setSelection(0, 0);
         }
         catch (QTException e) {
             // ???? Auto-generated catch block

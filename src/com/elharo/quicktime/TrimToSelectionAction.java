@@ -23,9 +23,10 @@ public class TrimToSelectionAction extends AbstractAction {
     private MovieController controller;
     private PlayerFrame frame;
 
-    TrimToSelectionAction(MovieController controller, PlayerFrame frame) {
+    TrimToSelectionAction(PlayerFrame frame) {
         this.frame = frame;
-        this.controller = controller;
+        if (frame == null) this.setEnabled(false);
+        else this.controller = frame.getController();
         putValue(Action.NAME, "Trim To Selection");    
     } 
     
