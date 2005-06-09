@@ -116,7 +116,8 @@ public final class PlayerFrame extends JFrame implements Printable {
         this.setUndecorated(true);
         this.setSize(0, 0);
         CONTROL_BAR_HEIGHT = 0;
-        setupMenuBar();
+        JMenuBar menubar = new PlayerMenuBar(null);
+        this.setJMenuBar(menubar);
         this.pack();
     }
 
