@@ -22,7 +22,6 @@ package com.elharo.quicktime;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -30,8 +29,6 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -58,6 +55,7 @@ import quicktime.app.view.GraphicsImporterDrawer;
 import quicktime.app.view.QTComponent;
 import quicktime.app.view.QTFactory;
 import quicktime.app.view.QTImageProducer;
+import quicktime.io.QTFile;
 import quicktime.qd.Pict;
 import quicktime.qd.QDRect;
 import quicktime.std.StdQTConstants;
@@ -78,15 +76,13 @@ public final class PlayerFrame extends JFrame implements Printable {
     private int movieHeight = -1;
     private int movieWidth = -1;
     private Component c;
-    private boolean fullScreen = false;
-    private JMenu windowMenu;
     private UndoManager undoer = new UndoManager();
-    private PrinterJob printerJob = PrinterJob.getPrinterJob();
+    private QTFile file = null;
     
     private final int CONTROL_BAR_HEIGHT;
     private int frameExtras;
     static final int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-    private static final int NUMBER_OF_WINDOW_MENU_ITEMS = 10;
+    private JFrame fullScreenFrame = null;
 
     public PlayerFrame() throws QTException {
         this("Amateur Player");
@@ -129,119 +125,18 @@ public final class PlayerFrame extends JFrame implements Printable {
     }
 
     private void setupMenuBar() {
-        JMenuBar menubar = new JMenuBar();
-        initFileMenu(menubar);
-        initEditMenu(menubar);
-        initViewMenu(menubar);
-        initWindowMenu(menubar);
-        initHelpMenu(menubar);
+        JMenuBar menubar = new PlayerMenuBar(this);
         this.setJMenuBar(menubar);
     }
-    
-    private void initHelpMenu(JMenuBar menubar) {
-        JMenu helpMenu = new JMenu("Help");
 
-        JMenuItem help = new JMenuItem("Quicktime Amateur Help");
-        // XXX why doesn't this work?
-        // Probably has something to do with this from InputEvent API doc:
-        /* Not all characters have a keycode associated with them. 
-         * For example, there is no keycode for the question mark 
-         * because there is no keyboard for which it appears on the primary layer. */
-        help.setAccelerator(KeyStroke.getKeyStroke('?', menuShortcutKeyMask));
-        help.setEnabled(false);
-        helpMenu.add(help);
-
-        JMenuItem sendFeedback = new JMenuItem("Send Feedback");
-        sendFeedback.setEnabled(false);
-        helpMenu.add(sendFeedback);
-
-        // XXX This should open the user's default web browser ponted to the the 
-        // java.net bug report form
-        JMenuItem reportBug = new JMenuItem("Report Bug");
-        reportBug.setEnabled(false);
-        helpMenu.add(reportBug);
-
-        // XXX This should open the user's default web browser ponted to the the 
-        // java.net RFE form
-        JMenuItem requestFeature = new JMenuItem("Request Feature");
-        requestFeature.setEnabled(false);
-        helpMenu.add(requestFeature);
-
-        // XXX Check how CyberDuck does htis with PayPal
-        JMenuItem donate = new JMenuItem("Donate");
-        donate.setEnabled(false);
-        helpMenu.add(donate);
-
-        menubar.add(helpMenu);
-    }
-
-    private void initWindowMenu(JMenuBar menubar) {
-        windowMenu = new JMenu("Window");
-        
-        JMenuItem minimize = new JMenuItem("Minimize");
-        minimize.setAccelerator(KeyStroke.getKeyStroke('M', menuShortcutKeyMask));
-        minimize.addActionListener(
-          new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                setState(Frame.ICONIFIED);
-            }
-          }
-        );
-        windowMenu.add(minimize);
-        
-        JMenuItem zoom = new JMenuItem("Zoom");
-        zoom.addActionListener(
-          new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                setExtendedState(JFrame.MAXIMIZED_BOTH);
-            }
-          }
-        );
-        windowMenu.add(zoom);
-        
-        windowMenu.addSeparator();
-
-        windowMenu.add(new MovieInfoAction(movie));   
-        
-        JMenuItem showMovieProperties = new JMenuItem("Show Movie Properties");
-        showMovieProperties.setAccelerator(KeyStroke.getKeyStroke('J', menuShortcutKeyMask));
-        showMovieProperties.setEnabled(false);
-        windowMenu.add(showMovieProperties);                
-        
-        JMenuItem showAVControls = new JMenuItem("Show A/V Controls");
-        showAVControls.setAccelerator(KeyStroke.getKeyStroke('K', menuShortcutKeyMask));
-        showAVControls.setEnabled(false);
-        windowMenu.add(showAVControls);                
-        windowMenu.add(new ShowContentGuideAction());    
-        
-        windowMenu.addSeparator();
-
-        JMenuItem favorites = new JMenuItem("Favorites");
-        favorites.setEnabled(false);
-        windowMenu.add(favorites);        
-        
-        windowMenu.addSeparator();
- 
-        windowMenu.add(new BringAllToFrontAction());
-        
-        windowMenu.addSeparator();
-        
-        WindowList list = WindowList.INSTANCE;
-        Iterator iterator = list.iterator();
-        while (iterator.hasNext()) {
-            PlayerFrame frame = (PlayerFrame) iterator.next();
-            this.windowMenu.add(new WindowMenuItem(frame));
-        }        
-        
-        menubar.add(windowMenu);
-    }
     
     public void show() {
         WindowList list = WindowList.INSTANCE;
         Iterator iterator = list.iterator();
         while (iterator.hasNext()) {
             PlayerFrame frame = (PlayerFrame) iterator.next();
-            frame.windowMenu.add(new WindowMenuItem(this));
+            PlayerMenuBar menubar = (PlayerMenuBar) frame.getJMenuBar();
+            menubar.addWindowMenuItem(this);
         }
         super.show();
     }
@@ -252,213 +147,11 @@ public final class PlayerFrame extends JFrame implements Printable {
         Iterator iterator = WindowList.INSTANCE.iterator();
         while (iterator.hasNext()) {
             PlayerFrame frame = (PlayerFrame) iterator.next();
-            frame.removeWindowMenuItem(this);
+            PlayerMenuBar menubar = (PlayerMenuBar) frame.getJMenuBar();
+            menubar.removeWindowMenuItem(this);
         }        
     }
 
-    private void removeWindowMenuItem(PlayerFrame frame) {
-
-        Component[] items = windowMenu.getMenuComponents();
-        for (int i = items.length-1; i > NUMBER_OF_WINDOW_MENU_ITEMS; i--) {
-            if (items[i] instanceof WindowMenuItem) {
-                WindowMenuItem item = (WindowMenuItem) items[i];
-                if (item.getFrame() == frame) {
-                    windowMenu.remove(item);
-                    break;   
-                }    
-            }
-            else break;
-        }
-        
-    }
-
-    private void initViewMenu(JMenuBar menubar) {
-        
-        JMenu viewMenu = new JMenu("View");
-        
-        JMenuItem halfsize = new JMenuItem("Half Size");
-        halfsize.setAccelerator(KeyStroke.getKeyStroke('0', menuShortcutKeyMask));
-        halfsize.addActionListener(new SizeListener(0.5));
-        viewMenu.add(halfsize);
-        
-        JMenuItem fullsize = new JMenuItem("Full Size");
-        fullsize.setAccelerator(KeyStroke.getKeyStroke('1', menuShortcutKeyMask));
-        fullsize.addActionListener(new SizeListener(1.0));
-        viewMenu.add(fullsize);
-        
-        JMenuItem doublesize = new JMenuItem("Double Size");
-        doublesize.setAccelerator(KeyStroke.getKeyStroke('2', menuShortcutKeyMask));
-        doublesize.addActionListener(new SizeListener(2.0));
-        viewMenu.add(doublesize);
-        
-        JMenuItem triplesize = new JMenuItem("Triple Size");
-        triplesize.setAccelerator(KeyStroke.getKeyStroke('3', menuShortcutKeyMask));
-        triplesize.addActionListener(new SizeListener(3.0));
-        viewMenu.add(triplesize);
-        
-        JMenuItem quadrupleSize = new JMenuItem("Quadruple Size");
-        quadrupleSize.setAccelerator(KeyStroke.getKeyStroke('4', menuShortcutKeyMask));
-        quadrupleSize.addActionListener(new SizeListener(4.0));
-        viewMenu.add(quadrupleSize);
-        
-        JMenuItem fullScreen = new JMenuItem("Full Screen");
-        fullScreen.setAccelerator(KeyStroke.getKeyStroke('F', menuShortcutKeyMask));
-        fullScreen.addActionListener(new FullScreenListener(this));
-        viewMenu.add(fullScreen);
-        
-        viewMenu.addSeparator();
-        
-        JMenuItem presentMovie = new JMenuItem("Present Movie");
-        presentMovie.setAccelerator(KeyStroke.getKeyStroke('F', menuShortcutKeyMask | InputEvent.SHIFT_MASK));
-        presentMovie.setEnabled(false);
-        viewMenu.add(presentMovie);
-        
-        viewMenu.addSeparator();
-        
-        JMenuItem loop = new JCheckBoxMenuItem("Loop");
-        loop.setAccelerator(KeyStroke.getKeyStroke('L', menuShortcutKeyMask));        
-        loop.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    if (controller.getLooping()) controller.setLooping(false);
-                    else controller.setLooping(true);
-                }
-                catch (StdQTException e) {
-                    // ???? Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }});
-        viewMenu.add(loop);
-        
-        JMenuItem loopBackAndForth = new JCheckBoxMenuItem("Loop Back and Forth");
-        loopBackAndForth.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    if (controller.getLoopIsPalindrome()) controller.setLoopIsPalindrome(false);
-                    else controller.setLoopIsPalindrome(true);
-                }
-                catch (StdQTException e) {
-                    // ???? Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }});
-        viewMenu.add(loopBackAndForth);
-        
-        final JCheckBoxMenuItem playSelectionOnly = new JCheckBoxMenuItem("Play Selection Only");
-        playSelectionOnly.setAccelerator(KeyStroke.getKeyStroke('T', menuShortcutKeyMask));
-        playSelectionOnly.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-                try {
-                    if (playSelectionOnly.isSelected()) {
-                        controller.setPlaySelection(true);
-                    }
-                    else {
-                        controller.setPlaySelection(false);
-                    }
-                }
-                catch (QTException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        
-        viewMenu.add(playSelectionOnly);
-        
-        final JCheckBoxMenuItem playAllFrames = new JCheckBoxMenuItem("Play All Frames");
-        playAllFrames.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent event) {
-                
-                try {
-                    if (playAllFrames.isSelected()) {
-                        // Setting this mutes the sound. This appears to be the normal
-                        // and expected behavior. See http://lists.apple.com/archives/quicktime-users/2003/Dec/msg00061.html
-                        controller.setPlayEveryFrame(true);
-                    }
-                    else {
-                        controller.setPlayEveryFrame(false);
-                    }
-                }
-                catch (QTException ex) {
-                    ex.printStackTrace();
-                }
-            }
-            
-            });
-        viewMenu.add(playAllFrames);
-
-        viewMenu.addSeparator();
-
-        viewMenu.add(new PlayAllMoviesAction());
-
-        viewMenu.addSeparator();
-
-        viewMenu.add(new GoToPosterFrameAction(controller));
-        viewMenu.add(new SetPosterFrameAction(controller));
-
-        viewMenu.addSeparator();
-
-        JMenuItem chooseLanguage = new JMenuItem("Choose Language...");
-        chooseLanguage.setEnabled(false);
-        viewMenu.add(chooseLanguage);
-
-        menubar.add(viewMenu);
-    }
-
-    private void initEditMenu(JMenuBar menubar) {
-        JMenu editMenu = new JMenu("Edit");
-        
-        editMenu.add(new UndoAction(this));
-        editMenu.add(new RedoAction(this));
-        
-        editMenu.addSeparator();
-
-        editMenu.add(new CutAction(this));
-        editMenu.add(new CopyAction(movie));
-        editMenu.add(new CopyCurrentFrameAction(this));
-        editMenu.add(new PasteAction(this));
-        editMenu.add(new ClearAction(this));
-        
-        editMenu.addSeparator();
-
-        editMenu.add(new SelectAllAction(movie));
-        editMenu.add(new SelectNoneAction(movie));
-        
-        editMenu.addSeparator();
-        
-        // XXX make this undoable
-        editMenu.add(new TrimToSelectionAction(controller, this));
-        
-        editMenu.addSeparator();
-
-        JMenuItem addToMovie = new JMenuItem("Add to Movie");
-        addToMovie.setAccelerator(KeyStroke.getKeyStroke('V', menuShortcutKeyMask | InputEvent.ALT_MASK));
-        addToMovie.setEnabled(false);
-        editMenu.add(addToMovie);
-        
-        JMenuItem addToSelection = new JMenuItem("Add to Selection and Scale");
-        addToSelection.setAccelerator(KeyStroke.getKeyStroke('V', menuShortcutKeyMask | InputEvent.ALT_MASK | InputEvent.SHIFT_MASK));
-        addToSelection.setEnabled(false);
-        editMenu.add(addToSelection);
-        
-        editMenu.addSeparator();
-
-        JMenuItem find = new JMenuItem("Find");
-        find.setEnabled(false);
-        editMenu.add(find);
-        
-        editMenu.addSeparator();
-
-        JMenuItem specialCharacters = new JMenuItem("Special Characters...");
-        specialCharacters.setAccelerator(KeyStroke.getKeyStroke('T', menuShortcutKeyMask | InputEvent.ALT_MASK));
-        specialCharacters.setEnabled(false);
-        editMenu.add(specialCharacters);
-        
-        menubar.add(editMenu);
-    }
     
     private void initMovieDimensions() throws StdQTException {
         if (movieHeight == -1 || movieWidth == -1) {
@@ -469,178 +162,7 @@ public final class PlayerFrame extends JFrame implements Printable {
         }
     }
 
-    private void initFileMenu(JMenuBar menubar) {
-        
-        JMenu fileMenu = new JMenu("File");
-        
-        fileMenu.add(new NewPlayerAction());
-        
-        JMenuItem newMovieRecording = new JMenuItem("New Movie Recording");
-        newMovieRecording.setAccelerator(KeyStroke.getKeyStroke('N', menuShortcutKeyMask | InputEvent.ALT_MASK));        
-        newMovieRecording.setEnabled(false);
-        fileMenu.add(newMovieRecording);
-        
-        JMenuItem newAudioRecording = new JMenuItem("New Audio Recording");
-        newAudioRecording.setAccelerator(KeyStroke.getKeyStroke('N', menuShortcutKeyMask | InputEvent.ALT_MASK | InputEvent.CTRL_MASK));        
-        newAudioRecording.setEnabled(false);
-        fileMenu.add(newAudioRecording);
-        
-        fileMenu.addSeparator();
-        
-        JMenuItem openFile = new JMenuItem("Open File...");
-        openFile.setAccelerator(KeyStroke.getKeyStroke('O', menuShortcutKeyMask));        
-        openFile.addActionListener(new FileOpener());
-        fileMenu.add(openFile);
-        
-        fileMenu.add(new URLOpener());
-        
-        JMenuItem openImageSequence = new JMenuItem("Open Image Sequence...");
-        openImageSequence.setAccelerator(KeyStroke.getKeyStroke('O', menuShortcutKeyMask | InputEvent.SHIFT_MASK));        
-        openImageSequence.setEnabled(false);
-        fileMenu.add(openImageSequence);
-        
-        // XXX Use this to play all movies in a folder in order
-        JMenuItem openMovieSequence = new JMenuItem("Open Movie Sequence...");        
-        openMovieSequence.setEnabled(false);
-        fileMenu.add(openMovieSequence);
-        
-        JMenuItem openRecent = new JMenuItem("Open Recent");
-        openRecent.setEnabled(false);
-        fileMenu.add(openRecent);
-        
-        fileMenu.add(new CloseAction(this));
-        
-        fileMenu.addSeparator();
-        
-        JMenuItem save = new JMenuItem("Save");
-        save.setAccelerator(KeyStroke.getKeyStroke('S', menuShortcutKeyMask));        
-        save.setEnabled(false);
-        fileMenu.add(save);
-        
-        fileMenu.add(new SaveAsAction(movie));
-        
-        JMenuItem revertToSaved = new JMenuItem("Revert to Saved");
-        revertToSaved.setEnabled(false);
-        fileMenu.add(revertToSaved);
-        
-        fileMenu.addSeparator();
-        
-        JMenuItem share = new JMenuItem("Share...");
-        share.setAccelerator(KeyStroke.getKeyStroke('S', menuShortcutKeyMask | InputEvent.ALT_MASK));        
-        share.setEnabled(false);
-        fileMenu.add(share);
-        
-        JMenuItem export = new JMenuItem("Export...");
-        export.setAccelerator(KeyStroke.getKeyStroke('E', menuShortcutKeyMask));        
-        export.setEnabled(false);
-        fileMenu.add(export);
-        
-        JMenuItem exportFrames = new JMenuItem("Export Frames...");        
-        exportFrames.setEnabled(false);
-        fileMenu.add(exportFrames);
-        
-        fileMenu.addSeparator();
-        
-        fileMenu.add(new PageSetupAction(printerJob));
-        fileMenu.add(new PrintAction(printerJob, this));
-        
-        menubar.add(fileMenu);
-    }
 
-    private class SizeListener implements ActionListener {
-    
-        private double ratio;
-    
-        SizeListener(double ratio) {
-            this.ratio = ratio;
-        }
-    
-        public void actionPerformed(ActionEvent event) {
-            int width = (int) (movieWidth * ratio);
-            int height = (int) (movieHeight * ratio) + CONTROL_BAR_HEIGHT + frameExtras;
-            setSize(width, height);
-        }
-
-    }
-    
-    private class FullScreenListener implements ActionListener {
-
-        private JFrame frame;
-        private JFrame fullScreenFrame;
-        
-        FullScreenListener(JFrame f) {
-            this.frame = f;
-        }
-        
-        private JFrame makeFullScreenFrame() {
-            JFrame fullScreenFrame = new JFrame();
-            fullScreenFrame.setUndecorated(true);
-            fullScreenFrame.addKeyListener(new KeyAdapter() {
-                public void keyPressed(KeyEvent event) {
-                    if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                        exitFullScreen();
-                    }
-                }
-            });
-            return fullScreenFrame;
-        }
-        
-        
-        public void actionPerformed(ActionEvent event) {
-            
-            try {
-                if (fullScreen) exitFullScreen();
-                else {
-                    GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-                    Rectangle bounds = device.getDefaultConfiguration().getBounds();
-                    
-                    double widthRatio = bounds.width / (double) movieWidth;
-                    double heightRatio = bounds.height / (double) movieHeight ;
-                    
-                    int fullScreenWidth = movieWidth;
-                    int fullScreenHeight = movieHeight;
-                    if (widthRatio < heightRatio) {
-                        fullScreenWidth = (int) (movieWidth * widthRatio);
-                        fullScreenHeight = (int) (movieHeight * widthRatio);
-                    }
-                    else {
-                        fullScreenWidth = (int) (movieWidth * heightRatio);
-                        fullScreenHeight = (int) (movieHeight * heightRatio);
-                    }
-                    
-                    // need to center the fullscreen movie vertically or horizontally????
-                    
-                    frame.setVisible(false);
-                    fullScreenFrame = makeFullScreenFrame();
-                    device.setFullScreenWindow(fullScreenFrame);
-                    frame.remove(c);
-                    QTComponent qc = QTFactory.makeQTComponent(movie);
-                    fullScreenFrame.getContentPane().add(qc.asComponent());
-                    fullScreenFrame.setSize(fullScreenWidth, fullScreenHeight);
-                    fullScreenFrame.setVisible(true);
-                    movie.start();
-                    fullScreen = true;
-                }
-            }
-            catch (Exception ex) {
-                // XXX do better
-                ex.printStackTrace();
-            }
-        }
-
-        private void exitFullScreen() {
-            fullScreen = false;
-            GraphicsEnvironment.getLocalGraphicsEnvironment().
-              getDefaultScreenDevice().setFullScreenWindow(null);
-            fullScreenFrame.setVisible(false);
-            fullScreenFrame.remove(c);
-            frame.getContentPane().add(c);
-            fullScreenFrame = null;
-            frame.setVisible(true);
-            frame.toFront();
-        }
-
-    }
 
     public void play() throws StdQTException {
         if (movie != null) {
@@ -648,6 +170,71 @@ public final class PlayerFrame extends JFrame implements Printable {
         }
     }
     
+    private void exitFullScreen() {
+        GraphicsEnvironment.getLocalGraphicsEnvironment().
+          getDefaultScreenDevice().setFullScreenWindow(null);
+        fullScreenFrame.setVisible(false);
+        fullScreenFrame.remove(c);
+        this.getContentPane().add(c);
+        fullScreenFrame = null;
+        this.setVisible(true);
+        this.toFront();
+    }
+
+
+    
+    
+    private void enterFullScreen() {
+        try {
+            GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+            Rectangle bounds = device.getDefaultConfiguration().getBounds();
+            
+            double widthRatio = bounds.width / (double) movieWidth;
+            double heightRatio = bounds.height / (double) movieHeight ;
+            
+            int fullScreenWidth = movieWidth;
+            int fullScreenHeight = movieHeight;
+            if (widthRatio < heightRatio) {
+                fullScreenWidth = (int) (movieWidth * widthRatio);
+                fullScreenHeight = (int) (movieHeight * widthRatio);
+            }
+            else {
+                fullScreenWidth = (int) (movieWidth * heightRatio);
+                fullScreenHeight = (int) (movieHeight * heightRatio);
+            }
+            
+            // need to center the fullscreen movie vertically or horizontally????
+            
+            this.setVisible(false);
+            fullScreenFrame = makeFullScreenFrame();
+            device.setFullScreenWindow(fullScreenFrame);
+            this.remove(c);
+            QTComponent qc = QTFactory.makeQTComponent(movie);
+            fullScreenFrame.getContentPane().add(qc.asComponent());
+            fullScreenFrame.setSize(fullScreenWidth, fullScreenHeight);
+            fullScreenFrame.setVisible(true);
+            movie.start();
+        }
+        catch (Exception ex) {
+            // XXX do better
+            ex.printStackTrace();
+        }
+    }
+
+    private JFrame makeFullScreenFrame() {
+        JFrame fullScreenFrame = new JFrame();
+        fullScreenFrame.setUndecorated(true);
+        fullScreenFrame.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent event) {
+                if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    exitFullScreen();
+                }
+            }
+        });
+        return fullScreenFrame;
+    }
+        
+            
     
     public Dimension getPreferredSize() {
 
@@ -820,6 +407,33 @@ public final class PlayerFrame extends JFrame implements Printable {
 
     void addEdit(MovieEdit edit) {
         undoer.addEdit(edit);
-    }    
+    }
+    
+    QTFile getFile() {
+        return this.file;
+    }
+    
+    void setFile(QTFile file) {
+        this.file = file;
+    }
+
+    Movie getMovie() {
+        return this.movie;
+    }
+
+    public void resize(double ratio) {
+        int width = (int) (movieWidth * ratio);
+        int height = (int) (movieHeight * ratio) + CONTROL_BAR_HEIGHT + frameExtras;
+        setSize(width, height);
+    }
+
+    public void toggleFullScreenMode() {
+        if (fullScreenFrame == null) this.enterFullScreen();
+        else this.exitFullScreen();
+    }
+
+    MovieController getController() {
+        return this.controller;
+    }
     
 }
