@@ -133,16 +133,20 @@ class PlayerMenuBar extends JMenuBar {
         fileMenu.addSeparator();
         
         PrinterJob printerJob = PrinterJob.getPrinterJob();
-        fileMenu.add(new PageSetupAction(printerJob));
-        fileMenu.add(new PrintAction(printerJob, frame));
+        Action pageSetupAction = new PageSetupAction(printerJob);
+        if (frame == null) pageSetupAction.setEnabled(false);
+        fileMenu.add(pageSetupAction);
+        Action printAction = new PrintAction(printerJob, frame);
+        if (frame == null) printAction.setEnabled(false);
+        fileMenu.add(printAction);
         
         this.add(fileMenu);
+        
     }
-    
-    
 
 
     private void initEditMenu() {
+        
         JMenu editMenu = new JMenu("Edit");
         
         if (frame == null) editMenu.setEnabled(false);
