@@ -145,6 +145,8 @@ class PlayerMenuBar extends JMenuBar {
     private void initEditMenu() {
         JMenu editMenu = new JMenu("Edit");
         
+        if (frame == null) editMenu.setEnabled(false);
+        
         editMenu.add(new UndoAction(frame));
         editMenu.add(new RedoAction(frame));
         
