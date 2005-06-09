@@ -320,10 +320,12 @@ class PlayerMenuBar extends JMenuBar {
             else break;
         }
         
-    }    
+    }
+    
     private void initViewMenu() {
         
         JMenu viewMenu = new JMenu("View");
+        if (frame == null) viewMenu.setEnabled(false);
         
         JMenuItem halfsize = new JMenuItem("Half Size");
         halfsize.setAccelerator(KeyStroke.getKeyStroke('0', menuShortcutKeyMask));
