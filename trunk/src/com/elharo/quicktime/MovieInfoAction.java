@@ -33,8 +33,9 @@ class MovieInfoAction extends AbstractAction {
 
     private Movie movie;
     
-    MovieInfoAction(Movie movie) {
-        this.movie = movie;
+    MovieInfoAction(PlayerFrame frame) {
+        if (frame == null) this.setEnabled(false);
+        else this.movie = frame.getMovie();
         putValue(Action.NAME, "Show Movie Info");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('I', PlayerFrame.menuShortcutKeyMask));  
     } 

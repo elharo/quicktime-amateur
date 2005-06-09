@@ -28,14 +28,13 @@ import javax.swing.KeyStroke;
 
 import quicktime.QTException;
 import quicktime.std.movies.Movie;
-import quicktime.std.movies.MovieController;
 
 class CopyAction extends AbstractAction {
 
-    private Movie movie;
+    private PlayerFrame frame;
 
-    CopyAction(Movie movie) {
-        this.movie = movie;
+    CopyAction(PlayerFrame frame) {
+        this.frame = frame;
         putValue(Action.NAME, "Copy");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('C', PlayerFrame.menuShortcutKeyMask));  
     } 
@@ -43,7 +42,8 @@ class CopyAction extends AbstractAction {
     
     public void actionPerformed(ActionEvent arg0) {
         try {
-            Movie copy = movie.copySelection();
+            Movie original = frame.getMovie();
+            Movie copy = original.copySelection();
             copy.putOnScrap(0);
         }
         catch (QTException e) {

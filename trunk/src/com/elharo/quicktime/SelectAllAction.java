@@ -31,10 +31,10 @@ import quicktime.std.movies.Movie;
 
 class SelectAllAction extends AbstractAction {
 
-    private Movie movie;
+    private PlayerFrame frame;
 
-    SelectAllAction(Movie movie) {
-        this.movie = movie;
+    SelectAllAction(PlayerFrame frame) {
+        this.frame = frame;
         putValue(Action.NAME, "Select All"); 
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('A', PlayerFrame.menuShortcutKeyMask));
     } 
@@ -42,6 +42,7 @@ class SelectAllAction extends AbstractAction {
     
     public void actionPerformed(ActionEvent event) {
         try {
+            Movie movie = frame.getMovie();
             movie.setSelection(0, movie.getDuration());
         }
         catch (QTException e) {

@@ -33,8 +33,9 @@ class SetPosterFrameAction extends AbstractAction {
 
     private MovieController controller;
     
-    public SetPosterFrameAction(MovieController controller) {
-        this.controller = controller;
+    public SetPosterFrameAction(PlayerFrame frame) {
+        if (frame != null) this.controller = controller;
+        else setEnabled(false);
         putValue(Action.NAME, "Set Poster Frame");  
     }
 

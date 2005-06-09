@@ -35,7 +35,7 @@ class CloseAction extends AbstractAction {
         this.frame = frame;
         putValue(Action.NAME, "Close");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('W', PlayerFrame.menuShortcutKeyMask));  
-        
+        if (frame == null) this.setEnabled(false);
     }
 
     public void actionPerformed(ActionEvent event) {

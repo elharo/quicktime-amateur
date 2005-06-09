@@ -27,8 +27,6 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import quicktime.QTException;
-import quicktime.std.movies.Movie;
-import quicktime.std.movies.MovieController;
 
 class CutAction extends AbstractAction {
 

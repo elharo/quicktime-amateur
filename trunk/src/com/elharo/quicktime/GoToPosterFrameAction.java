@@ -34,8 +34,9 @@ class GoToPosterFrameAction extends AbstractAction {
 
     private MovieController controller;
     
-    public GoToPosterFrameAction(MovieController controller) {
-        this.controller = controller;
+    public GoToPosterFrameAction(PlayerFrame frame) {
+        if (frame == null) setEnabled(false);
+        else this.controller = frame.getController();
         putValue(Action.NAME, "Go To Poster Frame");  
     }
 

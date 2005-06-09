@@ -29,6 +29,7 @@ import java.awt.event.InputEvent;
 import java.awt.print.PrinterJob;
 import java.util.Iterator;
 
+import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -96,7 +97,8 @@ class PlayerMenuBar extends JMenuBar {
         openRecent.setEnabled(false);
         fileMenu.add(openRecent);
         
-        fileMenu.add(new CloseAction(frame));
+        Action closeAction = new CloseAction(frame);
+        fileMenu.add(closeAction);
         
         fileMenu.addSeparator();
         
@@ -104,9 +106,10 @@ class PlayerMenuBar extends JMenuBar {
         save.setAccelerator(KeyStroke.getKeyStroke('S', menuShortcutKeyMask));        
         save.setEnabled(false);
         fileMenu.add(save);
-        
-        fileMenu.add(new SaveAsAction(frame.getMovie()));
-        
+         
+        if (frame != null) fileMenu.add(new SaveAsAction(frame.getMovie()));
+        else fileMenu.add(new SaveAsAction(null));
+            
         JMenuItem revertToSaved = new JMenuItem("Revert to Saved");
         revertToSaved.setEnabled(false);
         fileMenu.add(revertToSaved);
@@ -149,19 +152,19 @@ class PlayerMenuBar extends JMenuBar {
 
         editMenu.add(new CutAction(frame));
         // XXX should copy copy entire movie if nothing is selected????
-        editMenu.add(new CopyAction(frame.getMovie()));
+        editMenu.add(new CopyAction(frame));
         editMenu.add(new CopyCurrentFrameAction(frame));
         editMenu.add(new PasteAction(frame));
         editMenu.add(new ClearAction(frame));
         
         editMenu.addSeparator();
 
-        editMenu.add(new SelectAllAction(frame.getMovie()));
-        editMenu.add(new SelectNoneAction(frame.getMovie()));
+        editMenu.add(new SelectAllAction(frame));
+        editMenu.add(new SelectNoneAction(frame));
         
         editMenu.addSeparator();
         
-        editMenu.add(new TrimToSelectionAction(frame.getController(), frame));
+        editMenu.add(new TrimToSelectionAction(frame));
         
         editMenu.addSeparator();
 
@@ -217,7 +220,7 @@ class PlayerMenuBar extends JMenuBar {
         
         windowMenu.addSeparator();
 
-        windowMenu.add(new MovieInfoAction(frame.getMovie()));   
+        windowMenu.add(new MovieInfoAction(frame));   
         
         JMenuItem showMovieProperties = new JMenuItem("Show Movie Properties");
         showMovieProperties.setAccelerator(KeyStroke.getKeyStroke('J', menuShortcutKeyMask));
@@ -435,8 +438,8 @@ class PlayerMenuBar extends JMenuBar {
         viewMenu.add(new PlayAllMoviesAction());
 
         viewMenu.addSeparator();
-        viewMenu.add(new GoToPosterFrameAction(frame.getController()));
-        viewMenu.add(new SetPosterFrameAction(frame.getController()));
+        viewMenu.add(new GoToPosterFrameAction(frame));
+        viewMenu.add(new SetPosterFrameAction(frame));
 
         viewMenu.addSeparator();
 
