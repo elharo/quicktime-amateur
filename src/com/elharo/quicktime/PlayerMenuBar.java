@@ -199,23 +199,30 @@ class PlayerMenuBar extends JMenuBar {
         
         JMenuItem minimize = new JMenuItem("Minimize");
         minimize.setAccelerator(KeyStroke.getKeyStroke('M', menuShortcutKeyMask));
-        minimize.addActionListener(
-          new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                frame.setState(Frame.ICONIFIED);
-            }
-          }
-        );
+        if (frame == null) minimize.setEnabled(false);
+        else {
+            minimize.addActionListener(
+              new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    frame.setState(Frame.ICONIFIED);
+                }
+              }
+            );
+        }
         windowMenu.add(minimize);
         
         JMenuItem zoom = new JMenuItem("Zoom");
-        zoom.addActionListener(
-          new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            }
-          }
-        );
+        if (frame == null) zoom.setEnabled(false);
+        else {
+            zoom.addActionListener(
+              new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    // XXX This needs to respect the ratio
+                    frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                }
+              }
+            );
+        }
         windowMenu.add(zoom);
         
         windowMenu.addSeparator();
@@ -241,7 +248,9 @@ class PlayerMenuBar extends JMenuBar {
         
         windowMenu.addSeparator();
  
-        windowMenu.add(new BringAllToFrontAction());
+        Action bringAllToFront = new BringAllToFrontAction();
+        if (frame == null) bringAllToFront.setEnabled(false);
+        windowMenu.add(bringAllToFront);
         
         windowMenu.addSeparator();
         
