@@ -27,9 +27,12 @@ import javax.swing.*;
 
 import quicktime.QTException;
 import quicktime.qd.QDRect;
+import quicktime.std.StdQTConstants;
 import quicktime.std.StdQTException;
 import quicktime.std.clocks.TimeBase;
 import quicktime.std.movies.Movie;
+import quicktime.std.movies.Track;
+import quicktime.std.movies.media.Media;
 
 /** Although this class extends JFrame, it's called a Dialog
  * It really is a non-modal dialog, but we have to extend Frame to get the menu bars right.
@@ -51,7 +54,7 @@ class InfoDialog extends JFrame {
         
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        titlePanel.add(new JLabel(title));
+        titlePanel.add(new JLabel("<html><p>" + title + "</p></html>"));
         this.getContentPane().add(BorderLayout.NORTH, titlePanel);
         this.getContentPane().add(BorderLayout.CENTER, new JSeparator());
         
@@ -72,12 +75,12 @@ class InfoDialog extends JFrame {
         }
 
         try {
-            // how to figure out 3000 programmatically????
-            String rate = format.format(movie.getTimeScale() / 3000);
-            TimeBase base = movie.getTimeBase();
-            System.err.println(base.getEffectiveRate());
-            System.err.println(base.getRate());
-            rate = format.format(movie.getTrack(1).getMedia().getTimeScale());
+            Track videoTrack = movie.getIndTrackType(1, 
+              StdQTConstants.visualMediaCharacteristic, StdQTConstants.movieTrackCharacteristic);
+            double units = videoTrack.getMedia().getDuration();
+            double frames = videoTrack.getMedia().getSampleCount();
+            double unitsPerSecond = videoTrack.getMedia().getTimeScale();
+            String rate = format.format( unitsPerSecond * frames / units);
             this.addInfo("FPS", rate);
         }
         catch (StdQTException e) {
@@ -183,5 +186,7 @@ class InfoDialog extends JFrame {
         southPanel.add(valuePanel);
         
     }
+    
+    
 
 }
