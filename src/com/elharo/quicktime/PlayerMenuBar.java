@@ -49,6 +49,10 @@ class PlayerMenuBar extends JMenuBar {
     private PlayerFrame frame;
     private JMenu windowMenu;
     
+    private Action cutAction;
+    private Action clearAction;
+    private Action trimToSelectionAction;
+    
     PlayerMenuBar(PlayerFrame frame) {
         this.frame = frame;
         initFileMenu();
@@ -126,9 +130,8 @@ class PlayerMenuBar extends JMenuBar {
         export.setEnabled(false);
         fileMenu.add(export);
         
-        JMenuItem exportFrames = new JMenuItem("Export Frames...");        
-        exportFrames.setEnabled(false);
-        fileMenu.add(exportFrames);
+        Action exportFramesAction = new ExportFramesAction(frame);
+        fileMenu.add(exportFramesAction);
         
         fileMenu.addSeparator();
         
@@ -156,12 +159,13 @@ class PlayerMenuBar extends JMenuBar {
         
         editMenu.addSeparator();
 
-        editMenu.add(new CutAction(frame));
-        // XXX should copy copy entire movie if nothing is selected????
+        cutAction = new CutAction(frame);
+        editMenu.add(cutAction);
         editMenu.add(new CopyAction(frame));
         editMenu.add(new CopyCurrentFrameAction(frame));
         editMenu.add(new PasteAction(frame));
-        editMenu.add(new ClearAction(frame));
+        clearAction = new ClearAction(frame);
+        editMenu.add(clearAction);
         
         editMenu.addSeparator();
 
@@ -170,7 +174,8 @@ class PlayerMenuBar extends JMenuBar {
         
         editMenu.addSeparator();
         
-        editMenu.add(new TrimToSelectionAction(frame));
+        trimToSelectionAction = new TrimToSelectionAction(frame); 
+        editMenu.add(trimToSelectionAction);
         
         editMenu.addSeparator();
 
@@ -198,6 +203,21 @@ class PlayerMenuBar extends JMenuBar {
         editMenu.add(specialCharacters);
         
         add(editMenu);
+        
+        deselection();
+        
+    }
+
+    void deselection() {
+        this.cutAction.setEnabled(false);
+        this.clearAction.setEnabled(false);
+        this.trimToSelectionAction.setEnabled(false);
+    }
+
+    void selection() {
+        this.cutAction.setEnabled(true);
+        this.clearAction.setEnabled(true);
+        this.trimToSelectionAction.setEnabled(true);
     }
 
     private void initWindowMenu() {
