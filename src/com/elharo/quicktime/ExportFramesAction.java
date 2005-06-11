@@ -21,6 +21,7 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime;
 
 import java.awt.event.ActionEvent;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Vector;
 
@@ -49,12 +50,13 @@ public class ExportFramesAction extends AbstractAction {
         String name;
         int code;
 
-        ExportFormat(String name, int subType) {
+        ExportFormat(String name, int code) {
             this.name = name;
             this.code = code;
+            System.out.println(code);
         }
         
-        public String toString() {return this.name; }
+        public String toString() { return this.name; }
         
         String getExtension() {
             return this.name.toLowerCase();
@@ -98,9 +100,21 @@ public class ExportFramesAction extends AbstractAction {
             JOptionPane.showMessageDialog(frame, exportCombo, "Choose export format", JOptionPane.PLAIN_MESSAGE);
             ExportFormat format = (ExportFormat) exportCombo.getSelectedItem();
             GraphicsExporter exporter = new GraphicsExporter(format.code);
+            /* System.out.write((format.code & 0xFF000000) >> 24);
+            System.out.write((format.code & 0x00FF0000) >> 16);
+            System.out.write((format.code & 0x0000FF00) >> 8);
+            System.out.write((format.code & 0x000000FF));
+            System.out.println(); */
             /* if CallComponentCanDo ( myGraphicsExporter , kGraphicsExportRequestSettingsSelect ) {
                 exporter.requestSettings();
             } */
+            
+            try {
+                exporter.requestSettings();
+            }
+            catch (QTException ex) {
+                // no settings for this format 
+            }
             
             /* for (int i = 1; i <= movie.getTrackCount(); i++) {
                 Track track = movie.getTrack(i);
@@ -128,8 +142,11 @@ public class ExportFramesAction extends AbstractAction {
                 QTFile file = new QTFile(new File(framesFolder, frame.getTitle() + time + "." + format.getExtension()));
                 System.out.println(file.getAbsolutePath());
                 exporter.setOutputFile(file);
-                //importer.exportImageFile(format.code, -1, file, -1);
-                exporter.doExport();
+                if (exporter.canTranscode()) exporter.doExport();
+                else {
+                    JOptionPane.showMessageDialog(frame, "Can't transcode this one");
+                    break;
+                }
             }
             
             if (wasPlaying) movie.start();
