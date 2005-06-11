@@ -41,19 +41,22 @@ import quicktime.std.movies.Movie;
 class InfoDialog extends JFrame {
 
     // XXX make control-w and close work with this dialog
-    
+    private JPanel southPanel = new JPanel();
     
     InfoDialog(Movie movie, String title) {
         super("Movie Info");
         this.setJMenuBar(new PlayerMenuBar(null));
         
-        this.getContentPane().setLayout(new GridLayout(12, 1));
+        this.getContentPane().setLayout(new BorderLayout());
         
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         titlePanel.add(new JLabel(title));
-        this.getContentPane().add(titlePanel);
-        this.getContentPane().add(new JSeparator());
+        this.getContentPane().add(BorderLayout.NORTH, titlePanel);
+        this.getContentPane().add(BorderLayout.CENTER, new JSeparator());
+        
+        southPanel.setLayout(new GridLayout(10, 2));
+        this.getContentPane().add(BorderLayout.SOUTH, southPanel);
         
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(2);
@@ -160,18 +163,24 @@ class InfoDialog extends JFrame {
         // move to right hand of screen????
         
         this.pack();
+        this.setResizable(false);
     }
+    
     
     
     void addInfo(String name, String value) {
         
-        JPanel panel = new JPanel();
+        JPanel namePanel = new JPanel();
+        namePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         JLabel nameLabel = new JLabel("<html><b>" + name + ": </b></html>");
-        panel.add(nameLabel);
-        JLabel valueLabel = new JLabel(value);
-        panel.add(valueLabel);
+        namePanel.add(nameLabel);
+        southPanel.add(namePanel);
         
-        this.getContentPane().add(panel);
+        JPanel valuePanel = new JPanel();
+        valuePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JLabel valueLabel = new JLabel(value);
+        valuePanel.add(valueLabel);
+        southPanel.add(valuePanel);
         
     }
 
