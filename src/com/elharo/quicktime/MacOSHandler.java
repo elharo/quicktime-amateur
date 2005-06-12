@@ -35,11 +35,9 @@ import com.apple.eawt.Application;
  */
 public class MacOSHandler extends Application {
 
-    private PlayerFrame frame;
     private Dialog about;
     
     public MacOSHandler(PlayerFrame frame) {
-        this.frame = frame;
         about = new AboutDialog(frame);
         addApplicationListener(new AboutBoxHandler());
     }
@@ -59,8 +57,8 @@ public class MacOSHandler extends Application {
         public void handleQuit(ApplicationEvent event) {
             Iterator iterator = WindowList.INSTANCE.iterator();
             while (iterator.hasNext()) {
-                Frame f = (Frame) iterator.next();
-                frame.hide();
+                Frame next = (Frame) iterator.next();
+                next.hide();
             }
             System.exit(0);
         }
