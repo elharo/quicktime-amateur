@@ -29,7 +29,6 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.ImageProducer;
@@ -39,12 +38,8 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.util.Iterator;
 
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -70,7 +65,7 @@ import quicktime.std.movies.media.DataRef;
 // XXX Move Pageable impl to a separate class
 public final class PlayerFrame extends JFrame implements Printable {
     
-    private static final int PICT_HEADER_SIZE = 512;
+    static final int PICT_HEADER_SIZE = 512;
     private Movie movie;
     private MovieController controller;
     private int movieHeight = -1;
@@ -81,6 +76,7 @@ public final class PlayerFrame extends JFrame implements Printable {
     
     private final int CONTROL_BAR_HEIGHT;
     private int frameExtras;
+    // XXX remove this
     static final int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     private JFrame fullScreenFrame = null;
 
@@ -193,8 +189,8 @@ public final class PlayerFrame extends JFrame implements Printable {
             double widthRatio = bounds.width / (double) movieWidth;
             double heightRatio = bounds.height / (double) movieHeight ;
             
-            int fullScreenWidth = movieWidth;
-            int fullScreenHeight = movieHeight;
+            int fullScreenWidth;
+            int fullScreenHeight;
             if (widthRatio < heightRatio) {
                 fullScreenWidth = (int) (movieWidth * widthRatio);
                 fullScreenHeight = (int) (movieHeight * widthRatio);
