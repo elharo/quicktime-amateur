@@ -27,8 +27,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import quicktime.QTException;
-
 class ShowContentGuideAction extends AbstractAction {
 
     ShowContentGuideAction() {
