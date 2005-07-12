@@ -20,18 +20,12 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime.tests;
 
-import java.awt.AWTException;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.event.InputEvent;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
 
 import quicktime.QTException;
 
@@ -131,6 +125,23 @@ public class PlayerFrameTest extends TestCase {
         }
         
     }
+    
+    private JMenuItem findJMenuItem(String name) {
+        
+        for (int menu = 0; menu < menubar.getMenuCount(); menu++) {
+            Component[] menuitems = menubar.getMenu(menu).getMenuComponents();
+            for (int i = 0; i < menuitems.length; i++) {
+                if (menuitems[i] instanceof JMenuItem) {
+                    JMenuItem item = (JMenuItem) menuitems[i];
+                    if (item.getText().equals(name)) {
+                        return item;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
     
     public void testPrintCommandKeyEquivalent() {        
         assertCommandKeyEquivalent("Print...", 'P');
