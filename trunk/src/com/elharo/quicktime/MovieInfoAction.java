@@ -26,29 +26,25 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import quicktime.std.StdQTException;
 import quicktime.std.movies.Movie;
 
 class MovieInfoAction extends AbstractAction {
 
-    private Movie movie;
+    private PlayerFrame frame;
     
     MovieInfoAction(PlayerFrame frame) {
         if (frame == null) this.setEnabled(false);
-        else this.movie = frame.getMovie();
+        else this.frame = frame;
         putValue(Action.NAME, "Show Movie Info");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('I', PlayerFrame.menuShortcutKeyMask));  
     } 
     
     
     public void actionPerformed(ActionEvent event) {
-        try {
-            movie.showInformation();
-        }
-        catch (StdQTException ex) {
-            // ???? Auto-generated catch block
-            ex.printStackTrace();
-        }
+        InfoDialog info = new InfoDialog(frame.getMovie(), frame.getTitle());
+        
+        // use eventqueue????
+        info.show();
     }
 
 }
