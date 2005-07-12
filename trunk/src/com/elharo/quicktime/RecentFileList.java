@@ -20,26 +20,36 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
-import java.awt.EventQueue;
+import java.util.*;
+import java.io.*;
+import javax.swing.*;
 
-import quicktime.QTException;
+class RecentFileList extends LinkedHashMap {
 
-public class Main {
+    private static int MAX_FILES = 10;
     
-    static RecentFileList recentFileList = new RecentFileList();
-
-    public static void main(String[] args) throws QTException {
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Amateur");
-        System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("apple.awt.showGrowBox", "true");
-        QuicktimeInit.setup();
-        final PlayerFrame hidden = new PlayerFrame(true);
-        // first frame is just for menu bar
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                hidden.show();
-            }
-        });
-    }    
+    void add(File f) {
+        if (containsKey(f)) return;
+        put(f, f);
+    }
+    
+    Iterator iterator() {
+        return values().iterator();
+    }
+    
+    protected boolean removeEldestEntry() {
+        return size() > MAX_FILES;
+    }
+    
+    JMenu getJMenu() {
+        JMenu result = new JMenu("Recent Files");
+        Iterator iterator = iterator();
+        while (iterator.hasNext()) {
+            File f = (File) iterator.next();
+            result.add(new RecentFileAction(f));
+        }
+        return result;
+    }
+    
     
 }

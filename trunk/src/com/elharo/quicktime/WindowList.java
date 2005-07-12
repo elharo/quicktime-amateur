@@ -82,4 +82,12 @@ class WindowList {
         return total;
     }
     
+    void updateRecentFiles() {
+        Iterator iterator = windows.iterator();
+        while (iterator.hasNext()) {
+            PlayerFrame f = (PlayerFrame) iterator.next();
+        }
+        
+    }
+    
 }
