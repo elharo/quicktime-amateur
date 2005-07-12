@@ -21,8 +21,8 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime;
 
 import java.awt.event.ActionEvent;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.Locale;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -53,13 +53,12 @@ public class ExportFramesAction extends AbstractAction {
         ExportFormat(String name, int code) {
             this.name = name;
             this.code = code;
-            System.out.println(code);
         }
         
         public String toString() { return this.name; }
         
         String getExtension() {
-            return this.name.toLowerCase();
+            return this.name.toLowerCase(Locale.ENGLISH);
         }
 
     }
