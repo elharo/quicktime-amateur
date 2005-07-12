@@ -60,6 +60,9 @@ public class MacOSHandler extends Application {
                 Frame next = (Frame) iterator.next();
                 next.hide();
             }
+            
+            // XXX could fix this by setting the hidden frame to exit on close 
+            // and then closing it instead
             System.exit(0);
         }
         
