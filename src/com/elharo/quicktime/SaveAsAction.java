@@ -23,9 +23,11 @@ package com.elharo.quicktime;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import quicktime.QTException;
@@ -52,17 +54,24 @@ class SaveAsAction extends AbstractAction {
           StdQTConstants.createMovieFileDontCreateResFile |
           StdQTConstants.createMovieFileDeleteCurFile |
           StdQTConstants.showUserSettingsDialog;
-          try {
-              movie.setProgressProc();
-              // why does this not bring up a progress dialog when saving????
-              movie.convertToFile(file, 
-                StdQTConstants.kQTFileTypeMovie, 
-                StdQTConstants.kMoviePlayer, // ???? change this to Amateur
-                IOConstants.smSystemScript, 
-                flags);
-              // ???? why does this lose sound when converting an MPEG?
-          }
-          catch (StdQTException e) {
+        System.err.println(file);
+        try {
+            movie.setProgressProc();
+            // does this next line return a file? It doesn't seem to change the file argument????
+            movie.convertToFile(file, 
+              StdQTConstants.kQTFileTypeMovie, 
+              StdQTConstants.kMoviePlayer, // ???? change this to Amateur
+              IOConstants.smSystemScript, 
+              flags);
+            // ???? why does this lose sound when converting an MPEG?
+            JMenuItem source = (JMenuItem) event.getSource();
+            PlayerFrame frame = (PlayerFrame) source.getTopLevelAncestor();
+        System.err.println(file);
+         byte[] data =   file.getFSSpec(true, QTFile.kReadPermission);
+         System.out.println(new String(data, "MacRoman"));
+            //frame.setFile(????);
+        }
+        catch (StdQTException e) {
             if (e.errorCode() == -128) {
                 // user cancelled
                 return;
@@ -74,6 +83,10 @@ class SaveAsAction extends AbstractAction {
             // ???? Auto-generated catch block
             e.printStackTrace();
           }
+        catch (UnsupportedEncodingException e) {
+            // ???? Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 }
