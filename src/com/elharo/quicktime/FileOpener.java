@@ -33,6 +33,7 @@ import quicktime.io.QTFile;
 import quicktime.io.QTIOException;
 import quicktime.std.movies.Movie;
 
+// XXX Make this an action
 public class FileOpener implements ActionListener {
 
     private static final int USER_CANCELLED = -128;
@@ -46,6 +47,7 @@ public class FileOpener implements ActionListener {
             OpenMovieFile omFile = OpenMovieFile.asRead(file);
             Movie m = Movie.fromFile(omFile);
             PlayerFrame f = new PlayerFrame(file.getName(), m);
+            f.setFile(file);
             Main.recentFileList.add(file);
             FrameDisplayer.display(f);
         }
