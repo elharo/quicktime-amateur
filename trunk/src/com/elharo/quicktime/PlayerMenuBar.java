@@ -308,11 +308,9 @@ class PlayerMenuBar extends JMenuBar {
         sendFeedback.setEnabled(false);
         helpMenu.add(sendFeedback);
 
-        // XXX This should open the user's default web browser ponted to the the 
+        // Open the user's default web browser pointed to the the 
         // java.net bug report form
-        JMenuItem reportBug = new JMenuItem("Report Bug");
-        reportBug.setEnabled(false);
-        helpMenu.add(reportBug);
+        helpMenu.add(new OpenURLAction("Report Bug", "https://amateur.dev.java.net/servlets/ProjectIssues"));
 
         // XXX This should open the user's default web browser ponted to the the 
         // java.net RFE form
