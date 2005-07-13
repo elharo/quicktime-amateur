@@ -306,17 +306,19 @@ class PlayerMenuBar extends JMenuBar {
 
         helpMenu.add(new OpenURLAction("Send Feedback", "mailto:elharo@metalab.unc.edu?Subject=Amateur"));
 
-        // Open the user's default web browser pointed to the the 
+        // Open the user's default web browser pointed to the 
         // java.net bug report form
-        helpMenu.add(new OpenURLAction("Report Bug", "https://amateur.dev.java.net/servlets/ProjectIssues"));
+        helpMenu.add(new OpenURLAction("Report Bug", "https://amateur.dev.java.net/issues/enter_bug.cgi?issue_type=DEFECT"));
 
-        // XXX This should open the user's default web browser ponted to the the 
+        // Open the user's default web browser pointed to the 
         // java.net RFE form
-        JMenuItem requestFeature = new JMenuItem("Request Feature");
-        requestFeature.setEnabled(false);
-        helpMenu.add(requestFeature);
+        helpMenu.add(new OpenURLAction("Request Feature", "https://amateur.dev.java.net/issues/enter_bug.cgi?issue_type=FEATURE"));
 
-        // XXX Check how CyberDuck does this with PayPal
+        // XXX Check how CyberDuck does this with PayPal.
+        // Hmm, it has a special page with a form and a hidden field.
+        // Maybe we can't do this just with get?
+        // Cyberduck puts this in the Apple menu; should it go there?
+        // Should I just send all donatiosn to MSF?
         JMenuItem donate = new JMenuItem("Donate");
         donate.setEnabled(false);
         helpMenu.add(donate);
