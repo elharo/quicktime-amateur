@@ -304,9 +304,7 @@ class PlayerMenuBar extends JMenuBar {
         help.setEnabled(false);
         helpMenu.add(help);
 
-        JMenuItem sendFeedback = new JMenuItem("Send Feedback");
-        sendFeedback.setEnabled(false);
-        helpMenu.add(sendFeedback);
+        helpMenu.add(new OpenURLAction("Send Feedback", "mailto:elharo@metalab.unc.edu?Subject=Amateur"));
 
         // Open the user's default web browser pointed to the the 
         // java.net bug report form
@@ -318,7 +316,7 @@ class PlayerMenuBar extends JMenuBar {
         requestFeature.setEnabled(false);
         helpMenu.add(requestFeature);
 
-        // XXX Check how CyberDuck does htis with PayPal
+        // XXX Check how CyberDuck does this with PayPal
         JMenuItem donate = new JMenuItem("Donate");
         donate.setEnabled(false);
         helpMenu.add(donate);
