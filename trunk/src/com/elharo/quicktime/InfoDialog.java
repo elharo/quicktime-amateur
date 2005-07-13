@@ -46,7 +46,8 @@ class InfoDialog extends JFrame {
     // XXX make control-w and close work with this dialog
     private JPanel southPanel = new JPanel();
     
-    InfoDialog(Movie movie, String title) {
+    InfoDialog(PlayerFrame frame) {
+        
         super("Movie Info");
         this.setJMenuBar(new PlayerMenuBar(null));
         
@@ -54,6 +55,7 @@ class InfoDialog extends JFrame {
         
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        String title = frame.getTitle();
         titlePanel.add(new JLabel("<html><p>" + title + "</p></html>"));
         this.getContentPane().add(BorderLayout.NORTH, titlePanel);
         this.getContentPane().add(BorderLayout.CENTER, new JSeparator());
@@ -63,8 +65,9 @@ class InfoDialog extends JFrame {
         
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(2);
-        this.addInfo("Source", "????");
+        this.addInfo("Source", frame.getFile().getPath());
 
+        Movie movie = frame.getMovie();
         try {
             movie.getDuration();
             this.addInfo("Format", "????");
