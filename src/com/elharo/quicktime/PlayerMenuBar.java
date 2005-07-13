@@ -306,10 +306,17 @@ class PlayerMenuBar extends JMenuBar {
 
         helpMenu.add(new OpenURLAction("Send Feedback", "mailto:elharo@metalab.unc.edu?Subject=Amateur"));
 
-        // Open the user's default web browser pointed to the 
-        // java.net bug report form
+         helpMenu.add(
+          new OpenURLAction(
+            "Show Known Issues",
+            "https://amateur.dev.java.net/issues/buglist.cgi?issue_status=UNCONFIRMED&issue_status=NEW&issue_status=STARTED&issue_status=REOPENED"
+          )
+        );
+        
+        // Open the default web browser pointed to the java.net bug report form
         helpMenu.add(new OpenURLAction("Report Bug", "https://amateur.dev.java.net/issues/enter_bug.cgi?issue_type=DEFECT"));
 
+        
         // Open the user's default web browser pointed to the 
         // java.net RFE form
         helpMenu.add(new OpenURLAction("Request Feature", "https://amateur.dev.java.net/issues/enter_bug.cgi?issue_type=FEATURE"));
