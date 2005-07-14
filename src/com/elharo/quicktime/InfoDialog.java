@@ -21,6 +21,7 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime;
 
 import java.awt.*;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 
 import javax.swing.*;
@@ -69,6 +70,8 @@ class InfoDialog extends JFrame {
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(2);
         this.addInfo("Source", frame.getFile().getPath());
+        
+        DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
 
         Movie movie = frame.getMovie();
         try {
@@ -119,7 +122,8 @@ class InfoDialog extends JFrame {
         }
 
         try {
-            String time = String.valueOf(movie.getTime() / movie.getTimeScale());
+            double length = movie.getTime() / (double) movie.getTimeScale();
+            String time = formatTime(length);
             this.addInfo("Current Time", time);
         }
         catch (StdQTException e) {
@@ -140,7 +144,8 @@ class InfoDialog extends JFrame {
 
         try {
             double length = movie.getDuration() / (double) movie.getTimeScale();
-            this.addInfo("Duration", format.format(length) + "s");
+            String time = formatTime(length);
+            this.addInfo("Duration", time);
         }
         catch (StdQTException e) {
             // ???? Auto-generated catch block
@@ -174,6 +179,27 @@ class InfoDialog extends JFrame {
         
         this.pack();
         this.setResizable(false);
+    }
+
+
+    private String formatTime(double length) {
+        int hours = (int) (length / 3600);
+        int minutes = (int) (length / 60) - hours*60;
+        int seconds = (int) Math.floor(length % 60);
+        double fraction = length - Math.floor(length);
+        
+        String h = Integer.toString(hours);
+        if (hours < 10) h = "0" + h;
+        String m = Integer.toString(minutes);
+        if (minutes < 10) m = "0" + m;
+        
+        String s = Integer.toString(seconds);
+        if (seconds < 10) s = "0" + s;
+        
+        String f = String.valueOf(fraction).substring(2, 4);
+        
+        String time = String.valueOf(h + ":" + m + ":" + s + "." + f);
+        return time;
     }
     
     
