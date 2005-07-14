@@ -44,7 +44,8 @@ import quicktime.std.movies.Track;
 class InfoDialog extends JFrame {
 
     // XXX make control-w and close work with this dialog
-    private JPanel southPanel = new JPanel();
+    private JPanel eastPanel = new JPanel();
+    private JPanel westPanel = new JPanel();
     
     InfoDialog(PlayerFrame frame) {
         
@@ -60,8 +61,10 @@ class InfoDialog extends JFrame {
         this.getContentPane().add(BorderLayout.NORTH, titlePanel);
         this.getContentPane().add(BorderLayout.CENTER, new JSeparator());
         
-        southPanel.setLayout(new GridLayout(10, 2));
-        this.getContentPane().add(BorderLayout.SOUTH, southPanel);
+        eastPanel.setLayout(new GridLayout(10, 1));
+        westPanel.setLayout(new GridLayout(10, 1));
+        this.getContentPane().add(BorderLayout.EAST, eastPanel);
+        this.getContentPane().add(BorderLayout.WEST, westPanel);
         
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(2);
@@ -173,7 +176,6 @@ class InfoDialog extends JFrame {
     }
     
     
-    
     void addInfo(String name, String value) {
         
         JPanel namePanel = new JPanel();
@@ -182,13 +184,13 @@ class InfoDialog extends JFrame {
         Font f = nameLabel.getFont();
         nameLabel.setFont(new Font(f.getName(), Font.BOLD, f.getSize()));
         namePanel.add(nameLabel);
-        southPanel.add(namePanel);
+        westPanel.add(namePanel);
         
         JPanel valuePanel = new JPanel();
         valuePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel valueLabel = new JLabel(value);
         valuePanel.add(valueLabel);
-        southPanel.add(valuePanel);
+        eastPanel.add(valuePanel);
         
     }
     
