@@ -260,10 +260,7 @@ class PlayerMenuBar extends JMenuBar {
         showMovieProperties.setEnabled(false);
         windowMenu.add(showMovieProperties);                
         
-        JMenuItem showAVControls = new JMenuItem("Show A/V Controls");
-        showAVControls.setAccelerator(KeyStroke.getKeyStroke('K', menuShortcutKeyMask));
-        showAVControls.setEnabled(false);
-        windowMenu.add(showAVControls);                
+        windowMenu.add(new AVControlsAction(this.frame));                
         windowMenu.add(new ShowContentGuideAction());    
         
         windowMenu.addSeparator();
