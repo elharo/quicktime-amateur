@@ -58,7 +58,7 @@ class InfoDialog extends JFrame {
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         String title = frame.getTitle();
-        titlePanel.add(new JLabel("<html><p>" + title + "</p></html>"));
+        titlePanel.add(new JLabel(title));
         this.getContentPane().add(BorderLayout.NORTH, titlePanel);
         this.getContentPane().add(BorderLayout.CENTER, new JSeparator());
         
@@ -195,10 +195,11 @@ class InfoDialog extends JFrame {
         
         String s = Integer.toString(seconds);
         if (seconds < 10) s = "0" + s;
+      
+        String f = "00";
+        if (fraction != 0) f = String.valueOf(fraction).substring(2, 4);
         
-        String f = String.valueOf(fraction).substring(2, 4);
-        
-        String time = String.valueOf(h + ":" + m + ":" + s + "." + f);
+        String time = h + ":" + m + ":" + s + "." + f;
         return time;
     }
     
