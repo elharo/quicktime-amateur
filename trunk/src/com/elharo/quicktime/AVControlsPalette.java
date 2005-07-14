@@ -23,6 +23,8 @@ package com.elharo.quicktime;
 import java.awt.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 
 import quicktime.QTException;
 import quicktime.qd.QDRect;
@@ -49,11 +51,74 @@ class AVControlsPalette extends JFrame {
     AVControlsPalette(PlayerFrame frame) {
         
         super("Audio Controls");
+        this.setLayout(new GridLayout(1, 2));
+        
+        eastPanel.setLayout(new BorderLayout());
+        westPanel.setLayout(new BorderLayout());
+        
+        JPanel audioControls = new JPanel();
+        Border border = BorderFactory.createLineBorder(Color.GRAY);
+        audioControls.setBorder(BorderFactory.createTitledBorder(border, "Audio", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
+        audioControls.setBackground(Color.LIGHT_GRAY);
+        audioControls.setLayout(new GridLayout(10, 1));
+        
+        int min = 0;
+        int max = 10;
 
+        audioControls.add(new JLabel("Volume"));
+        JSlider volume = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        volume.setPaintTicks( true );
+        volume.setMajorTickSpacing( 5 );
+        audioControls.add(volume);
+        audioControls.add(new JSeparator());
+
+        audioControls.add(new JLabel("Bass"));
+        JSlider bass = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        bass.setPaintTicks( true );
+        bass.setMajorTickSpacing( 5 );
+        audioControls.add(bass);
+        
+        audioControls.add(new JLabel("Treble"));
+        JSlider treble = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        treble.setPaintTicks( true );
+        treble.setMajorTickSpacing( 5 );
+        audioControls.add(treble);
+        
+        audioControls.add(new JSeparator());
+
+        audioControls.add(new JLabel("Balance"));
+        JSlider balance = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        balance.setPaintTicks( true );
+        balance.setMajorTickSpacing( 5 );
+        audioControls.add(balance);
+        
+        westPanel.add(BorderLayout.SOUTH, audioControls);
+        
+        JPanel playbackControls = new JPanel();
+        playbackControls.setBorder(BorderFactory.createTitledBorder(border, "Playback", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
+        playbackControls.setBackground(Color.LIGHT_GRAY);
+        
+        playbackControls.add(new JLabel("Jog Shuttle"));
+        JSlider jogShuttle = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        jogShuttle.setPaintTicks( true );
+        jogShuttle.setMajorTickSpacing( 5 );
+        playbackControls.add(jogShuttle);
+        playbackControls.add(new JSeparator());
+        
+        playbackControls.add(new JLabel("Playback Speed"));
+        JSlider playbackSpeed = new JSlider(JSlider.HORIZONTAL, 0, 6, 2 );
+        playbackSpeed.setPaintTicks( true );
+        playbackSpeed.setMajorTickSpacing( 2 );
+        playbackSpeed.setMinorTickSpacing( 1 );
+        playbackControls.add(playbackSpeed);
+        
+        
+        playbackControls.setLayout(new GridLayout(10, 1));
+        eastPanel.add(playbackControls);
         // move to right hand of screen????
         
-        this.add(BorderLayout.EAST, eastPanel);
-        this.add(BorderLayout.WEST, westPanel);
+        this.add(westPanel);
+        this.add(eastPanel);
         
         this.pack();
         this.setResizable(false);
