@@ -86,23 +86,22 @@ class InfoDialog extends JFrame {
             double units = videoTrack.getMedia().getDuration();
             double frames = videoTrack.getMedia().getSampleCount();
             double unitsPerSecond = videoTrack.getMedia().getTimeScale();
-            String rate = format.format( unitsPerSecond * frames / units);
-            this.addInfo("FPS", rate);
+            double expectedRate = unitsPerSecond * frames / units;
+            String fps = format.format(expectedRate);
+            this.addInfo("FPS", fps);
+            String playingFPS = "????";
+            double rate = movie.getRate();
+            if (rate == 0.0) playingFPS = "(Available while movie is playing.)";
+            else {
+                playingFPS = format.format(rate * expectedRate);
+            }
+            this.addInfo("Playing FPS", playingFPS);
         }
         catch (StdQTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }
         catch (QTException e) {
-            // ???? Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        try {
-            movie.getDuration();
-            this.addInfo("Playing FPS", "????");
-        }
-        catch (StdQTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }
@@ -193,7 +192,5 @@ class InfoDialog extends JFrame {
         eastPanel.add(valuePanel);
         
     }
-    
-    
 
 }
