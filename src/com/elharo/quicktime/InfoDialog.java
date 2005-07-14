@@ -21,7 +21,6 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime;
 
 import java.awt.*;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 
 import javax.swing.*;
@@ -32,6 +31,7 @@ import quicktime.std.StdQTConstants;
 import quicktime.std.StdQTException;
 import quicktime.std.movies.Movie;
 import quicktime.std.movies.Track;
+import quicktime.std.movies.media.HandlerInfo;
 
 /** 
  * Although this class extends JFrame, it's called a Dialog
@@ -69,16 +69,28 @@ class InfoDialog extends JFrame {
         
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(2);
-        this.addInfo("Source", frame.getFile().getPath());
-        
-        DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+        this.addInfo("Source", "<html><body><p>" + frame.getFile().getPath() + "</p></body></html>");
 
         Movie movie = frame.getMovie();
         try {
-            movie.getDuration();
-            this.addInfo("Format", "????");
+            Track videoTrack = movie.getIndTrackType(1, 
+                    StdQTConstants.visualMediaCharacteristic, StdQTConstants.movieTrackCharacteristic);
+            HandlerInfo hi = videoTrack.getMedia().getHandlerDescription(); 
+            int code = hi.subType;
+            // XXX convert code to format string
+            String formatString = hi.toString();
+            try {
+                formatString = formatString.substring(formatString.indexOf("mediaType=") + 10);
+            }
+            catch (Exception ex) {
+                
+            }
+            formatString = movie.getClass().getName();
+            this.addInfo("Format", formatString);
+            // XXX see CodecName and CodecInfo classes
+            // can we get one of these from a movie?
         }
-        catch (StdQTException e) {
+        catch (QTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }
