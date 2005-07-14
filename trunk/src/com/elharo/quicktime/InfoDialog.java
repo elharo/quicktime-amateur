@@ -29,13 +29,13 @@ import quicktime.QTException;
 import quicktime.qd.QDRect;
 import quicktime.std.StdQTConstants;
 import quicktime.std.StdQTException;
-import quicktime.std.clocks.TimeBase;
 import quicktime.std.movies.Movie;
 import quicktime.std.movies.Track;
-import quicktime.std.movies.media.Media;
 
-/** Although this class extends JFrame, it's called a Dialog
- * It really is a non-modal dialog, but we have to extend Frame to get the menu bars right.
+/** 
+ * Although this class extends JFrame, it's called a Dialog
+ * It really is a non-modal dialog, but we have to extend 
+ * JFrame to get the menu bars right.
  * Bleah.
  * 
  * @author Elliotte Rusty Harold
@@ -178,7 +178,9 @@ class InfoDialog extends JFrame {
         
         JPanel namePanel = new JPanel();
         namePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        JLabel nameLabel = new JLabel("<html><b>" + name + ": </b></html>");
+        JLabel nameLabel = new JLabel(name + ": ");
+        Font f = nameLabel.getFont();
+        nameLabel.setFont(new Font(f.getName(), Font.BOLD, f.getSize()));
         namePanel.add(nameLabel);
         southPanel.add(namePanel);
         
