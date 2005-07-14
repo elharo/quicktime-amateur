@@ -128,8 +128,10 @@ class InfoDialog extends JFrame {
         }
 
         try {
-            movie.getDataSize(1, 1);
-            this.addInfo("Data Rate", "????");
+            int duration = movie.getDuration();
+            double dataSizeInKiloBits = 8 * movie.getDataSize(1, duration) / 1024;
+            String dataRate = format.format(movie.getTimeScale() * dataSizeInKiloBits / duration) + " kbits/sec";
+            this.addInfo("Data Rate", dataRate);
         }
         catch (StdQTException e) {
             // ???? Auto-generated catch block
