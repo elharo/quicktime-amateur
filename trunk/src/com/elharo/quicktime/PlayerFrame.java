@@ -92,6 +92,7 @@ public final class PlayerFrame extends JFrame implements Printable {
         super(title);
         this.movie = m;
         controller = new MovieController(m);
+        controller.setActionFilter(new SelectionListener(this));
         CONTROL_BAR_HEIGHT = controller.getRequiredSize().getHeight();
         setupMenuBar();
         QTComponent qc = QTFactory.makeQTComponent(controller);
