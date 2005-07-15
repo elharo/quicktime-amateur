@@ -78,14 +78,20 @@ class InfoDialog extends JFrame {
             HandlerInfo hi = videoTrack.getMedia().getHandlerDescription(); 
             int code = hi.subType;
             // XXX convert code to format string
-            String formatString = hi.toString();
-            try {
-                formatString = formatString.substring(formatString.indexOf("mediaType=") + 10);
+            String formatString = "????";
+            switch (code) {
+                case 1986618469:
+                    // is this an apple four letter ASCII code = int situation????
+                    formatString = "vide";
+                    break;
+                default: 
+                    formatString = hi.toString();
+                    try {
+                        formatString = code + "  " + formatString.substring(formatString.indexOf("mediaType=") + 10);
+                    }
+                    catch (Exception ex) {  
+                    }
             }
-            catch (Exception ex) {
-                
-            }
-            formatString = movie.getClass().getName();
             this.addInfo("Format", formatString);
             // XXX see CodecName and CodecInfo classes
             // can we get one of these from a movie?
