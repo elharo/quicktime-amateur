@@ -26,8 +26,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import quicktime.std.movies.Movie;
-
 class MovieInfoAction extends AbstractAction {
 
     private PlayerFrame frame;
@@ -41,7 +39,7 @@ class MovieInfoAction extends AbstractAction {
     
     
     public void actionPerformed(ActionEvent event) {
-        InfoDialog info = new InfoDialog(frame.getMovie(), frame.getTitle());
+        InfoDialog info = new InfoDialog(frame);
         
         // use eventqueue????
         info.show();
