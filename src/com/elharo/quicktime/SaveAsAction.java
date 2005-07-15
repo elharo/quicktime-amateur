@@ -41,6 +41,7 @@ class SaveAsAction extends AbstractAction {
     
     SaveAsAction(Movie movie) {
         this.movie = movie;
+        if (movie == null) this.setEnabled(false);
         putValue(Action.NAME, "Save As...");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('S', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));  
     } 
@@ -87,6 +88,7 @@ class SaveAsAction extends AbstractAction {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }
+        
     }
 
 }
