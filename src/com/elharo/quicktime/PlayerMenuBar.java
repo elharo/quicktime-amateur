@@ -49,6 +49,7 @@ class PlayerMenuBar extends JMenuBar {
     private PlayerFrame frame;
     private JMenu windowMenu;
     
+    private Action copyAction;
     private Action cutAction;
     private Action clearAction;
     private Action trimToSelectionAction;
@@ -161,7 +162,8 @@ class PlayerMenuBar extends JMenuBar {
 
         cutAction = new CutAction(frame);
         editMenu.add(cutAction);
-        editMenu.add(new CopyAction(frame));
+        copyAction = new CopyAction(frame);
+        editMenu.add(copyAction);
         editMenu.add(new CopyCurrentFrameAction(frame));
         editMenu.add(new PasteAction(frame));
         clearAction = new ClearAction(frame);
@@ -208,13 +210,17 @@ class PlayerMenuBar extends JMenuBar {
         
     }
 
+    // cut. copy, and clear shoudl always be enabled
+    // and act on current frame if no selection is available
     void deselection() {
+        this.copyAction.setEnabled(false);
         this.cutAction.setEnabled(false);
         this.clearAction.setEnabled(false);
         this.trimToSelectionAction.setEnabled(false);
     }
 
     void selection() {
+        this.copyAction.setEnabled(true);
         this.cutAction.setEnabled(true);
         this.clearAction.setEnabled(true);
         this.trimToSelectionAction.setEnabled(true);
