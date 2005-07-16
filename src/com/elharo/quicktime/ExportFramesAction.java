@@ -42,6 +42,7 @@ import quicktime.std.movies.Movie;
 import quicktime.std.movies.TimeInfo;
 import quicktime.std.movies.Track;
 import quicktime.std.movies.media.DataRef;
+import quicktime.std.movies.media.Media;
 
 public class ExportFramesAction extends AbstractAction {
     
@@ -125,10 +126,11 @@ public class ExportFramesAction extends AbstractAction {
             GraphicsImporter importer = new GraphicsImporter(StdQTConstants.kQTFileTypePicture);
             
             // setup a progress bar????
-            int time = 0;
-            while (time >= 0) {
-                TimeInfo ti = videoTrack.getNextInterestingTime(StdQTConstants.nextTimeMediaSample, time, movie.getRate());
-                time = ti.time;
+            Media media = videoTrack.getMedia();
+            int sampleCount = media.getSampleCount();
+            for (int i = 1; i < sampleCount; i++) {
+                TimeInfo ti = media.sampleNumToMediaTime(i);
+                int time = ti.time;
                 System.out.println(time);
                 Pict oldPict = movie.getPict(time);
                 int pictSize = oldPict.getSize();
@@ -141,11 +143,11 @@ public class ExportFramesAction extends AbstractAction {
                 QTFile file = new QTFile(new File(framesFolder, frame.getTitle() + time + "." + format.getExtension()));
                 System.out.println(file.getAbsolutePath());
                 exporter.setOutputFile(file);
-                if (exporter.canTranscode()) exporter.doExport();
+                /* if (exporter.canTranscode()) exporter.doExport();
                 else {
                     JOptionPane.showMessageDialog(frame, "Can't transcode this one");
                     break;
-                }
+                } */
             }
             
             if (wasPlaying) movie.start();
