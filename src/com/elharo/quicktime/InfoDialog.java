@@ -70,8 +70,13 @@ class InfoDialog extends JFrame {
         
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(2);
+        // can be null????
+        try {
         this.addInfo("Source", "<html><body><p>" + frame.getFile().getPath() + "</p></body></html>");
-
+        }
+        catch (NullPointerException ex) {
+            
+        }
         Movie movie = frame.getMovie();
         try {
             Track videoTrack = movie.getIndTrackType(1, 
