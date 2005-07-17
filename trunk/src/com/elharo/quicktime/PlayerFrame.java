@@ -41,6 +41,7 @@ import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.SwingUtilities;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -107,19 +108,26 @@ public final class PlayerFrame extends JFrame implements Printable {
         new MacOSHandler(this);
         
         this.addComponentListener( new ComponentAdapter() {
-        
-            private int RESIZE_DELAY = 20;
             
             public void componentResized(final ComponentEvent evt) {
-                try {
-                    Thread.sleep(RESIZE_DELAY);
-                } 
-                catch( InterruptedException ex) {
-                }
 
-                // XXX Make this allow resizing vertically to increase the width as well
+                // Make this allow resizing vertically to increase the width as well
                 int newWidth = evt.getComponent().getBounds().width;
-                setSize( newWidth, (int) (newWidth * heightToWidth + frameExtras) );
+                int newHeight = evt.getComponent().getBounds().height;
+
+                final Rectangle widthBasedSize = new Rectangle(newWidth, (int) (newWidth * heightToWidth + frameExtras));
+                final Rectangle heightBasedSize = new Rectangle((int) ((newHeight - frameExtras)/heightToWidth), newHeight);
+                
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        if (widthBasedSize.height * widthBasedSize.width > heightBasedSize.height * heightBasedSize.width) {
+                            setSize( widthBasedSize.width, widthBasedSize.height );
+                        }
+                        else {
+                            setSize( heightBasedSize.width, heightBasedSize.height );
+                        }                                 
+                    }
+                 } );
             }
         });
 
