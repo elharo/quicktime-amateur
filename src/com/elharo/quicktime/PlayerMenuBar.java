@@ -87,11 +87,7 @@ class PlayerMenuBar extends JMenuBar {
         fileMenu.add(openFile);
         
         fileMenu.add(new URLOpener());
-        
-        JMenuItem openImageSequence = new JMenuItem("Open Image Sequence...");
-        openImageSequence.setAccelerator(KeyStroke.getKeyStroke('O', menuShortcutKeyMask | InputEvent.SHIFT_MASK));        
-        openImageSequence.setEnabled(false);
-        fileMenu.add(openImageSequence);
+        fileMenu.add(new ImageSequenceOpener(frame));
         
         // XXX Use this to play all movies in a folder in order
         JMenuItem openMovieSequence = new JMenuItem("Open Movie Sequence...");        
@@ -215,7 +211,7 @@ class PlayerMenuBar extends JMenuBar {
     void deselection() {
         this.copyAction.setEnabled(false);
         this.cutAction.setEnabled(false);
-        this.clearAction.setEnabled(false);
+        // this.clearAction.setEnabled(false);
         this.trimToSelectionAction.setEnabled(false);
     }
 
