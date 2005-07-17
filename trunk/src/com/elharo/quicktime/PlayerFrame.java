@@ -29,6 +29,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.ImageProducer;
@@ -69,6 +71,7 @@ public final class PlayerFrame extends JFrame implements Printable {
     private MovieController controller;
     private int movieHeight = -1;
     private int movieWidth = -1;
+    private double heightToWidth = 1.0;
     private Component c;
     private UndoManager undoer = new UndoManager();
     private QTFile file = null;
@@ -102,6 +105,25 @@ public final class PlayerFrame extends JFrame implements Printable {
         initMovieDimensions();
         this.controller.enableEditing(true);
         new MacOSHandler(this);
+        
+        this.addComponentListener( new ComponentAdapter() {
+        
+            private int RESIZE_DELAY = 20;
+            
+            public void componentResized(final ComponentEvent evt) {
+                try {
+                    Thread.sleep(RESIZE_DELAY);
+                } 
+                catch( InterruptedException ex) {
+                }
+
+                // XXX Make this allow resizing vertically to increase the width as well
+                int newWidth = evt.getComponent().getBounds().width;
+                setSize( newWidth, (int) (newWidth * heightToWidth + frameExtras) );
+            }
+        });
+
+        
     }
 
     // XXX Logically I should split the menubar out into a separate class
@@ -155,6 +177,7 @@ public final class PlayerFrame extends JFrame implements Printable {
             QDRect size = this.movie.getBox();
             this.movieHeight = size.getHeight();
             this.movieWidth = size.getWidth();
+            this.heightToWidth = ((double) movieHeight) / movieWidth;
             this.frameExtras = getSize().height - CONTROL_BAR_HEIGHT - movieHeight;
         }
     }
@@ -337,6 +360,8 @@ public final class PlayerFrame extends JFrame implements Printable {
      
     void undoableClear() throws QTException {
         
+        System.err.println(movie.getSelection().duration);
+        System.err.println(movie.getSelection().time);
         MovieEditState oldState = movie.newEditState();
         movie.clearSelection();
         MovieEditState newState = movie.newEditState();
@@ -349,6 +374,10 @@ public final class PlayerFrame extends JFrame implements Printable {
     void undoablePaste() throws QTException {
         
         MovieEditState oldState = movie.newEditState();
+        // XXX need to catch StdQTException with error code -102 here
+        // in case user tries to paste something that isn't movie
+        // Honestly if there's no movie on the clipboard we should just disable 
+        // the Paste menu item 
         Movie pasted = Movie.fromScrap(0);
         movie.pasteSelection(pasted);
         MovieEditState newState = movie.newEditState();
@@ -389,6 +418,7 @@ public final class PlayerFrame extends JFrame implements Printable {
 
     public int print(Graphics graphics, PageFormat format, int pageIndex) 
       throws PrinterException {
+        
         try {
             // XXX need to handle movies bigger than the page
             Image image = getStill();
