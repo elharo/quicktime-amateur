@@ -38,6 +38,7 @@ import quicktime.std.image.CodecComponent;
 import quicktime.std.image.CompressedFrameInfo;
 import quicktime.std.image.GraphicsImporter;
 import quicktime.std.image.ImageDescription;
+import quicktime.std.image.Matrix;
 import quicktime.std.image.QTImage;
 import quicktime.std.movies.*;
 import quicktime.std.movies.media.VideoMedia;
@@ -110,11 +111,19 @@ class ImageSequenceOpener extends AbstractAction {
 
             ProgressMonitor monitor = new ProgressMonitor(
               (Component) event.getSource(), "Building movie", "test", 0, chosen.length-1);
-            for (int i=0; i < chosen.length; i++) {
-                monitor.setNote("Processing " + chosen[i].getName());
-                importer.setDataFile(new QTFile(chosen[i]));
-                // XXX If a file does not match the original size we need to 
+
+            Matrix matrix = new Matrix();
+            for (int i=0; i < chosen.length; i++) { 
+                QTFile imageFile = new QTFile(chosen[i]);
+                monitor.setNote("Processing " + imageFile.getName());
+                
+                // If a file does not match the original size we need to 
                 // resize it
+                importer.setDataFile(imageFile);
+                QDRect newBounds = importer.getBoundsRect();
+                matrix.map(newBounds, bounds);
+                importer.setMatrix(matrix);
+                importer.setDestRect(bounds);
                 importer.draw();
                 CompressedFrameInfo cfInfo = seq.compressFrame(offscreen, bounds, 
                   StdQTConstants.codecFlagUpdatePrevious, rawImage);
