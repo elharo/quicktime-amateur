@@ -28,6 +28,7 @@ import javax.swing.*;
 
 import quicktime.*;
 import quicktime.io.QTFile;
+import quicktime.io.QTIOException;
 import quicktime.qd.QDGraphics;
 import quicktime.qd.QDRect;
 import quicktime.std.*;
@@ -45,6 +46,15 @@ import quicktime.util.RawEncodedImage;
 
 class ImageSequenceOpener extends AbstractAction {
     
+    private static int[] types = new int[4];
+    
+    static {
+        types[0] = QTUtils.toOSType("JPEG");
+        types[1] = QTUtils.toOSType("GIFf");
+        types[2] = QTUtils.toOSType("PICT");
+        types[3] = QTUtils.toOSType("PNGf");
+    }
+    
     ImageSequenceOpener() {
         putValue(Action.NAME, "Open Image Sequence...");
         putValue(
@@ -54,12 +64,9 @@ class ImageSequenceOpener extends AbstractAction {
     } 
     
     public void actionPerformed(ActionEvent event) {
-        
-        // fill in with image types????
-        int[] types = {};
+
         try {
             QTFile firstImage = QTFile.standardGetFilePreview(types);
-            if (firstImage == null) return;
             
             // XXX We need to use a file filter here
             File[] chosen = firstImage.getParentFile().listFiles();
@@ -120,6 +127,12 @@ class ImageSequenceOpener extends AbstractAction {
             
             PlayerFrame f = new PlayerFrame(movie);
             f.show();
+        }
+        catch (QTIOException ex) {
+            if (ex.errorCode() == -128) {
+                // User cancelled
+            }
+            else ex.printStackTrace();
         }
         catch (QTException ex) {
             // ???? Auto-generated catch block
