@@ -222,6 +222,8 @@ public final class PlayerFrame extends JFrame implements Printable {
             
             int fullScreenWidth;
             int fullScreenHeight;
+            int fullScreenX;
+            int fullScreenY;
             if (widthRatio < heightRatio) {
                 fullScreenWidth = (int) (movieWidth * widthRatio);
                 fullScreenHeight = (int) (movieHeight * widthRatio);
@@ -230,8 +232,9 @@ public final class PlayerFrame extends JFrame implements Printable {
                 fullScreenWidth = (int) (movieWidth * heightRatio);
                 fullScreenHeight = (int) (movieHeight * heightRatio);
             }
-            
-            // need to center the fullscreen movie vertically or horizontally????
+            fullScreenY = (bounds.height - fullScreenHeight) / 2 ;
+            fullScreenX = (bounds.width - fullScreenWidth) / 2;
+            System.err.println(fullScreenX + " " + fullScreenY);
             
             this.setVisible(false);
             fullScreenFrame = makeFullScreenFrame();
@@ -239,6 +242,7 @@ public final class PlayerFrame extends JFrame implements Printable {
             this.remove(c);
             QTComponent qc = QTFactory.makeQTComponent(movie);
             fullScreenFrame.getContentPane().add(qc.asComponent());
+            fullScreenFrame.setLocation(fullScreenX, fullScreenY);
             fullScreenFrame.setSize(fullScreenWidth, fullScreenHeight);
             fullScreenFrame.setVisible(true);
             movie.start();
