@@ -186,7 +186,7 @@ public final class PlayerFrame extends JFrame implements Printable {
             this.movieHeight = size.getHeight();
             this.movieWidth = size.getWidth();
             this.heightToWidth = ((double) movieHeight) / movieWidth;
-            this.frameExtras = getSize().height - CONTROL_BAR_HEIGHT - movieHeight;
+            this.frameExtras = getSize().height - movieHeight;
         }
     }
 
