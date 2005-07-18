@@ -68,8 +68,7 @@ class ImageSequenceOpener extends AbstractAction {
         try {
             QTFile firstImage = QTFile.standardGetFilePreview(types);
             
-            // XXX We need to use a file filter here
-            File[] chosen = firstImage.getParentFile().listFiles();
+            File[] chosen = firstImage.getParentFile().listFiles(ImageFileFilter.INSTANCE);
             int delay = getDelay();
 
             // XXX should I delete the temp file later?
@@ -127,6 +126,7 @@ class ImageSequenceOpener extends AbstractAction {
             
             PlayerFrame f = new PlayerFrame(movie);
             f.show();
+            // start playing????
         }
         catch (QTIOException ex) {
             if (ex.errorCode() == -128) {
