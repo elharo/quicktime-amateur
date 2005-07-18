@@ -22,13 +22,8 @@ package com.elharo.quicktime;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
-import java.io.File;
-import java.io.UnsupportedEncodingException;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 import quicktime.QTException;
 import quicktime.io.*;
@@ -38,10 +33,12 @@ import quicktime.std.movies.Movie;
 class SaveAsAction extends AbstractAction {
 
     private Movie movie;
+    private PlayerFrame frame;
     
-    SaveAsAction(Movie movie) {
-        this.movie = movie;
-        if (movie == null) this.setEnabled(false);
+    SaveAsAction(PlayerFrame frame) {
+        this.frame = frame;
+        if (frame == null) this.setEnabled(false);
+        else this.movie = frame.getMovie();
         putValue(Action.NAME, "Save As...");  
         putValue(Action.ACCELERATOR_KEY, 
                  KeyStroke.getKeyStroke('S', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));  
@@ -50,29 +47,28 @@ class SaveAsAction extends AbstractAction {
     
     public void actionPerformed(ActionEvent event) {
         
-        // ???? need to read window title from window and use that as default name
-        QTFile file = new QTFile(new File("testsave.mov"));
+        // XXX need to provide means to choose output format
+        // and various other QuickTimeSettings
+        JFileChooser chooser = new JFileChooser();
+        chooser.setSelectedFile(frame.getFile());
+        int chosen = chooser.showSaveDialog(frame);
+        if (chosen != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        
+        QTFile file = new QTFile(chooser.getSelectedFile());
         int flags = 
           StdQTConstants.createMovieFileDontCreateResFile |
-          StdQTConstants.createMovieFileDeleteCurFile |
-          StdQTConstants.showUserSettingsDialog;
-        // If we don't show the user settings dialog I could use a 
-        // standard Swing save file dialog and then save into that file
-        // ???? Could I use a GraphicsImporterInfo?
+          StdQTConstants.createMovieFileDeleteCurFile;
         try {
             movie.setProgressProc();
-            // does this next line return a file? It doesn't seem to change the file argument????
             int resource = movie.convertToFile(file, 
               StdQTConstants.kQTFileTypeMovie, 
               StdQTConstants.kMoviePlayer, // ???? change this to Amateur
               IOConstants.smSystemScript, 
               flags);
             // ???? why does this lose sound when converting an MPEG?
-            JMenuItem source = (JMenuItem) event.getSource();
-            PlayerFrame frame = (PlayerFrame) source.getTopLevelAncestor();
-            byte[] data = file.getFSSpec(true, QTFile.kReadPermission);
-            System.out.println(new String(data, "MacRoman"));
-            //frame.setFile(????);
+            frame.setFile(file);
         }
         catch (StdQTException e) {
             if (e.errorCode() == -128) {
@@ -81,12 +77,8 @@ class SaveAsAction extends AbstractAction {
             }
             // ???? Auto-generated catch block
             e.printStackTrace();
-          }
-          catch (QTException e) {
-            // ???? Auto-generated catch block
-            e.printStackTrace();
-          }
-        catch (UnsupportedEncodingException e) {
+        }
+        catch (QTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }

@@ -108,7 +108,7 @@ class PlayerMenuBar extends JMenuBar {
         save.setEnabled(false);
         fileMenu.add(save);
          
-        if (frame != null) fileMenu.add(new SaveAsAction(frame.getMovie()));
+        if (frame != null) fileMenu.add(new SaveAsAction(frame));
         else fileMenu.add(new SaveAsAction(null));
             
         JMenuItem revertToSaved = new JMenuItem("Revert to Saved");
