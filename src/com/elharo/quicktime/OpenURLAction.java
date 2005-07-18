@@ -35,15 +35,17 @@ class OpenURLAction extends AbstractAction {
     OpenURLAction(String name, String url) {
         this.url = url;  
         putValue(Action.NAME, name);  
-    } 
+    }
     
     public void actionPerformed(ActionEvent event) {
         try {
-            // ???? What's the non-deprecated way to do this?
+            // ???? This is Mac specific. What to do on Windows?
             FileManager.openURL(url);
         }
         catch (IOException e) {
-            // ???? Auto-generated catch block
+            // ???? should put up a dialog, JOptionPane
+            // warning user
+            // ???? should probbaly catch classnotfoundexception too
             e.printStackTrace();
         }
     }

@@ -43,7 +43,8 @@ class SaveAsAction extends AbstractAction {
         this.movie = movie;
         if (movie == null) this.setEnabled(false);
         putValue(Action.NAME, "Save As...");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('S', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));  
+        putValue(Action.ACCELERATOR_KEY, 
+                 KeyStroke.getKeyStroke('S', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));  
     } 
     
     
@@ -55,11 +56,13 @@ class SaveAsAction extends AbstractAction {
           StdQTConstants.createMovieFileDontCreateResFile |
           StdQTConstants.createMovieFileDeleteCurFile |
           StdQTConstants.showUserSettingsDialog;
-        System.err.println(file);
+        // If we don't show the user settings dialog I could use a 
+        // standard Swing save file dialog and then save into that file
+        // ???? Could I use a GraphicsImporterInfo?
         try {
             movie.setProgressProc();
             // does this next line return a file? It doesn't seem to change the file argument????
-            movie.convertToFile(file, 
+            int resource = movie.convertToFile(file, 
               StdQTConstants.kQTFileTypeMovie, 
               StdQTConstants.kMoviePlayer, // ???? change this to Amateur
               IOConstants.smSystemScript, 
@@ -67,9 +70,8 @@ class SaveAsAction extends AbstractAction {
             // ???? why does this lose sound when converting an MPEG?
             JMenuItem source = (JMenuItem) event.getSource();
             PlayerFrame frame = (PlayerFrame) source.getTopLevelAncestor();
-        System.err.println(file);
-         byte[] data =   file.getFSSpec(true, QTFile.kReadPermission);
-         System.out.println(new String(data, "MacRoman"));
+            byte[] data = file.getFSSpec(true, QTFile.kReadPermission);
+            System.out.println(new String(data, "MacRoman"));
             //frame.setFile(????);
         }
         catch (StdQTException e) {
