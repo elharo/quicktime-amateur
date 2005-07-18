@@ -20,6 +20,7 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.io.*;
@@ -107,8 +108,10 @@ class ImageSequenceOpener extends AbstractAction {
              
             ImageDescription imgDesc = seq.getDescription();
 
-            // XXX Need a progress bar
+            ProgressMonitor monitor = new ProgressMonitor(
+              (Component) event.getSource(), "Building movie", "test", 0, chosen.length-1);
             for (int i=0; i < chosen.length; i++) {
+                monitor.setNote("Processing " + chosen[i].getName());
                 importer.setDataFile(new QTFile(chosen[i]));
                 // XXX If a file does not match the original size we need to 
                 // resize it
@@ -119,6 +122,7 @@ class ImageSequenceOpener extends AbstractAction {
                 int flags = syncSample ? 0 : StdQTConstants.mediaSampleNotSync;
                 videoMedia.addSample(imageHandle, 0, cfInfo.getDataSize(), delay,
                   imgDesc, 1, flags);
+                monitor.setProgress(i);
             }
                    
             videoMedia.endEdits();
