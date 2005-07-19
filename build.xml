@@ -2,15 +2,13 @@
 <project name="Amateur" default="compile" basedir=".">
 	
     <property name="JUNIT_HOME" value="/Applications/eclipse/plugins/org.junit_3.8.1"/>
-	
-	<!-- parameterize these???? -->
+
     <path id="project.classpath">
         <pathelement location="bin"/>
-    	    <!-- Installed by default on Mac, where on other systems? -->
-        <pathelement location="/System/Library/Java/Extensions/MRJToolkit.jar"/>
-        <pathelement location="/System/Library/Java/Extensions/QTJava.zip"/>
-        <pathelement location="/System/Library/Java/Extensions/QTJSupport.jar"/>
-    	   <!-- only necessary for testing -->
+    </path>
+	
+    <path id="test.classpath">
+    	    <path refid="project.classpath"/>
         <pathelement location="${JUNIT_HOME}/junit.jar"/>
     </path>
 	
@@ -34,7 +32,7 @@
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="plain"/>
             <test name="com.elharo.quicktime.tests.AmateurTests"/>
-            <classpath refid="project.classpath"/>
+            <classpath refid="test.classpath"/>
         </junit>
     </target>
 	
