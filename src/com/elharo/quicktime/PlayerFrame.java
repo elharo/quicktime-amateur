@@ -78,7 +78,7 @@ public final class PlayerFrame extends JFrame implements Printable {
     private QTFile file = null;
     
     private final int CONTROL_BAR_HEIGHT;
-    private int frameExtras;
+    private int frameExtras = -1;
     // XXX remove this
     static final int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     private JFrame fullScreenFrame = null;
@@ -128,7 +128,7 @@ public final class PlayerFrame extends JFrame implements Printable {
                         }
                         else {
                             setSize( heightBasedSize.width, heightBasedSize.height );
-                        }                                 
+                        }
                     }
                  } );
             }
@@ -184,15 +184,18 @@ public final class PlayerFrame extends JFrame implements Printable {
 
     
     private void initMovieDimensions() throws StdQTException {
-        if (movieHeight == -1 || movieWidth == -1) {
+        
+        if (movieHeight <= 0 || movieWidth <= 0) {
             QDRect size = this.movie.getBox();
             this.movieHeight = size.getHeight();
             this.movieWidth = size.getWidth();
             this.heightToWidth = ((double) movieHeight) / movieWidth;
-            this.frameExtras = getSize().height - movieHeight;
+            if (this.frameExtras == -1) {
+                this.frameExtras = getSize().height - movieHeight;
+            }
         }
+        
     }
-
 
 
     public void play() throws StdQTException {
@@ -397,7 +400,8 @@ public final class PlayerFrame extends JFrame implements Printable {
         movie.pasteSelection(pasted);
         MovieEditState newState = movie.newEditState();
         MovieEdit edit = new MovieEdit(oldState, newState, "Paste");
-        undoer.addEdit (edit);
+        undoer.addEdit(edit);
+        this.initMovieDimensions();
         controller.movieChanged();
         this.pack();
         
