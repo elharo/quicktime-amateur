@@ -102,11 +102,8 @@ class PlayerMenuBar extends JMenuBar {
         fileMenu.add(closeAction);
         
         fileMenu.addSeparator();
-        
-        JMenuItem save = new JMenuItem("Save");
-        save.setAccelerator(KeyStroke.getKeyStroke('S', menuShortcutKeyMask));        
-        save.setEnabled(false);
-        fileMenu.add(save);
+
+        fileMenu.add(new SaveAction(frame));
          
         if (frame != null) fileMenu.add(new SaveAsAction(frame));
         else fileMenu.add(new SaveAsAction(null));
@@ -206,12 +203,12 @@ class PlayerMenuBar extends JMenuBar {
         
     }
 
-    // cut. copy, and clear shoudl always be enabled
+    // XXX cut. copy, and clear should always be enabled
     // and act on current frame if no selection is available
     void deselection() {
         this.copyAction.setEnabled(false);
         this.cutAction.setEnabled(false);
-        // this.clearAction.setEnabled(false);
+        this.clearAction.setEnabled(false);
         this.trimToSelectionAction.setEnabled(false);
     }
 
