@@ -42,6 +42,8 @@ class SelectNoneAction extends AbstractAction {
     public void actionPerformed(ActionEvent event) {
         try {
             frame.getMovie().setSelection(0, 0);
+            PlayerMenuBar mb = (PlayerMenuBar) (frame.getJMenuBar());
+            mb.deselection();
         }
         catch (QTException e) {
             // ???? Auto-generated catch block
