@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Amateur" default="compile" basedir=".">
+	
+    <property name="JUNIT_HOME" value="/Applications/eclipse/plugins/org.junit_3.8.1"/>
+	
+	<!-- parameterize these???? -->
+    <path id="project.classpath">
+        <pathelement location="bin"/>
+    	    <!-- Installed by default on Mac, where on other systems? -->
+        <pathelement location="/System/Library/Java/Extensions/MRJToolkit.jar"/>
+        <pathelement location="/System/Library/Java/Extensions/QTJava.zip"/>
+        <pathelement location="/System/Library/Java/Extensions/QTJSupport.jar"/>
+    	   <!-- only necessary for testing -->
+        <pathelement location="${JUNIT_HOME}/junit.jar"/>
+    </path>
+	
+    <target name="init">
+        <mkdir dir="bin"/>
+    </target>
+	
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+	
+    <target name="compile" depends="init">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac destdir="bin">
+            <src path="src"/>
+            <classpath refid="project.classpath"/>
+        </javac>
+    </target>
+	
+    <target name="test">
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="plain"/>
+            <test name="com.elharo.quicktime.tests.AmateurTests"/>
+            <classpath refid="project.classpath"/>
+        </junit>
+    </target>
+	
+    <target name="run">
+        <java fork="yes" classname="com.elharo.quicktime.Main" failonerror="true">
+            <classpath refid="project.classpath"/>
+        </java>
+    </target>
+	
+</project>
