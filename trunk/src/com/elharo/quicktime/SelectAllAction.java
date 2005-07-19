@@ -44,6 +44,8 @@ class SelectAllAction extends AbstractAction {
         try {
             Movie movie = frame.getMovie();
             movie.setSelection(0, movie.getDuration());
+            PlayerMenuBar mb = (PlayerMenuBar) (frame.getJMenuBar());
+            mb.selection();
         }
         catch (QTException e) {
             // ???? Auto-generated catch block
