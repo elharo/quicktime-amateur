@@ -111,6 +111,9 @@ public final class PlayerFrame extends JFrame implements Printable {
             
             public void componentResized(final ComponentEvent evt) {
 
+                // Allow all sizes when there's no movie
+                if (movieHeight <= 0 || movieWidth <= 0) return;
+                
                 // Make this allow resizing vertically to increase the width as well
                 int newWidth = evt.getComponent().getBounds().width;
                 int newHeight = evt.getComponent().getBounds().height;
