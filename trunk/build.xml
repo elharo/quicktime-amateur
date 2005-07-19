@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Amateur" default="compile" basedir=".">
 	
+	<!-- ???? need a help target -->
+	
     <property name="JUNIT_HOME" value="/Applications/eclipse/plugins/org.junit_3.8.1"/>
 
+	<taskdef name="jarbundler"
+	         classpath="lib/jarbundler-1.4.jar"
+	         classname="com.loomcom.ant.tasks.jarbundler.JarBundler" />	
+	
     <path id="project.classpath">
         <pathelement location="bin"/>
     </path>
@@ -13,7 +19,13 @@
     </path>
 	
     <target name="init">
+        <tstamp/>
+        <property name="Name"    value="Amateur"/>
+        <property name="name"    value="amateur"/>
+        <property name="version" value="1.1d3-SNAPSHOT"/>
+        <property name="year"    value="2005"/>
         <mkdir dir="bin"/>
+        <mkdir dir="dist"/>
     </target>
 	
     <target name="clean">
@@ -40,6 +52,38 @@
         <java fork="yes" classname="com.elharo.quicktime.Main" failonerror="true">
             <classpath refid="project.classpath"/>
         </java>
+    </target>
+	
+    <target name="jar" depends="compile">
+    	   <jar jarfile="dist/${name}-${version}.jar"
+    	         basedir="bin"
+    	         index="no"
+    			 compress="yes"
+    	         includes="com/elharo/quicktime/*"
+    	         excludes="com/elharo/quicktime/tests/* com/elharo/quicktime/pantry/*">
+
+    	      <manifest>
+    	        <attribute name="Built-By" value="${user.name}"/>
+    	        <attribute name="Specification-Title"    value="Amateur"/>
+    	        <attribute name="Specification-Version"  value="${version}"/>
+    	        <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
+    	        <attribute name="Implementation-Title"   value="Amateur"/>
+    	        <attribute name="Implementation-Version" value="${version}"/>
+    	        <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
+    	        <attribute name="Main-Class" value="com.elharo.quicktime.Main"/>
+    	        <section name="com/elharo/quicktime/">
+    	          <attribute name="Sealed" value="true"/>
+    	          <attribute name="Specification-Title"   value="Amateur core classes"/>
+    	          <attribute name="Implementation-Title"  value="com.elharo.quicktime"/>
+    	        <attribute name="Implementation-Version" value="${version}"/>
+    	        <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
+    	       </section>
+    	      </manifest>
+    	    </jar>        
+    </target>
+	
+    <target name="app" depends="jar">
+        <jarbundler dir="dist" jars="dist/${name}-${version}.jar" name="Amateur" mainclass="com.elharo.quicktime.Main" />
     </target>
 	
 </project>
