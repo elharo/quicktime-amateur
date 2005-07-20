@@ -87,7 +87,7 @@ class PlayerMenuBar extends JMenuBar {
         fileMenu.add(openFile);
         
         fileMenu.add(new URLOpener());
-        fileMenu.add(new ImageSequenceOpener());
+        fileMenu.add(new ImageSequenceOpener(frame));
         
         // XXX Use this to play all movies in a folder in order
         JMenuItem openMovieSequence = new JMenuItem("Open Movie Sequence...");        

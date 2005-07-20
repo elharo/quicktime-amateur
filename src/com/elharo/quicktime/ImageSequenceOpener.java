@@ -21,6 +21,7 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime;
 
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.io.*;
@@ -49,6 +50,8 @@ import quicktime.util.RawEncodedImage;
 class ImageSequenceOpener extends AbstractAction {
     
     private static int[] types = new int[4];
+    private ImageSequenceDialog dialog;
+    private int unitsPerSecond = 30; // timeScale  
     
     static {
         types[0] = QTUtils.toOSType("JPEG");
@@ -57,7 +60,8 @@ class ImageSequenceOpener extends AbstractAction {
         types[3] = QTUtils.toOSType("PNGf");
     }
     
-    ImageSequenceOpener() {
+    ImageSequenceOpener(Frame frame) {
+        dialog = new  ImageSequenceDialog(frame);
         putValue(Action.NAME, "Open Image Sequence...");
         putValue(
           Action.ACCELERATOR_KEY, 
@@ -88,7 +92,6 @@ class ImageSequenceOpener extends AbstractAction {
             QDRect bounds = new QDRect(0, 0, trackWidth, trackHeight);
             
             Track videoTrack = movie.addTrack(trackWidth, trackHeight, volume);
-            int unitsPerSecond = 30; // timeScale
             QDGraphics offscreen = new QDGraphics(bounds);
             importer.setGWorld(offscreen, null);
             VideoMedia videoMedia = new VideoMedia(videoTrack, unitsPerSecond);            
@@ -159,9 +162,10 @@ class ImageSequenceOpener extends AbstractAction {
     }
 
     private int getDelay() {
-        // ???? replace with dialog asking user for number of seconds; 
+        dialog.setVisible(true);
+        double fps = dialog.getRate();
         // convert to current time scale
-        return 90;
+        return (int) (unitsPerSecond / fps);
     } 
 
 }
