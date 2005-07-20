@@ -29,24 +29,28 @@ import quicktime.QTException;
 import quicktime.io.*;
 import quicktime.std.*;
 import quicktime.std.movies.Movie;
+import quicktime.util.QTUtils;
 
 class SaveAsAction extends AbstractAction {
 
-    private Movie movie;
     private PlayerFrame frame;
     
     SaveAsAction(PlayerFrame frame) {
         this.frame = frame;
         if (frame == null) this.setEnabled(false);
-        else this.movie = frame.getMovie();
         putValue(Action.NAME, "Save As...");  
         putValue(Action.ACCELERATOR_KEY, 
                  KeyStroke.getKeyStroke('S', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));  
     } 
     
     
-    public void actionPerformed(ActionEvent event) {
-        
+    public void actionPerformed(ActionEvent event) {      
+        saveFrameAs(frame);
+    }
+
+
+    static void saveFrameAs(PlayerFrame frame) {
+
         // XXX need to provide means to choose output format
         // and various other QuickTimeSettings
         JFileChooser chooser = new JFileChooser();
@@ -55,28 +59,36 @@ class SaveAsAction extends AbstractAction {
         if (chosen != JFileChooser.APPROVE_OPTION) {
             return;
         }
-        
         QTFile file = new QTFile(chooser.getSelectedFile());
+        saveMovieIntoFile(frame, file);
+    }
+
+
+    static void saveMovieIntoFile(PlayerFrame frame, QTFile file) {
+
+        Movie movie = frame.getMovie();
+        // XXX is null?
+        
         int flags = 
           StdQTConstants.createMovieFileDontCreateResFile |
           StdQTConstants.createMovieFileDeleteCurFile;
         try {
             movie.setProgressProc();
-            int resource = movie.convertToFile(file, 
-              StdQTConstants.kQTFileTypeMovie, 
-              StdQTConstants.kMoviePlayer, // ???? change this to Amateur
+            movie.convertToFile(file, 
+              StdQTConstants.kQTFileTypeMovie, // adjust according to type????
+              AmateurConstants.CREATOR_CODE,
               IOConstants.smSystemScript, 
               flags);
             // ???? why does this lose sound when converting an MPEG?
             frame.setFile(file);
         }
-        catch (StdQTException e) {
-            if (e.errorCode() == -128) {
+        catch (StdQTException ex) {
+            if (ex.errorCode() == -128) {
                 // user cancelled
                 return;
             }
             // ???? Auto-generated catch block
-            e.printStackTrace();
+            ex.printStackTrace();
         }
         catch (QTException e) {
             // ???? Auto-generated catch block
