@@ -29,7 +29,9 @@ class ImageSequenceDialog extends JDialog {
         fps.addItem(new FPS(10));
         fps.addItem(new FPS(3));
         fps.addItem(new FPS(2));
-        fps.addItem(new FPS(1));
+        FPS one = new FPS(1);
+        fps.addItem(one);
+        fps.setSelectedItem(one);
         fps.addItem(new FPS(0.5));
         fps.addItem(new FPS(1.0/3));
         fps.addItem(new FPS(0.25));
