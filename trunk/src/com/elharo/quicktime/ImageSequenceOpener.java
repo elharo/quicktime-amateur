@@ -25,6 +25,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.io.*;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -74,7 +75,44 @@ class ImageSequenceOpener extends AbstractAction {
         try {
             QTFile firstImage = QTFile.standardGetFilePreview(types);
             
-            File[] chosen = firstImage.getParentFile().listFiles(ImageFileFilter.INSTANCE);
+            String name = firstImage.getName();
+            int extensionIndex = name.lastIndexOf('.');
+            String extension = name.substring(name.lastIndexOf('.'));
+            String s = "";
+            if (extensionIndex > 0) {
+                for (int i = extensionIndex-1; i >=0; i--) {
+                    char c = name.charAt(i);
+                    if (c >= '0' && c <= '9') s = c + s;
+                }
+                
+            }
+            
+            File[] chosen;
+            
+            try {
+                int numberOfDigits = s.length();
+                int first = Integer.parseInt(s);
+                String prefix = name.substring(0, name.indexOf(s));
+                ArrayList list = new ArrayList();
+                while (true) {
+                    String number = String.valueOf(first);
+                    while (number.length() < numberOfDigits) number = "0" + number;
+                    File f = new File(firstImage.getParent(), prefix + number + extension);
+                    System.err.println(f);
+                    first++;
+                    if (f.exists()) list.add(f);
+                    else break;
+                }
+                chosen = new File[list.size()];
+                for (int i = 0; i < chosen.length; i++) {
+                    chosen[i] = (File) list.get(i);
+                    System.err.println(chosen[i]);
+                }
+            }
+            catch (Exception ex) {
+                chosen = firstImage.getParentFile().listFiles(ImageFileFilter.INSTANCE);
+            }
+            
             int delay = getDelay();
 
             // XXX should I delete the temp file later?
