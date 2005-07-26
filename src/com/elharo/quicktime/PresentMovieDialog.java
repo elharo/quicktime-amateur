@@ -38,13 +38,14 @@ import javax.swing.JRadioButton;
 
 public class PresentMovieDialog extends JDialog {
 
+    // XXX need to add action listeners to these buttons
     private JButton playButton = new JButton("Play");
     private JButton cancelButton = new JButton("Cancel");
     private JComboBox size = new JComboBox();
     
-    PresentMovieDialog() {
+    PresentMovieDialog(PlayerFrame frame) {
         
-        this.setUndecorated(true);
+        super(frame, "Present Movie");
         
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -82,7 +83,7 @@ public class PresentMovieDialog extends JDialog {
         mainPanel.add(BorderLayout.NORTH, north);
         
         GridBagLayout layout = new GridBagLayout();
-        this.setLayout(layout);
+        this.getContentPane().setLayout(layout);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -102,15 +103,6 @@ public class PresentMovieDialog extends JDialog {
         int left = (screenSize.width - dialogSize.width)/2;
         this.setLocation(left, top);
         
-    }
-
-
-    /**
-     * Just for testing
-     */
-    public static void main(String[] args) {
-        PresentMovieDialog dialog = new PresentMovieDialog();
-        dialog.show();
     }
 
 }
