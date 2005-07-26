@@ -22,6 +22,7 @@ package com.elharo.quicktime.tests;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Frame;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -186,6 +187,16 @@ public class PlayerFrameTest extends TestCase {
         }        
         assertFalse(frame.isVisible());
         
+    }
+    
+    
+    public void testNewMenuItem() {
+        
+        int oldNumberOfWindows = Frame.getFrames().length;
+        JMenuItem newMenuItem = this.findJMenuItem("New Player");
+        newMenuItem.doClick();
+        int newNumberOfWindows = Frame.getFrames().length;
+        assertEquals(oldNumberOfWindows+1, newNumberOfWindows);
     }
     
 }
