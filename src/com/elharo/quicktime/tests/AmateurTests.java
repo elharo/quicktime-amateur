@@ -38,6 +38,7 @@ public class AmateurTests extends TestCase {
         TestSuite result = new TestSuite();
         result.addTest(new TestSuite(FrameDisplayerTest.class));
         result.addTest(new TestSuite(PlayerFrameTest.class));
+        result.addTest(new TestSuite(PresentMovieTest.class));
         return result;
         
         
