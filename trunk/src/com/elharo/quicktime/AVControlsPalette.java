@@ -51,7 +51,7 @@ class AVControlsPalette extends JFrame {
     AVControlsPalette(PlayerFrame frame) {
         
         super("Audio Controls");
-        this.setLayout(new GridLayout(1, 2));
+        this.getContentPane().setLayout(new GridLayout(1, 2));
         
         eastPanel.setLayout(new BorderLayout());
         westPanel.setLayout(new BorderLayout());
@@ -117,8 +117,8 @@ class AVControlsPalette extends JFrame {
         eastPanel.add(playbackControls);
         // move to right hand of screen????
         
-        this.add(westPanel);
-        this.add(eastPanel);
+        this.getContentPane().add(westPanel);
+        this.getContentPane().add(eastPanel);
         
         this.pack();
         this.setResizable(false);
