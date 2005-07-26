@@ -27,6 +27,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -92,6 +94,15 @@ public class PresentMovieDialog extends JDialog {
         this.getContentPane().add(mainPanel);
         this.pack();
         this.center();
+        
+        cancelButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+                setVisible(false);
+            }
+            
+        });
+        
     }
     
     
