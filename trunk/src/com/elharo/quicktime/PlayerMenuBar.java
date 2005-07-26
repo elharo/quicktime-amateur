@@ -93,10 +93,8 @@ class PlayerMenuBar extends JMenuBar {
         JMenuItem openMovieSequence = new JMenuItem("Open Movie Sequence...");        
         openMovieSequence.setEnabled(false);
         fileMenu.add(openMovieSequence);
-        
-        JMenuItem openRecent = new JMenuItem("Open Recent");
-        openRecent.setEnabled(false);
-        fileMenu.add(openRecent);
+
+        fileMenu.add(Main.recentFileList.getJMenu());
         
         Action closeAction = new CloseAction(frame);
         fileMenu.add(closeAction);
@@ -386,10 +384,7 @@ class PlayerMenuBar extends JMenuBar {
         
         viewMenu.addSeparator();
         
-        JMenuItem presentMovie = new JMenuItem("Present Movie");
-        presentMovie.setAccelerator(KeyStroke.getKeyStroke('F', menuShortcutKeyMask | InputEvent.SHIFT_MASK));
-        presentMovie.setEnabled(false);
-        viewMenu.add(presentMovie);
+        viewMenu.add(new PresentMovieAction(frame));
         
         viewMenu.addSeparator();
         
