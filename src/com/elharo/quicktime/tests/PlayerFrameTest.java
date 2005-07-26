@@ -175,25 +175,16 @@ public class PlayerFrameTest extends TestCase {
         FrameDisplayer.display(frame);
         while (! frame.isVisible() ) Thread.sleep(100);
         
-        // ???? extract this as a find menu item method
-        Component[] fileitems = menubar.getMenu(0).getMenuComponents();
-        for (int i = 0; i < fileitems.length; i++) {
-            if (fileitems[i] instanceof JMenuItem) {
-                JMenuItem item = (JMenuItem) fileitems[i];
-                if (item.getText().equals("Close")) {
-                    item.doClick();
-                }
-            }
-        }        
+        JMenuItem closeMenuItem = findJMenuItem("Close");
+        closeMenuItem.doClick();
         assertFalse(frame.isVisible());
         
     }
     
     
     public void testNewMenuItem() {
-        
         int oldNumberOfWindows = Frame.getFrames().length;
-        JMenuItem newMenuItem = this.findJMenuItem("New Player");
+        JMenuItem newMenuItem = findJMenuItem("New Player");
         newMenuItem.doClick();
         int newNumberOfWindows = Frame.getFrames().length;
         assertEquals(oldNumberOfWindows+1, newNumberOfWindows);
