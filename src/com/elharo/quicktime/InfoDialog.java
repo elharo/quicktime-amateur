@@ -35,15 +35,11 @@ import quicktime.std.movies.media.HandlerInfo;
 import quicktime.util.QTUtils;
 
 /** 
- * Although this class extends JFrame, it's called a Dialog
- * It really is a non-modal dialog, but we have to extend 
- * JFrame to get the menu bars right.
- * Bleah.
  * 
  * @author Elliotte Rusty Harold
  *
  */
-class InfoDialog extends JFrame {
+class InfoDialog extends JDialog {
 
     // XXX make control-w and close work with this dialog
     private JPanel eastPanel = new JPanel();
@@ -51,8 +47,7 @@ class InfoDialog extends JFrame {
     
     InfoDialog(PlayerFrame frame) {
         
-        super("Movie Info");
-        this.setJMenuBar(new PlayerMenuBar(null));
+        super(frame, "Movie Info");
         
         this.getContentPane().setLayout(new BorderLayout());
         

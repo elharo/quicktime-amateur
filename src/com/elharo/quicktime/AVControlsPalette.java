@@ -26,23 +26,12 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-import quicktime.QTException;
-import quicktime.qd.QDRect;
-import quicktime.std.StdQTConstants;
-import quicktime.std.StdQTException;
-import quicktime.std.movies.Movie;
-import quicktime.std.movies.Track;
-
 /** 
- * Although this class extends JFrame, it's called a Dialog
- * It really is a non-modal dialog, but we have to extend 
- * JFrame to get the menu bars right.
- * Bleah.
  * 
  * @author Elliotte Rusty Harold
  *
  */
-class AVControlsPalette extends JFrame {
+class AVControlsPalette extends JDialog {
 
     // XXX make control-w and close work with this dialog
     private JPanel eastPanel = new JPanel();
@@ -50,7 +39,7 @@ class AVControlsPalette extends JFrame {
     
     AVControlsPalette(PlayerFrame frame) {
         
-        super("Audio Controls");
+        super(frame, "Audio Controls");
         this.getContentPane().setLayout(new GridLayout(1, 2));
         
         eastPanel.setLayout(new BorderLayout());
