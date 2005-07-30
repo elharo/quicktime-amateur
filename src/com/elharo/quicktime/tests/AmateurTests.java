@@ -22,16 +22,9 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime.tests;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class AmateurTests extends TestCase {
-
-    
-    public AmateurTests(String name) {
-        super(name);   
-    }
-
+public class AmateurTests {
     
     public static Test suite() {
         
@@ -41,8 +34,6 @@ public class AmateurTests extends TestCase {
         result.addTest(new TestSuite(PresentMovieTest.class));
         return result;
         
-        
     }
-
     
 }
