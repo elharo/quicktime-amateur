@@ -32,6 +32,7 @@ import javax.swing.JMenuItem;
 
 import quicktime.QTException;
 
+import com.elharo.quicktime.FrameDisplayer;
 import com.elharo.quicktime.PlayerFrame;
 import com.elharo.quicktime.QuicktimeInit;
 
@@ -51,6 +52,7 @@ public class PresentMovieTest extends GUITestCase {
     
     protected void setUp() throws QTException {
         frame = new PlayerFrame();
+        FrameDisplayer.display(frame);
         menubar = frame.getJMenuBar();
     }
 
