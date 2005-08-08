@@ -32,6 +32,7 @@ public class AmateurTests {
         result.addTest(new TestSuite(FrameDisplayerTest.class));
         result.addTest(new TestSuite(PlayerFrameTest.class));
         result.addTest(new TestSuite(PresentMovieTest.class));
+        result.addTest(new TestSuite(AVDialogTest.class));
         return result;
         
     }
