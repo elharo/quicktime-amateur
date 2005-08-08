@@ -41,6 +41,9 @@ class RecentFileList extends LinkedHashMap {
         return size() > MAX_FILES;
     }
     
+    
+    // XXX This is completely wrong; we need a dynamically updated menu
+    // with some sort of listener on open/close
     JMenu getJMenu() {
         JMenu result = new JMenu("Recent Files");
         Iterator iterator = iterator();
