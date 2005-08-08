@@ -21,6 +21,9 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime.tests;
 
 import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -40,6 +43,22 @@ public abstract class GUITestCase extends TestCase {
         catch (QTException ex) {
             throw new RuntimeException(ex);
         }   
+    }
+
+    protected static Dialog findDialogByTitle(String title) {
+        
+        Frame[] allFrames = Frame.getFrames();
+        for (int i = 0; i < allFrames.length; i++) {
+            Window[] owned = allFrames[i].getOwnedWindows();
+            for (int j = 0; j < owned.length; j++) {
+                Dialog dialog = (Dialog) owned[j];
+                if (title.equals(dialog.getTitle())) {
+                    return dialog;
+                }
+            }
+        }
+        
+        return null;
     }
 
     public JMenuItem findJMenuItem(JMenuBar menubar, String name) {

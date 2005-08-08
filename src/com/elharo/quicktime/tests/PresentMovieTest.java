@@ -23,8 +23,6 @@ package com.elharo.quicktime.tests;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.Window;
 
 import javax.swing.JButton;
 import javax.swing.JMenuBar;
@@ -61,22 +59,6 @@ public class PresentMovieTest extends GUITestCase {
         frame.dispose();
     }
     
-    
-    private static Dialog findDialogByTitle(String title) {
-        
-        Frame[] allFrames = Frame.getFrames();
-        for (int i = 0; i < allFrames.length; i++) {
-            Window[] owned = allFrames[i].getOwnedWindows();
-            for (int j = 0; j < owned.length; j++) {
-                Dialog dialog = (Dialog) owned[j];
-                if (title.equals(dialog.getTitle())) {
-                    return dialog;
-                }
-            }
-        }
-        
-        return null;
-    }
     
     public void testPresentMovieDialog() {
         
