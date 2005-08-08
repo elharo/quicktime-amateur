@@ -26,7 +26,6 @@ import java.util.Iterator;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.KeyStroke;
 
 class BringAllToFrontAction extends AbstractAction {
 
