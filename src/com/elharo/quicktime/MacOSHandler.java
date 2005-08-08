@@ -31,7 +31,7 @@ import com.apple.eawt.Application;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d1
+ * @version 1.0d3
  */
 public class MacOSHandler extends Application {
 
@@ -48,7 +48,7 @@ public class MacOSHandler extends Application {
         public void handleAbout(ApplicationEvent event) {
             EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    about.show();
+                    about.setVisible(true);
                 }
             });
             event.setHandled(true);
@@ -58,7 +58,7 @@ public class MacOSHandler extends Application {
             Iterator iterator = WindowList.INSTANCE.iterator();
             while (iterator.hasNext()) {
                 Frame next = (Frame) iterator.next();
-                next.hide();
+                next.setVisible(false);
             }
             
             // XXX could fix this by setting the hidden frame to exit on close 
