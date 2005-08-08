@@ -92,10 +92,10 @@ public final class PlayerFrame extends JFrame implements Printable {
         this.setSize(640, 480);
     }
 
-    public PlayerFrame(String title, Movie m) throws QTException {
+    public PlayerFrame(String title, Movie movie) throws QTException {
         super(title);
-        this.movie = m;
-        controller = new MovieController(m);
+        this.movie = movie;
+        controller = new MovieController(movie);
         controller.setActionFilter(new SelectionListener(this));
         CONTROL_BAR_HEIGHT = controller.getRequiredSize().getHeight();
         setupMenuBar();
@@ -129,6 +129,8 @@ public final class PlayerFrame extends JFrame implements Printable {
                         else {
                             setSize( heightBasedSize.width, heightBasedSize.height );
                         }
+                        invalidate();
+                        c.repaint();
                     }
                  } );
             }
@@ -214,8 +216,6 @@ public final class PlayerFrame extends JFrame implements Printable {
         this.setVisible(true);
         this.toFront();
     }
-
-
     
     
     private void enterFullScreen() {
