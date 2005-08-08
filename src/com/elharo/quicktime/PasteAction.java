@@ -20,7 +20,6 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -28,7 +27,6 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import quicktime.QTException;
-import quicktime.std.movies.MovieController;
 
 class PasteAction extends AbstractAction {
 

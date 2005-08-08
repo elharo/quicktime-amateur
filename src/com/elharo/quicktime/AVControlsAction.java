@@ -26,8 +26,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import quicktime.std.movies.Movie;
-
 class AVControlsAction extends AbstractAction {
 
     private PlayerFrame frame;
@@ -44,7 +42,7 @@ class AVControlsAction extends AbstractAction {
         AVControlsPalette palette = new AVControlsPalette(frame);
         
         // use eventqueue????
-        palette.show();
+        palette.setVisible(true);
     }
 
 }

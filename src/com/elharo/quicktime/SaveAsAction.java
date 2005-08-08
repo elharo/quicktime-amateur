@@ -29,7 +29,6 @@ import quicktime.QTException;
 import quicktime.io.*;
 import quicktime.std.*;
 import quicktime.std.movies.Movie;
-import quicktime.util.QTUtils;
 
 class SaveAsAction extends AbstractAction {
 
