@@ -24,7 +24,7 @@
         <tstamp/>
         <property name="Name"    value="Amateur"/>
         <property name="name"    value="amateur"/>
-        <property name="version" value="1.0d3"/>
+        <property name="version" value="1.0d4-SNAPSHOT"/>
         <property name="year"    value="2005"/>
         <mkdir dir="bin"/>
         <mkdir dir="dist"/>
@@ -86,6 +86,7 @@
     </target>
     
     <target name="app" depends="jar">
+    	<delete dir="dist/Amateur.app"/>
         <jarbundler dir="dist" jars="dist/${name}-${version}.jar" 
                     name="Amateur" 
                     mainclass="com.elharo.quicktime.Main" 
@@ -95,6 +96,16 @@
                     signature="QTAM"
                     bundleid="com.elharo.quicktime"
         />
+    </target>
+    
+    <target name="image" depends="app">
+    	<exec executable="hdiutil" os="Mac OS X">
+    	    <arg value="create"/>
+    	    <arg value="-srcfolder"/>
+    	    <arg value="dist/${Name}.app"/>
+	        <arg value="-ov"/>
+    	    <arg value="dist/${Name}-${version}.dmg"/>
+    	</exec>
     </target>
     
 </project>
