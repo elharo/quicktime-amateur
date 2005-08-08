@@ -24,7 +24,7 @@
         <tstamp/>
         <property name="Name"    value="Amateur"/>
         <property name="name"    value="amateur"/>
-        <property name="version" value="1.1d3"/>
+        <property name="version" value="1.0d3"/>
         <property name="year"    value="2005"/>
         <mkdir dir="bin"/>
         <mkdir dir="dist"/>
