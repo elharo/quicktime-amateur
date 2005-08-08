@@ -44,7 +44,7 @@ class ImageSequenceDialog extends JDialog {
         this.getContentPane().add(ok);
         ok.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent event) {
                 setVisible(false);
             }
             

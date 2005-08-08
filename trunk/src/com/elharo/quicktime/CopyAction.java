@@ -40,7 +40,7 @@ class CopyAction extends AbstractAction {
     } 
     
     
-    public void actionPerformed(ActionEvent arg0) {
+    public void actionPerformed(ActionEvent event) {
         try {
             Movie original = frame.getMovie();
             Movie copy = original.copySelection();
