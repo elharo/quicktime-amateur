@@ -14,11 +14,11 @@ class RecentFileMenu extends JMenu {
 
     RecentFileMenu() {
         super("Recent Files");
-        update();
         instances.add(this);
+        update();
     }
     
-    public void finalize() {
+    protected void finalize() {
         instances.remove(this);
     }
 

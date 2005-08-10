@@ -94,7 +94,7 @@ class PlayerMenuBar extends JMenuBar {
         openMovieSequence.setEnabled(false);
         fileMenu.add(openMovieSequence);
 
-        fileMenu.add(Main.recentFileList.getJMenu());
+        fileMenu.add(new RecentFileMenu());
         
         Action closeAction = new CloseAction(frame);
         fileMenu.add(closeAction);
@@ -420,6 +420,10 @@ class PlayerMenuBar extends JMenuBar {
                 }
             }});
         viewMenu.add(loopBackAndForth);
+        
+        final JCheckBoxMenuItem keepOnTop = new JCheckBoxMenuItem("Keep on Top");
+        keepOnTop.setEnabled(false);
+        viewMenu.add(keepOnTop);
         
         final JCheckBoxMenuItem playSelectionOnly = new JCheckBoxMenuItem("Play Selection Only");
         playSelectionOnly.setAccelerator(KeyStroke.getKeyStroke('T', menuShortcutKeyMask));
