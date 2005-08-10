@@ -43,13 +43,8 @@ public class FileOpener implements ActionListener {
         String title = "The movie in the file";
         try {
             QTFile file = QTFile.standardGetFilePreview(QTFile.kStandardQTFileTypes);
-            title = file.getName();
-            OpenMovieFile omFile = OpenMovieFile.asRead(file);
-            Movie m = Movie.fromFile(omFile);
-            PlayerFrame f = new PlayerFrame(file.getName(), m);
-            f.setFile(file);
+            title = openFile(file);
             Main.recentFileList.add(file);
-            FrameDisplayer.display(f);
         }
         catch (QTIOException ex) {
            if (ex.errorCode() == USER_CANCELLED) return;
@@ -65,6 +60,16 @@ public class FileOpener implements ActionListener {
             Container parent = component.getParent();
             JOptionPane.showMessageDialog(parent, errorMessage);
         }
+    }
+
+    static String openFile(QTFile file) throws QTException {
+        String title = file.getName();
+        OpenMovieFile omFile = OpenMovieFile.asRead(file);
+        Movie m = Movie.fromFile(omFile);
+        PlayerFrame f = new PlayerFrame(file.getName(), m);
+        f.setFile(file);
+        FrameDisplayer.display(f);
+        return title;
     }
 
 }

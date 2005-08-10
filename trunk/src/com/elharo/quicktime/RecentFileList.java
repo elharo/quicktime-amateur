@@ -31,6 +31,7 @@ class RecentFileList extends LinkedHashMap {
     void add(File f) {
         if (containsKey(f)) return;
         put(f, f);
+        RecentFileMenu.update();
     }
     
     Iterator iterator() {
@@ -45,13 +46,7 @@ class RecentFileList extends LinkedHashMap {
     // XXX This is completely wrong; we need a dynamically updated menu
     // with some sort of listener on open/close
     JMenu getJMenu() {
-        JMenu result = new JMenu("Recent Files");
-        Iterator iterator = iterator();
-        while (iterator.hasNext()) {
-            File f = (File) iterator.next();
-            result.add(new RecentFileAction(f));
-        }
-        return result;
+        return new RecentFileMenu();
     }
     
     
