@@ -22,7 +22,6 @@ package com.elharo.quicktime;
 
 import java.util.*;
 import java.io.*;
-import javax.swing.*;
 
 class RecentFileList extends LinkedHashMap {
 
@@ -41,13 +40,5 @@ class RecentFileList extends LinkedHashMap {
     protected boolean removeEldestEntry(Map.Entry eldest) {
         return size() > MAX_FILES;
     }
-    
-    
-    // XXX This is completely wrong; we need a dynamically updated menu
-    // with some sort of listener on open/close
-    JMenu getJMenu() {
-        return new RecentFileMenu();
-    }
-    
     
 }
