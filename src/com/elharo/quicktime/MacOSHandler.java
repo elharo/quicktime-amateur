@@ -23,6 +23,10 @@ package com.elharo.quicktime;
 import java.awt.Dialog;
 import java.awt.EventQueue;
 import java.awt.Frame;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Iterator;
 
 import com.apple.eawt.ApplicationAdapter;
@@ -59,13 +63,49 @@ public class MacOSHandler extends Application {
             while (iterator.hasNext()) {
                 Frame next = (Frame) iterator.next();
                 next.setVisible(false);
+                next.dispose();
             }
             
+            storeRecentFiles();
             // XXX could fix this by setting the hidden frame to exit on close 
             // and then closing it instead
             System.exit(0);
         }
         
     }
+
+    private void storeRecentFiles() {
+        System.err.println("FOO");
+        File home = new File (System.getProperty("user.home"));
+        File library = new File(home, "Library");
+        File prefs = new File(library, "Preferences");
+        if (prefs.exists()) {
+            File prefxml = new File(prefs, "com.elharo.amateur.RecentFiles.xml");
+            try {
+                FileOutputStream out = new FileOutputStream(prefxml);
+                OutputStreamWriter writer = new OutputStreamWriter(out, "UTF-8"); 
+                writer.write("<?xml version='1.0'?>\r\n");
+                writer.write("<RecentFiles>\r\n");
+                Iterator iterator = Main.recentFileList.iterator();
+                while (iterator.hasNext()) {
+                    File f = (File) iterator.next();
+                    writer.write("  <File>");
+                    // XXX need to do XML escaping here
+                    writer.write(f.getAbsolutePath());
+                    writer.write("</File>\r\n");
+                }
+                writer.write("</RecentFiles>\r\n");
+                writer.flush();
+                writer.close();
+            }
+            catch (IOException e) {
+                // ???? Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        
+    }
+        
+    
     
 }
