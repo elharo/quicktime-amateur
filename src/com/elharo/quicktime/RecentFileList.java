@@ -38,7 +38,7 @@ class RecentFileList extends LinkedHashMap {
         return values().iterator();
     }
     
-    protected boolean removeEldestEntry() {
+    protected boolean removeEldestEntry(Map.Entry eldest) {
         return size() > MAX_FILES;
     }
     
