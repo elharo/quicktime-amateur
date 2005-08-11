@@ -66,7 +66,7 @@ class RecentFileList extends LinkedHashMap {
                 OutputStreamWriter writer = new OutputStreamWriter(out, "UTF-8"); 
                 writer.write("<?xml version='1.0'?>\r\n");
                 writer.write("<RecentFiles>\r\n");
-                Iterator iterator = Main.recentFileList.iterator();
+                Iterator iterator = this.iterator();
                 while (iterator.hasNext()) {
                     File f = (File) iterator.next();
                     writer.write("  <File>");

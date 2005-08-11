@@ -66,7 +66,7 @@ public class MacOSHandler extends Application {
                 next.dispose();
             }
             
-            Main.recentFileList.storeRecentFiles();
+            RecentFileList.INSTANCE.storeRecentFiles();
             // XXX could fix this by setting the hidden frame to exit on close 
             // and then closing it instead
             System.exit(0);
