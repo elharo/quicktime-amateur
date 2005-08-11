@@ -288,13 +288,8 @@ class PlayerMenuBar extends JMenuBar {
     private void initHelpMenu() {
         JMenu helpMenu = new JMenu("Help");
 
-        JMenuItem help = new JMenuItem("Quicktime Amateur Help");
-        // XXX why doesn't this work?
-        // Probably has something to do with this from InputEvent API doc:
-        /* Not all characters have a keycode associated with them. 
-         * For example, there is no keycode for the question mark 
-         * because there is no keyboard for which it appears on the primary layer. */
-        help.setAccelerator(KeyStroke.getKeyStroke('?', menuShortcutKeyMask));
+        JMenuItem help = new JMenuItem("Amateur Help");
+        help.setAccelerator(KeyStroke.getKeyStroke(new Character('?'), menuShortcutKeyMask));
         help.setEnabled(false);
         helpMenu.add(help);
 
