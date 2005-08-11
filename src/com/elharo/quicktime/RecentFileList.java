@@ -23,9 +23,22 @@ package com.elharo.quicktime;
 import java.util.*;
 import java.io.*;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+
 class RecentFileList extends LinkedHashMap {
 
-    private static int MAX_FILES = 10;
+    static RecentFileList INSTANCE = new RecentFileList();
+    
+    private RecentFileList() {
+        loadRecentFiles();
+    }
+    
+    private final static int MAX_FILES = 10;
     
     void add(File f) {
         if (containsKey(f)) return;
@@ -40,5 +53,77 @@ class RecentFileList extends LinkedHashMap {
     protected boolean removeEldestEntry(Map.Entry eldest) {
         return size() > MAX_FILES;
     }
+    
+    void storeRecentFiles() {
+        
+        File home = new File(System.getProperty("user.home"));
+        File library = new File(home, "Library");
+        File prefs = new File(library, "Preferences");
+        if (prefs.exists()) {
+            File prefxml = new File(prefs, "com.elharo.amateur.RecentFiles.xml");
+            try {
+                FileOutputStream out = new FileOutputStream(prefxml);
+                OutputStreamWriter writer = new OutputStreamWriter(out, "UTF-8"); 
+                writer.write("<?xml version='1.0'?>\r\n");
+                writer.write("<RecentFiles>\r\n");
+                Iterator iterator = Main.recentFileList.iterator();
+                while (iterator.hasNext()) {
+                    File f = (File) iterator.next();
+                    writer.write("  <File>");
+                    // XXX need to do XML escaping here
+                    writer.write(f.getAbsolutePath());
+                    writer.write("</File>\r\n");
+                }
+                writer.write("</RecentFiles>\r\n");
+                writer.flush();
+                writer.close();
+            }
+            catch (IOException e) {
+                // ???? Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        
+    } 
+    
+    
+    void loadRecentFiles() {
+        
+        File home = new File(System.getProperty("user.home"));
+        File library = new File(home, "Library");
+        File prefs = new File(library, "Preferences");
+        File prefxml = new File(prefs, "com.elharo.amateur.RecentFiles.xml");
+        if (prefxml.exists()) {
+            try {
+                // could be quite a bit more robust????
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document doc = builder.parse(prefxml);
+                NodeList files = doc.getElementsByTagName("File");
+                for (int i = 0; i < files.getLength(); i++) {
+                    String path = files.item(i).getFirstChild().getNodeValue();
+                    File recent = new File(path);
+                    if (recent.exists() && ! containsKey(recent)) {
+                        // XXX somehow this isn't getting put in the list
+                        put(recent, recent);
+                    }
+                }
+            }
+            catch (IOException e) {
+                // ???? Auto-generated catch block
+                e.printStackTrace();
+            }
+            catch (ParserConfigurationException e) {
+                // ???? Auto-generated catch block
+                e.printStackTrace();
+            }
+            catch (SAXException e) {
+                // ???? Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        
+    }   
+    
     
 }

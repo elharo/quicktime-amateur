@@ -26,7 +26,8 @@ import quicktime.QTException;
 
 public class Main {
     
-    static RecentFileList recentFileList = new RecentFileList();
+    // XXX remove this variable
+    static RecentFileList recentFileList = RecentFileList.INSTANCE;
 
     public static void main(String[] args) throws QTException {
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Amateur");
