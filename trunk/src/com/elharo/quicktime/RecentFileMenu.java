@@ -15,7 +15,7 @@ class RecentFileMenu extends JMenu {
     RecentFileMenu() {
         super("Recent Files");
         instances.add(this);
-        update();
+        updateMe();
     }
     
     protected void finalize() {
@@ -28,11 +28,16 @@ class RecentFileMenu extends JMenu {
         while (iterator.hasNext()) {
             RecentFileMenu menu = (RecentFileMenu) iterator.next();
             menu.removeAll();
-            Iterator files = Main.recentFileList.iterator();
-            while (files.hasNext()) {
-                File f = (File) files.next();
-                menu.add(new RecentFileAction(f));
-            }
+            menu.updateMe();
+        }
+    }
+    
+    
+    private void updateMe() {
+        Iterator files = RecentFileList.INSTANCE.iterator();
+        while (files.hasNext()) {
+            File f = (File) files.next();
+            add(new RecentFileAction(f));
         }
     }
     

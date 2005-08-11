@@ -66,7 +66,7 @@ public class MacOSHandler extends Application {
                 next.dispose();
             }
             
-            storeRecentFiles();
+            Main.recentFileList.storeRecentFiles();
             // XXX could fix this by setting the hidden frame to exit on close 
             // and then closing it instead
             System.exit(0);
@@ -74,37 +74,7 @@ public class MacOSHandler extends Application {
         
     }
 
-    private void storeRecentFiles() {
-        System.err.println("FOO");
-        File home = new File (System.getProperty("user.home"));
-        File library = new File(home, "Library");
-        File prefs = new File(library, "Preferences");
-        if (prefs.exists()) {
-            File prefxml = new File(prefs, "com.elharo.amateur.RecentFiles.xml");
-            try {
-                FileOutputStream out = new FileOutputStream(prefxml);
-                OutputStreamWriter writer = new OutputStreamWriter(out, "UTF-8"); 
-                writer.write("<?xml version='1.0'?>\r\n");
-                writer.write("<RecentFiles>\r\n");
-                Iterator iterator = Main.recentFileList.iterator();
-                while (iterator.hasNext()) {
-                    File f = (File) iterator.next();
-                    writer.write("  <File>");
-                    // XXX need to do XML escaping here
-                    writer.write(f.getAbsolutePath());
-                    writer.write("</File>\r\n");
-                }
-                writer.write("</RecentFiles>\r\n");
-                writer.flush();
-                writer.close();
-            }
-            catch (IOException e) {
-                // ???? Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        
-    }
+
         
     
     
