@@ -38,7 +38,7 @@ import javax.swing.text.JTextComponent;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d1
+ * @version 1.0d4
  */
 class AboutDialog extends JDialog {
 
@@ -75,7 +75,7 @@ class AboutDialog extends JDialog {
                 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
                 "GNU General Public License for more details.\n\n" +
                 "You should have received a copy of the GNU General Public License\n" +
-                "along with XQuisitor; if not, write to the\n\n" +
+                "along with Amateur; if not, write to the\n\n" +
                 "Free Software Foundation, Inc. \n" +
                 "59 Temple Place, Suite 330\n" +
                 "Boston, MA  02111-1307\nUSA");
@@ -110,7 +110,7 @@ class AboutDialog extends JDialog {
         copyright.setFont(font);
         panel.add(copyright);
         
-        JLabel version = new JLabel("Version: 1.0d1");
+        JLabel version = new JLabel("Version: 1.0d4");
         version.setFont(font);
         panel.add(version);
         
