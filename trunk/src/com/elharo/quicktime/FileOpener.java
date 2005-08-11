@@ -44,7 +44,7 @@ public class FileOpener implements ActionListener {
         try {
             QTFile file = QTFile.standardGetFilePreview(QTFile.kStandardQTFileTypes);
             title = openFile(file);
-            Main.recentFileList.add(file);
+            RecentFileList.INSTANCE.add(file);
         }
         catch (QTIOException ex) {
            if (ex.errorCode() == USER_CANCELLED) return;
