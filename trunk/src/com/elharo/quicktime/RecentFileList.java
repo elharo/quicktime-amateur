@@ -70,8 +70,7 @@ class RecentFileList extends LinkedHashMap {
                 while (iterator.hasNext()) {
                     File f = (File) iterator.next();
                     writer.write("  <File>");
-                    // XXX need to do XML escaping here
-                    writer.write(f.getAbsolutePath());
+                    writer.write(escapeXML(f.getAbsolutePath()));
                     writer.write("</File>\r\n");
                 }
                 writer.write("</RecentFiles>\r\n");
@@ -87,6 +86,31 @@ class RecentFileList extends LinkedHashMap {
     } 
     
     
+    private static String escapeXML(String s) {
+
+        // what about C0 characters????
+        StringBuffer buffer = new StringBuffer(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '&': 
+                    buffer.append("&amp;");
+                    break;
+                case '<': 
+                    buffer.append("&lt;");
+                    break;
+                case '>': 
+                    buffer.append("&gt;");
+                    break;
+                default:
+                    buffer.append(c);
+            }
+        }
+        return buffer.toString();
+
+        
+    }
+
     void loadRecentFiles() {
         
         File home = new File(System.getProperty("user.home"));
