@@ -62,7 +62,7 @@ public class FileOpener implements ActionListener {
         }
     }
 
-    static String openFile(QTFile file) throws QTException {
+    public static String openFile(QTFile file) throws QTException {
         String title = file.getName();
         OpenMovieFile omFile = OpenMovieFile.asRead(file);
         Movie m = Movie.fromFile(omFile);
