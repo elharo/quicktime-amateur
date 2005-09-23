@@ -33,6 +33,7 @@ public class AmateurTests {
         result.addTest(new TestSuite(PlayerFrameTest.class));
         result.addTest(new TestSuite(PresentMovieTest.class));
         result.addTest(new TestSuite(AVDialogTest.class));
+        result.addTest(new TestSuite(RobotTests.class));
         return result;
         
     }
