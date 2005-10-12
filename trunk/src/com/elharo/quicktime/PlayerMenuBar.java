@@ -190,10 +190,8 @@ class PlayerMenuBar extends JMenuBar {
         
         editMenu.addSeparator();
 
-        JMenuItem specialCharacters = new JMenuItem("Special Characters...");
-        specialCharacters.setAccelerator(KeyStroke.getKeyStroke('T', menuShortcutKeyMask | InputEvent.ALT_MASK));
-        specialCharacters.setEnabled(false);
-        editMenu.add(specialCharacters);
+        
+        editMenu.add(new SpecialCharactersAction());
         
         add(editMenu);
         
