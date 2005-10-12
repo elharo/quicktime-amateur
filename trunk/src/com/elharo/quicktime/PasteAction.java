@@ -35,7 +35,8 @@ class PasteAction extends AbstractAction {
     PasteAction(PlayerFrame frame) {
         this.frame = frame;
         putValue(Action.NAME, "Paste");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('V', PlayerFrame.menuShortcutKeyMask));  
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('V', PlayerFrame.menuShortcutKeyMask));
+        if (frame == null) this.setEnabled(false);
     } 
     
     

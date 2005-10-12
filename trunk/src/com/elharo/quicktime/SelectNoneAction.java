@@ -36,6 +36,7 @@ class SelectNoneAction extends AbstractAction {
         this.frame = frame;
         putValue(Action.NAME, "Select None"); 
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('B', PlayerFrame.menuShortcutKeyMask));
+        if (frame == null) this.setEnabled(false);
     } 
     
     

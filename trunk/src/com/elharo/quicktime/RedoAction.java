@@ -34,7 +34,9 @@ class RedoAction extends AbstractAction {
     RedoAction(PlayerFrame frame) {
         this.frame = frame;
         putValue(Action.NAME, "Redo");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('Z', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));  
+        putValue(Action.ACCELERATOR_KEY, 
+          KeyStroke.getKeyStroke('Z', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK)); 
+        if (frame == null) this.setEnabled(false);
     } 
     
     

@@ -37,6 +37,7 @@ class SelectAllAction extends AbstractAction {
         this.frame = frame;
         putValue(Action.NAME, "Select All"); 
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('A', PlayerFrame.menuShortcutKeyMask));
+        if (frame == null) this.setEnabled(false);
     } 
     
     
