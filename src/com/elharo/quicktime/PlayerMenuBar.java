@@ -144,8 +144,6 @@ class PlayerMenuBar extends JMenuBar {
         
         JMenu editMenu = new JMenu("Edit");
         
-        if (frame == null) editMenu.setEnabled(false);
-        
         editMenu.add(new UndoAction(frame));
         editMenu.add(new RedoAction(frame));
         
@@ -189,7 +187,6 @@ class PlayerMenuBar extends JMenuBar {
         editMenu.add(find);
         
         editMenu.addSeparator();
-
         
         editMenu.add(new SpecialCharactersAction());
         

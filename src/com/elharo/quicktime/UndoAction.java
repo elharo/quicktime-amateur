@@ -33,7 +33,8 @@ class UndoAction extends AbstractAction {
     UndoAction(PlayerFrame frame) {
         this.frame = frame;
         putValue(Action.NAME, "Undo");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('Z', PlayerFrame.menuShortcutKeyMask));  
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('Z', PlayerFrame.menuShortcutKeyMask));
+        if (frame == null) this.setEnabled(false);
     } 
     
     

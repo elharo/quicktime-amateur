@@ -27,7 +27,7 @@ public class TrimToSelectionAction extends AbstractAction {
         this.frame = frame;
         if (frame == null) this.setEnabled(false);
         else this.controller = frame.getController();
-        putValue(Action.NAME, "Trim To Selection");    
+        putValue(Action.NAME, "Trim To Selection");
     } 
     
     
