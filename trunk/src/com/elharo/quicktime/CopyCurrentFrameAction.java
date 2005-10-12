@@ -35,7 +35,8 @@ class CopyCurrentFrameAction extends AbstractAction {
 
     CopyCurrentFrameAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Copy Current Frame");  
+        putValue(Action.NAME, "Copy Current Frame");
+        if (frame == null) this.setEnabled(false);
     } 
     
     
