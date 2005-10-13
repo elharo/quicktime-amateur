@@ -36,14 +36,12 @@ class AVControlsPalette extends JDialog {
     // XXX make control-w and close work with this dialog
     private JPanel eastPanel = new JPanel();
     private JPanel westPanel = new JPanel();
+    private JPanel southPanel = new JPanel();
     
     AVControlsPalette(PlayerFrame frame) {
         
-        super(frame, "Audio Controls");
-        this.getContentPane().setLayout(new GridLayout(1, 2));
-        
-        eastPanel.setLayout(new BorderLayout());
-        westPanel.setLayout(new BorderLayout());
+        super(frame, "A/V Controls");
+        this.getContentPane().setLayout(new BorderLayout());
         
         JPanel audioControls = new JPanel();
         Border border = BorderFactory.createLineBorder(Color.GRAY);
@@ -82,32 +80,78 @@ class AVControlsPalette extends JDialog {
         audioControls.add(balance);
         
         westPanel.add(BorderLayout.SOUTH, audioControls);
+  
+        
+        JPanel videoControls = new JPanel();
+        videoControls.setBorder(BorderFactory.createTitledBorder(border, "Video", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
+        videoControls.setBackground(Color.LIGHT_GRAY);
+        videoControls.setLayout(new GridLayout(10, 1));
+
+        videoControls.add(new JLabel("Brightness"));
+        JSlider brightness = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        brightness.setPaintTicks( true );
+        brightness.setMajorTickSpacing( 5 );
+        videoControls.add(brightness);
+
+        videoControls.add(new JLabel("Color"));
+        JSlider color = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        color.setPaintTicks( true );
+        color.setMajorTickSpacing( 5 );
+        videoControls.add(color);
+
+        videoControls.add(new JLabel("Contrast"));
+        JSlider contrast = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        contrast.setPaintTicks( true );
+        contrast.setMajorTickSpacing( 5 );
+        videoControls.add(contrast);
+        
+        videoControls.add(new JLabel("Tint"));
+        JSlider tint = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        tint.setPaintTicks( true );
+        tint.setMajorTickSpacing( 5 );
+        videoControls.add(tint);
+
+        videoControls.add(new JButton("Reset"));
+        
+        eastPanel.add(BorderLayout.SOUTH, videoControls);
+         
         
         JPanel playbackControls = new JPanel();
-        playbackControls.setBorder(BorderFactory.createTitledBorder(border, "Playback", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
+        playbackControls.setBorder(BorderFactory.createTitledBorder(border, 
+          "Playback", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
         playbackControls.setBackground(Color.LIGHT_GRAY);
         
-        playbackControls.add(new JLabel("Jog Shuttle"));
+        
+        JPanel jog = new JPanel();
+        jog.setLayout(new GridLayout(2, 1));
+        jog.add(new JLabel("Jog Shuttle"));
         JSlider jogShuttle = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         jogShuttle.setPaintTicks( true );
         jogShuttle.setMajorTickSpacing( 5 );
-        playbackControls.add(jogShuttle);
-        playbackControls.add(new JSeparator());
+        jog.add(jogShuttle);
+        jog.setBackground(Color.LIGHT_GRAY);
+        playbackControls.add(jog);
         
-        playbackControls.add(new JLabel("Playback Speed"));
+        playbackControls.add(new JSeparator(SwingConstants.VERTICAL));
+        
+        JPanel speed = new JPanel();
+        speed.setLayout(new GridLayout(2, 1));
+        speed.add(new JLabel("Playback Speed"));
         JSlider playbackSpeed = new JSlider(JSlider.HORIZONTAL, 0, 6, 2 );
         playbackSpeed.setPaintTicks( true );
         playbackSpeed.setMajorTickSpacing( 2 );
         playbackSpeed.setMinorTickSpacing( 1 );
-        playbackControls.add(playbackSpeed);
+        speed.add(playbackSpeed);
+        speed.setBackground(Color.LIGHT_GRAY);
+        playbackControls.add(speed);
         
-        
-        playbackControls.setLayout(new GridLayout(10, 1));
-        eastPanel.add(playbackControls);
+        // playbackControls.setLayout(new GridLayout(1, 3));
+        southPanel.add(playbackControls);
         // move to right hand of screen????
         
-        this.getContentPane().add(westPanel);
-        this.getContentPane().add(eastPanel);
+        this.getContentPane().add(BorderLayout.EAST, eastPanel);
+        this.getContentPane().add(BorderLayout.WEST, westPanel);
+        this.getContentPane().add(BorderLayout.SOUTH, southPanel);
         
         this.pack();
         this.setResizable(false);
