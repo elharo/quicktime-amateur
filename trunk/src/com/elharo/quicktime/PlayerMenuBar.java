@@ -252,7 +252,7 @@ class PlayerMenuBar extends JMenuBar {
         showMovieProperties.setEnabled(false);
         windowMenu.add(showMovieProperties);                
         
-        windowMenu.add(new AVControlsAction(this.frame));                
+        windowMenu.add(new AVControlsAction());                
         windowMenu.add(new ShowContentGuideAction());    
         
         windowMenu.addSeparator();
