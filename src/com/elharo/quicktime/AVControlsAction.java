@@ -27,12 +27,8 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 class AVControlsAction extends AbstractAction {
-
-    private PlayerFrame frame;
     
-    AVControlsAction(PlayerFrame frame) {
-        if (frame == null) this.setEnabled(false);
-        else this.frame = frame;
+    AVControlsAction() {
         putValue(Action.NAME, "Show A/V Controls");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('K', PlayerFrame.menuShortcutKeyMask));  
     } 
