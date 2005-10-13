@@ -39,10 +39,9 @@ class AVControlsAction extends AbstractAction {
     
     
     public void actionPerformed(ActionEvent event) {
-        AVControlsPalette palette = new AVControlsPalette(frame);
         
         // use eventqueue????
-        palette.setVisible(true);
+        AVControlsPalette.INSTANCE.setVisible(true);
     }
 
 }

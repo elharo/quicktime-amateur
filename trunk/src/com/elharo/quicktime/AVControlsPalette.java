@@ -31,16 +31,18 @@ import javax.swing.border.TitledBorder;
  * @author Elliotte Rusty Harold
  *
  */
-class AVControlsPalette extends JDialog {
+final class AVControlsPalette extends JDialog {
 
     // XXX make control-w and close work with this dialog
     private JPanel eastPanel = new JPanel();
     private JPanel westPanel = new JPanel();
     private JPanel southPanel = new JPanel();
     
-    AVControlsPalette(PlayerFrame frame) {
+    final static AVControlsPalette INSTANCE = new AVControlsPalette();
+    
+    private AVControlsPalette() {
         
-        super(frame, "A/V Controls");
+        this.setTitle("A/V Controls");
         this.getContentPane().setLayout(new BorderLayout());
         
         JPanel audioControls = new JPanel();
