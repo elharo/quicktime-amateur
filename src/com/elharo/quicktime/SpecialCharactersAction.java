@@ -1,6 +1,7 @@
 package com.elharo.quicktime;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.io.*;
 
 import javax.swing.AbstractAction;
@@ -15,7 +16,7 @@ class SpecialCharactersAction extends AbstractAction {
     
     SpecialCharactersAction() {
         putValue(Action.NAME, "Special Characters...");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('T', PlayerFrame.menuShortcutKeyMask));
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('T', PlayerFrame.menuShortcutKeyMask | InputEvent.ALT_MASK));
     }    
     
     
