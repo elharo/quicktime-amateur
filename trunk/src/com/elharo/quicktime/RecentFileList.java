@@ -124,11 +124,10 @@ class RecentFileList extends LinkedHashMap {
                 DocumentBuilder builder = factory.newDocumentBuilder();
                 Document doc = builder.parse(prefxml);
                 NodeList files = doc.getElementsByTagName("File");
-                for (int i = 0; i < files.getLength(); i++) {
+                for (int i = files.getLength()-1; i >= 0; i--) {
                     String path = files.item(i).getFirstChild().getNodeValue();
                     File recent = new File(path);
                     if (recent.exists() && ! containsKey(recent)) {
-                        // XXX somehow this isn't getting put in the list
                         put(recent, recent);
                     }
                 }
