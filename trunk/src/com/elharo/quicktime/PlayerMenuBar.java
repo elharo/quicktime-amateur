@@ -305,14 +305,9 @@ class PlayerMenuBar extends JMenuBar {
         // java.net RFE form
         helpMenu.add(new OpenURLAction("Request Feature", "https://amateur.dev.java.net/issues/enter_bug.cgi?issue_type=FEATURE"));
 
-        // XXX Check how CyberDuck does this with PayPal.
-        // Hmm, it has a special page with a form and a hidden field.
-        // Maybe we can't do this just with get?
-        // Cyberduck puts this in the Apple menu; should it go there?
-        // Should I just send all donatiosn to MSF?
-        JMenuItem donate = new JMenuItem("Donate");
-        donate.setEnabled(false);
-        helpMenu.add(donate);
+        // XXX Cyberduck puts this in the Apple menu; should it go there?
+        // XXX Should I just send all donations to MSF?
+        helpMenu.add(new OpenURLAction("Donate", "https://www.paypal.com/xclick/business=elharo%40macfaq.com&item_name=Amateur&no_shipping=1&return=https%3A//amateur.dev.java.net/thankyou.html&currency_code=USD"));
 
         this.add(helpMenu);
     }
