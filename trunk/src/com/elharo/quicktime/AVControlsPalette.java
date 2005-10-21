@@ -45,6 +45,7 @@ final class AVControlsPalette extends JDialog {
     private AVControlsPalette() {
         
         this.setTitle("A/V Controls");
+        // this.setAlwaysOnTop(true); only in 1.5
         
         Font labelFont = new Font("Helvetica", Font.BOLD, 11);
         Font boxFont = new Font("Helvetica", Font.PLAIN, 12);
