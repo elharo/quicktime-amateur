@@ -2,6 +2,7 @@ package com.elharo.quicktime;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,8 +38,9 @@ class RecentFileMenu extends JMenu {
         Iterator files = RecentFileList.INSTANCE.iterator();
         while (files.hasNext()) {
             File f = (File) files.next();
-            add(new RecentFileAction(f));
+            insert(new RecentFileAction(f), 0);
         }
+        // XXX add clear menu if necessary
     }
     
     

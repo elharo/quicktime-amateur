@@ -47,8 +47,8 @@ public class FileOpener implements ActionListener {
             RecentFileList.INSTANCE.add(file);
         }
         catch (QTIOException ex) {
-           if (ex.errorCode() == USER_CANCELLED) return;
            ex.printStackTrace();
+           if (ex.errorCode() == USER_CANCELLED) return;
         }
         catch (QTException ex) {
             int code = ex.errorCode();
@@ -59,6 +59,7 @@ public class FileOpener implements ActionListener {
             Component component = (Component) event.getSource();
             Container parent = component.getParent();
             JOptionPane.showMessageDialog(parent, errorMessage);
+            ex.printStackTrace();
         }
     }
 
