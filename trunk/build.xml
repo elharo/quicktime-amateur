@@ -58,31 +58,31 @@
     </target>
     
     <target name="jar" depends="compile">
-           <jar jarfile="dist/${name}-${version}.jar"
-                 basedir="bin"
-                 index="no"
-                 compress="yes"
-                 includes="com/elharo/quicktime/*"
-                 excludes="com/elharo/quicktime/tests/* com/elharo/quicktime/pantry/*">
+       <jar jarfile="dist/${name}-${version}.jar"
+             basedir="bin"
+             index="no"
+             compress="yes"
+             includes="com/elharo/quicktime/*"
+             excludes="com/elharo/quicktime/tests/* com/elharo/quicktime/pantry/*">
 
-              <manifest>
-                <attribute name="Built-By" value="${user.name}"/>
-                <attribute name="Specification-Title"    value="Amateur"/>
-                <attribute name="Specification-Version"  value="${version}"/>
-                <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
-                <attribute name="Implementation-Title"   value="Amateur"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-                <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
-                <attribute name="Main-Class" value="com.elharo.quicktime.Main"/>
-                <section name="com/elharo/quicktime/">
-                  <attribute name="Sealed" value="true"/>
-                  <attribute name="Specification-Title"   value="Amateur core classes"/>
-                  <attribute name="Implementation-Title"  value="com.elharo.quicktime"/>
-                <attribute name="Implementation-Version" value="${version}"/>
-                <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
-               </section>
-              </manifest>
-            </jar>        
+          <manifest>
+            <attribute name="Built-By" value="${user.name}"/>
+            <attribute name="Specification-Title"    value="Amateur"/>
+            <attribute name="Specification-Version"  value="${version}"/>
+            <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
+            <attribute name="Implementation-Title"   value="Amateur"/>
+            <attribute name="Implementation-Version" value="${version}"/>
+            <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
+            <attribute name="Main-Class" value="com.elharo.quicktime.Main"/>
+            <section name="com/elharo/quicktime/">
+              <attribute name="Sealed" value="true"/>
+              <attribute name="Specification-Title"   value="Amateur core classes"/>
+              <attribute name="Implementation-Title"  value="com.elharo.quicktime"/>
+            <attribute name="Implementation-Version" value="${version}"/>
+            <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
+           </section>
+          </manifest>
+        </jar>        
     </target>
     
     <target name="app" depends="jar">
@@ -95,6 +95,7 @@
                     screenmenu="true"
                     signature="QTAM"
                     bundleid="com.elharo.quicktime"
+        			 jvmversion="1.5*"
         />
     </target>
     
@@ -107,5 +108,42 @@
     	    <arg value="dist/${Name}-${version}.dmg"/>
     	</exec>
     </target>
+
+
+    <taskdef classpath="lib/cobertura.jar" resource="tasks.properties" />
+    
+    <target name="instrument">
+      <cobertura-instrument todir="bin/instrumented-classes">
+        <fileset dir="bin/classes">
+          <include name="**/*.class"/>
+        </fileset>
+      </cobertura-instrument>
+    </target>
+    
+    <target name="cover-test" depends="instrument">
+      <mkdir dir="${testreportdir}" />
+      <junit dir="./" failureproperty="test.failure" printSummary="yes" 
+             fork="true" haltonerror="true">
+        <!-- Normally you can create this task by copying your existing JUnit
+             target, changing its name, and adding these next two lines.
+             You may need to change the locations to point to wherever 
+             you've put the cobertura.jar file and the instrumented classes. -->
+        <classpath location="lib/cobertura.jar"/>
+        <classpath location="bin/instrumented-classes"/>
+        <classpath>
+          <fileset dir="${libdir}">
+            <include name="*.jar" />
+          </fileset>
+          <pathelement path="${testclassesdir}" />
+          <pathelement path="${classesdir}" />
+        </classpath>
+        <batchtest todir="${testreportdir}">
+          <fileset dir="src">
+            <include name="**/*Test.java" />
+          </fileset>
+        </batchtest>
+      </junit>
+    </target>
+
     
 </project>
