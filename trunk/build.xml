@@ -24,7 +24,7 @@
         <tstamp/>
         <property name="Name"    value="Amateur"/>
         <property name="name"    value="amateur"/>
-        <property name="version" value="1.0d4-SNAPSHOT"/>
+        <property name="version" value="1.0d4"/>
         <property name="year"    value="2005"/>
         <mkdir dir="bin"/>
         <mkdir dir="dist"/>
@@ -95,7 +95,6 @@
                     screenmenu="true"
                     signature="QTAM"
                     bundleid="com.elharo.quicktime"
-        			 jvmversion="1.5*"
         />
     </target>
     
