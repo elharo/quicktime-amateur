@@ -30,6 +30,7 @@ public class Main {
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Amateur");
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("apple.awt.showGrowBox", "true");
+        System.setProperty("com.apple.eawt.CocoaComponent.CompatibilityMode", "false"); 
         QuicktimeInit.setup();
         final PlayerFrame hidden = new PlayerFrame(true);
         // first frame is just for menu bar
