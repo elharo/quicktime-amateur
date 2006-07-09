@@ -41,7 +41,6 @@ import quicktime.util.QTUtils;
  */
 class InfoDialog extends JDialog {
 
-    // XXX make control-w and close work with this dialog
     private JPanel eastPanel = new JPanel();
     private JPanel westPanel = new JPanel();
     
@@ -67,7 +66,7 @@ class InfoDialog extends JDialog {
         format.setMaximumFractionDigits(2);
         // can be null????
         try {
-        this.addInfo("Source", "<html><body><p>" + frame.getFile().getPath() + "</p></body></html>");
+            this.addInfo("Source", "<html><body><p>" + frame.getFile().getPath() + "</p></body></html>");
         }
         catch (NullPointerException ex) {
             
