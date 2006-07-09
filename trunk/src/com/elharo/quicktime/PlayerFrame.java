@@ -150,6 +150,7 @@ public final class PlayerFrame extends JFrame implements Printable {
         JMenuBar menubar = new PlayerMenuBar(null);
         this.setJMenuBar(menubar);
         this.pack();
+        new MacOSHandler(this);
     }
 
     public PlayerFrame(Movie m) throws QTException {
