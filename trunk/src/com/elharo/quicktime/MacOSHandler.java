@@ -23,10 +23,6 @@ package com.elharo.quicktime;
 import java.awt.Dialog;
 import java.awt.EventQueue;
 import java.awt.Frame;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.Iterator;
 
 import com.apple.eawt.ApplicationAdapter;
@@ -35,19 +31,26 @@ import com.apple.eawt.Application;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d3
+ * @version 1.0d5
  */
 public class MacOSHandler extends Application {
 
     private Dialog about;
+    private Dialog preferences;
     
     public MacOSHandler(PlayerFrame frame) {
         about = new AboutDialog(frame);
+        preferences = new PreferencesDialog(frame);
         addApplicationListener(new AboutBoxHandler());
+        // should this be elsewhere to do just once per application????
+        // is it possible to bring up two preferences dialogs at the same time
+        // by repeated invocation????
+        // what about the about dialog????
+        this.setEnabledPreferencesMenu(true);
     }
 
+          // bad name; refactor????
     class AboutBoxHandler extends ApplicationAdapter {
-        // what else can I handle here????
         
         public void handleAbout(ApplicationEvent event) {
             EventQueue.invokeLater(new Runnable() {
@@ -62,6 +65,7 @@ public class MacOSHandler extends Application {
             Iterator iterator = WindowList.INSTANCE.iterator();
             while (iterator.hasNext()) {
                 Frame next = (Frame) iterator.next();
+                // should I dispose child windows here too????
                 next.setVisible(false);
                 next.dispose();
             }
@@ -71,6 +75,17 @@ public class MacOSHandler extends Application {
             // and then closing it instead
             System.exit(0);
         }
+        
+        public void handlePreferences(ApplicationEvent event) {
+            EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    preferences.setVisible(true);
+                }
+            });
+            event.setHandled(true);
+        }
+        
+        
         
     }
 
