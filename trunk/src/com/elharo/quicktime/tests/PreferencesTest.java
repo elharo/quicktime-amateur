@@ -50,7 +50,47 @@ public class PreferencesTest extends TestCase {
         assertEquals(10, preferences.getNumberOfRecentItems());
     }
     
+    public void testSetOpenMoviesInNewPlayers() {
+        preferences.setOpenMoviesInNewPlayers(false);
+        assertFalse(preferences.getOpenMoviesInNewPlayers());
+    }
     
+    public void testSetUseHighQualityVideo() {
+        preferences.setUseHighQualityVideo(false);
+        assertFalse(preferences.getOpenMoviesInNewPlayers());
+    }
+    
+    public void testSetPlaySoundInFrontmostPlayerOnly() {
+        preferences.setPlaySoundInFrontmostPlayerOnly(false);
+        assertFalse(preferences.getOpenMoviesInNewPlayers());
+    }
+    
+    public void testSetPlaySoundWhenApplicationIsInBackground() {
+        preferences.setPlaySoundWhenApplicationIsInBackground(false);
+        assertFalse(preferences.getOpenMoviesInNewPlayers());
+    }
+    
+     public void testSetShowEqualizer() {
+        preferences.setShowEqualizer(false);
+        assertFalse(preferences.getOpenMoviesInNewPlayers());
+    }
+    
+     public void testSetShowContentGuideAutomatically() {
+        preferences.setShowContentGuideAutomatically(true);
+        assertTrue(preferences.getShowContentGuideAutomatically());
+    }
+    
+     public void testSetPauseMoviesBeforeSwitchingPlayers() {
+        preferences.setPauseMoviesBeforeSwitchingPlayers(true);
+        assertTrue(preferences.getPauseMoviesBeforeSwitchingPlayers());
+    }
+    
+     public void testSetNumberOfRecentItems() {
+        preferences.setNumberOfRecentItems(5);
+        assertEquals(5, preferences.getNumberOfRecentItems());
+    }
+    
+        
     
     
 }
