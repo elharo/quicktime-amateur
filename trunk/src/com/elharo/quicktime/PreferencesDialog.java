@@ -20,6 +20,10 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
+import java.awt.Dimension;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.*;
 
 
@@ -37,7 +41,31 @@ class PreferencesDialog extends JDialog {
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
         
         JPanel movies = new JPanel();
-        movies.add(new JLabel("Movies:"));
+        JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
+        movies.setLayout(new BoxLayout(movies, BoxLayout.Y_AXIS));
+        labelPanel.add(Box.createRigidArea(new Dimension(15, 0)));
+        JLabel m = new JLabel("Movies:");
+        labelPanel.add(m);
+        labelPanel.add(Box.createHorizontalGlue());
+        movies.add(labelPanel);
+        
+        JPanel p1 = new JPanel();
+        final JCheckBox openMoviesInNewPlayers = new JCheckBox("Open movies in new players");
+        openMoviesInNewPlayers.setEnabled(Preferences.getInstance().getOpenMoviesInNewPlayers());
+        openMoviesInNewPlayers.addItemListener(new ItemListener() {
+
+            public void itemStateChanged(ItemEvent event) {
+                Preferences.getInstance().setOpenMoviesInNewPlayers(openMoviesInNewPlayers.isSelected());
+            }
+            
+        });
+        
+        p1.add(Box.createRigidArea(new Dimension(25, 0)));
+        p1.add(openMoviesInNewPlayers);
+        movies.add(p1);
+        
+        this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
         this.getContentPane().add(movies);
         
         JPanel sound = new JPanel();
