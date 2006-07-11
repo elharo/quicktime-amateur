@@ -62,8 +62,15 @@ class PreferencesDialog extends JDialog {
         other.add(getNumberOfRecentItems());
         this.getContentPane().add(other);        
         
+        // XXX There's extra space at the bottom of the dialog I need to get rid of
+        // XXX The items are nto packed closely enough together
+        
+        
         this.pack();
-        // XXX Need to center dialog on screen
+        
+        Dimension screenSize = getToolkit().getScreenSize();
+        int xPosition = (screenSize.width - this.getSize().width)/2;
+        this.setLocation(xPosition, 92);
         this.setResizable(false);
         
     }
