@@ -1,91 +1,66 @@
 package com.elharo.quicktime;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Preferences {
 
     private static Preferences instance = new Preferences();
+
+    
+    private Map prefs = new HashMap();
     
     // XXX are these sticky over restarts? should they be?
     // defaults
-    private boolean openMoviesInNewPlayers = true;
-    private int     numberOfRecentItems = 10;
-    private boolean pauseMoviesBeforeSwitchingPlayers = true;
-    private boolean showContentGuideAutomatically = false;
-    private boolean showEqualizer = true;
-    private boolean playSoundWhenApplicationIsInBackground = true;
-    private boolean playSoundInFrontmostPlayerOnly = true;
-    private boolean useHighQualityVideo = true;
+
+    public final static String AUTOMATICALLY_PLAY_MOVIES_WHEN_OPENED = "Automatically play movies when opened";
+    public final static String OPEN_MOVIES_IN_NEW_PLAYERS = "Open movies in new players";
+    public final static String NUMBER_OF_RECENT_ITEMS = "Number Of recent items";
+    public final static String PAUSE_MOVIES_BEFORE_SWITCHING_PLAYERS = "Pause movies before switching players";
+    public final static String SHOW_CONTENT_GUIDE_AUTOMATICALLY = "Show content guide automatically";
+    public final static String SHOW_EQUALIZER = "Show equalizer";
+    public final static String PLAY_SOUND_WHEN_APPLICATION_IS_IN_BACKGROUND = "Play sound when application is in background";
+    public final static String PLAY_SOUND_IN_FRONTMOST_PLAYER_ONLY = "Play sound in frontmost player only";
+    public final static String USE_HIGH_QUALITY_VIDEO = "Use high quality video";
     
     
-    private Preferences() {}
+    
+    private Preferences() {
+        
+        prefs.put(OPEN_MOVIES_IN_NEW_PLAYERS, Boolean.TRUE);
+        prefs.put(USE_HIGH_QUALITY_VIDEO, Boolean.TRUE);
+        prefs.put(PLAY_SOUND_IN_FRONTMOST_PLAYER_ONLY, Boolean.TRUE);
+        prefs.put(SHOW_EQUALIZER, Boolean.TRUE);
+        prefs.put(PLAY_SOUND_WHEN_APPLICATION_IS_IN_BACKGROUND, Boolean.TRUE);
+        prefs.put(SHOW_CONTENT_GUIDE_AUTOMATICALLY, Boolean.FALSE);
+        prefs.put(PAUSE_MOVIES_BEFORE_SWITCHING_PLAYERS, Boolean.TRUE);
+        prefs.put(NUMBER_OF_RECENT_ITEMS, new Integer(10));
+        prefs.put(AUTOMATICALLY_PLAY_MOVIES_WHEN_OPENED, Boolean.FALSE);
+        
+    }
     
     public static Preferences getInstance() {
         return instance;
     }
-
-    public boolean getOpenMoviesInNewPlayers() {
-        return openMoviesInNewPlayers;
+    
+    public boolean getBooleanValue(String key) {
+        Boolean result = (Boolean) prefs.get(key);
+        // possible NullPointerException here????
+        return result.booleanValue();
     }
 
-    public boolean getUseHighQualityVideo() {
-        return this.useHighQualityVideo;
+    public int getIntValue(String key) {
+        Integer result = (Integer) prefs.get(key);
+        // possible NullPointerException here????
+        return result.intValue();
     }
 
-    public boolean getShowContentGuideAutomatically() {
-        return this.showContentGuideAutomatically ;
+    public void setValue(String key, boolean value) {
+        prefs.put(key, Boolean.valueOf(value));
     }
 
-    public boolean getPlaySoundInFrontmostPlayerOnly() {
-        return this.playSoundInFrontmostPlayerOnly;
-    }
-
-    public boolean getPlaySoundWhenApplicationIsInBackground() {
-        return this.playSoundWhenApplicationIsInBackground;
-    }
-
-    public int getNumberOfRecentItems() {
-        return this.numberOfRecentItems;
-    }
-
-    public boolean getPauseMoviesBeforeSwitchingPlayers() {
-        return this.pauseMoviesBeforeSwitchingPlayers;
-    }
-
-    public boolean getShowEqualizer() {
-        return this.showEqualizer;
-    }
-
-    public void setOpenMoviesInNewPlayers(boolean b) {
-        this.openMoviesInNewPlayers = b;
-    }
-
-    public void setNumberOfRecentItems(int i) {
-        this.numberOfRecentItems = i;
-        
-    }
-
-    public void setPauseMoviesBeforeSwitchingPlayers(boolean b) {
-        this.pauseMoviesBeforeSwitchingPlayers  = b;
-        
-    }
-
-    public void setShowContentGuideAutomatically(boolean b) {
-        this.showContentGuideAutomatically = b;
-    }
-
-    public void setShowEqualizer(boolean b) {
-        this.showEqualizer  = b;
-    }
-
-    public void setPlaySoundWhenApplicationIsInBackground(boolean b) {
-        this.playSoundWhenApplicationIsInBackground = b;
-    }
-
-    public void setPlaySoundInFrontmostPlayerOnly(boolean b) {
-        this.playSoundInFrontmostPlayerOnly = b;
-    }
-
-    public void setUseHighQualityVideo(boolean b) {
-        this.useHighQualityVideo = b;
+    public void setValue(String key, int value) {
+        prefs.put(key, Integer.valueOf(value));
     }
 
 }
