@@ -21,6 +21,7 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -40,45 +41,85 @@ class PreferencesDialog extends JDialog {
         super(frame, "General");
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
         
+        JPanel movies = getPanel("Movies:");
+        movies.add(getCheckbox(Preferences.OPEN_MOVIES_IN_NEW_PLAYERS));
+        movies.add(getCheckbox(Preferences.AUTOMATICALLY_PLAY_MOVIES_WHEN_OPENED));
+        movies.add(getCheckbox(Preferences.USE_HIGH_QUALITY_VIDEO));
+        
+        this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
+        this.getContentPane().add(movies);
+        
+        JPanel sound = getPanel("Sound:");
+        sound.add(getCheckbox(Preferences.PLAY_SOUND_IN_FRONTMOST_PLAYER_ONLY));
+        sound.add(getCheckbox(Preferences.PLAY_SOUND_WHEN_APPLICATION_IS_IN_BACKGROUND));
+        sound.add(getCheckbox(Preferences.SHOW_EQUALIZER));
+        this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
+        this.getContentPane().add(sound);
+        
+        JPanel other = getPanel("Other:");
+        other.add(getCheckbox(Preferences.SHOW_CONTENT_GUIDE_AUTOMATICALLY));
+        other.add(getCheckbox(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_PLAYERS));
+        other.add(getNumberOfRecentItems());
+        this.getContentPane().add(other);        
+        
+        this.pack();
+        // XXX Need to center dialog on screen
+        this.setResizable(false);
+        
+    }
+
+    private JPanel getPanel(String label) {
+
         JPanel movies = new JPanel();
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
         movies.setLayout(new BoxLayout(movies, BoxLayout.Y_AXIS));
         labelPanel.add(Box.createRigidArea(new Dimension(15, 0)));
-        JLabel m = new JLabel("Movies:");
+        JLabel m = new JLabel(label);
         labelPanel.add(m);
         labelPanel.add(Box.createHorizontalGlue());
         movies.add(labelPanel);
-        
+        return movies;
+    }
+
+    private JPanel getCheckbox(final String label) {
+
         JPanel p1 = new JPanel();
-        final JCheckBox openMoviesInNewPlayers = new JCheckBox("Open movies in new players");
-        openMoviesInNewPlayers.setEnabled(Preferences.getInstance().getOpenMoviesInNewPlayers());
-        openMoviesInNewPlayers.addItemListener(new ItemListener() {
+        p1.setLayout(new FlowLayout(FlowLayout.LEFT));
+        final JCheckBox checkbox = new JCheckBox(label);
+        checkbox.setSelected(Preferences.getInstance().getBooleanValue(label));
+        checkbox.addItemListener(new ItemListener() {
 
             public void itemStateChanged(ItemEvent event) {
-                Preferences.getInstance().setOpenMoviesInNewPlayers(openMoviesInNewPlayers.isSelected());
+                Preferences.getInstance().setValue(label, checkbox.isSelected());
             }
             
         });
         
         p1.add(Box.createRigidArea(new Dimension(25, 0)));
-        p1.add(openMoviesInNewPlayers);
-        movies.add(p1);
+        p1.add(checkbox);
+        return p1;
+    }
+
+    private JPanel getNumberOfRecentItems() {
+
+        JPanel p1 = new JPanel();
+        p1.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JPopupMenu choice = new JPopupMenu(Preferences.NUMBER_OF_RECENT_ITEMS);
+        choice.add("None");
+        choice.add("5");
+        choice.add("10");
+        choice.add("15");
+        choice.add("20");
+        choice.add("30");
+        choice.add("50");
+// XXX        choice.setSelected();
         
-        this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
-        this.getContentPane().add(movies);
+// XXX need an itemListener
         
-        JPanel sound = new JPanel();
-        sound.add(new JLabel("Sound:"));
-        this.getContentPane().add(sound);
-        
-        JPanel other = new JPanel();
-        other.add(new JLabel("Other:"));
-        this.getContentPane().add(other);        
-        
-        this.pack();
-        this.setResizable(false);
-        
+        p1.add(Box.createRigidArea(new Dimension(25, 0)));
+        p1.add(choice);
+        return p1;
     }
 
 
