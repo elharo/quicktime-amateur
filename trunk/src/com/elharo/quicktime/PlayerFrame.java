@@ -176,6 +176,12 @@ public final class PlayerFrame extends JFrame implements Printable {
     
 
     public void hide() {
+        try {
+            movie.stop();
+        }
+        catch (StdQTException e) {
+            // OK. It will stop later
+        }
         super.hide();
         Iterator iterator = WindowList.INSTANCE.iterator();
         while (iterator.hasNext()) {
