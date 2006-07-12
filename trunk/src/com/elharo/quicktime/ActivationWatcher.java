@@ -35,7 +35,7 @@ class ActivationWatcher implements WindowListener {
     public void windowDeactivated(WindowEvent evt) {
         
         try {
-            if (!muted 
+            if (!muted && ! frame.isFullScreen() 
                 && Preferences.getInstance().getBooleanValue(Preferences.PLAY_SOUND_IN_FRONTMOST_PLAYER_ONLY)) {
                 frame.mute();
                 muted = true;
@@ -44,10 +44,6 @@ class ActivationWatcher implements WindowListener {
         catch (StdQTException e) {
             
         }
-        /* Frame[] frames = Frame.getFrames();
-        for (int i = 0; i < frames.length; i++) {
-            if (frames[i].isActive())
-        } */
         
     }
     public void windowClosed(WindowEvent evt) {

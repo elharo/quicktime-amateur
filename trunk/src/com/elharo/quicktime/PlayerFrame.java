@@ -82,6 +82,7 @@ public final class PlayerFrame extends JFrame implements Printable {
     // XXX remove this
     static final int menuShortcutKeyMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
     private JFrame fullScreenFrame = null;
+    private boolean fullScreen;
 
     public PlayerFrame() throws QTException {
         this("Amateur Player");
@@ -215,6 +216,10 @@ public final class PlayerFrame extends JFrame implements Printable {
         }
     }
     
+    boolean isFullScreen() {
+        return this.fullScreen;
+    }
+    
     private void exitFullScreen() {
         GraphicsEnvironment.getLocalGraphicsEnvironment().
           getDefaultScreenDevice().setFullScreenWindow(null);
@@ -222,6 +227,7 @@ public final class PlayerFrame extends JFrame implements Printable {
         fullScreenFrame.remove(c);
         this.getContentPane().add(c);
         fullScreenFrame = null;
+        this.fullScreen = false;
         this.setVisible(true);
         this.toFront();
     }
@@ -249,7 +255,8 @@ public final class PlayerFrame extends JFrame implements Printable {
             }
             fullScreenY = (bounds.height - fullScreenHeight) / 2 ;
             fullScreenX = (bounds.width - fullScreenWidth) / 2;
-            System.err.println(fullScreenX + " " + fullScreenY);
+            
+            this.fullScreen = true;
             
             this.setVisible(false);
             fullScreenFrame = makeFullScreenFrame();
@@ -282,12 +289,12 @@ public final class PlayerFrame extends JFrame implements Printable {
     }
         
     void mute() throws StdQTException {
-        movie.setVolume(-movie.getVolume());
+        if (movie.getVolume() > 0) movie.setVolume(-movie.getVolume());
     }
     
     
     void unmute() throws StdQTException {
-       movie.setVolume(-movie.getVolume());        
+       if (movie.getVolume() < 0) movie.setVolume(-movie.getVolume());        
     }
     
     public Dimension getPreferredSize() {
@@ -490,7 +497,9 @@ public final class PlayerFrame extends JFrame implements Printable {
     }
 
     public void toggleFullScreenMode() {
-        if (fullScreenFrame == null) this.enterFullScreen();
+        if (fullScreenFrame == null) {
+            this.enterFullScreen();
+        }
         else this.exitFullScreen();
     }
 
