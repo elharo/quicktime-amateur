@@ -35,7 +35,8 @@ class ActivationWatcher implements WindowListener {
     public void windowDeactivated(WindowEvent evt) {
         
         try {
-            if (!muted) {
+            if (!muted 
+                && Preferences.getInstance().getBooleanValue(Preferences.PLAY_SOUND_IN_FRONTMOST_PLAYER_ONLY)) {
                 frame.mute();
                 muted = true;
             }
