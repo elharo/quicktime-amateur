@@ -107,6 +107,8 @@ public final class PlayerFrame extends JFrame implements Printable {
         this.controller.enableEditing(true);
         new MacOSHandler(this);
         
+        this.addWindowListener(new ActivationWatcher(this));
+        
         this.addComponentListener( new ComponentAdapter() {
             
             public void componentResized(final ComponentEvent evt) {
@@ -279,7 +281,14 @@ public final class PlayerFrame extends JFrame implements Printable {
         return fullScreenFrame;
     }
         
-            
+    void mute() throws StdQTException {
+        movie.setVolume(-movie.getVolume());
+    }
+    
+    
+    void unmute() throws StdQTException {
+       movie.setVolume(-movie.getVolume());        
+    }
     
     public Dimension getPreferredSize() {
 
