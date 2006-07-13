@@ -21,13 +21,15 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 package com.elharo.quicktime;
 
 import java.awt.Frame;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.NoSuchElementException;
+
+import quicktime.std.StdQTException;
 
 class WindowList {
 
-    private List windows = new ArrayList();
+    private LinkedList windows = new LinkedList();
     // for keeping track of where to put windows
     private static int total = 0;
     // ???? There should be a way to get these values programmatically
@@ -39,6 +41,20 @@ class WindowList {
     
     
     void add(PlayerFrame frame) {
+        
+        try {
+            PlayerFrame oldFront = (PlayerFrame) windows.getLast();
+            // XXX need to check preference
+            oldFront.mute();
+        }
+        catch (StdQTException e) {
+            // ???? Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (NoSuchElementException ex) {
+            // first window
+        }
+
         windows.add(frame);
         total++;
         nextX += OFFSET;
@@ -82,12 +98,28 @@ class WindowList {
         return total;
     }
     
-    void updateRecentFiles() {
-        Iterator iterator = windows.iterator();
-        while (iterator.hasNext()) {
-            PlayerFrame f = (PlayerFrame) iterator.next();
+    void moveToFront(PlayerFrame frame) {
+        PlayerFrame oldFront = (PlayerFrame) windows.getLast();
+        if (oldFront == frame) return;
+        // move to head of list
+        windows.remove(frame);
+        windows.add(frame);
+        try {
+            // need to check the preference????
+            oldFront.mute();
         }
-        
+        catch (StdQTException e) {
+            // ???? Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            frame.unmute();
+        }
+        catch (StdQTException e) {
+            // ???? Auto-generated catch block
+            e.printStackTrace();
+        }
     }
+    
     
 }

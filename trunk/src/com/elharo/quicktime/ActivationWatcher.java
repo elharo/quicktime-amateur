@@ -1,8 +1,8 @@
 package com.elharo.quicktime;
 
-import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.Frame;
 
 import quicktime.std.StdQTException;
 
@@ -20,32 +20,15 @@ class ActivationWatcher implements WindowListener {
 
     private boolean muted = false;
     
+    // XXX also need to check focused?
     public void windowActivated(WindowEvent evt) {
-        try {
-            if (muted) {
-                frame.unmute();
-                muted = false;
-            }
-        }
-        catch (StdQTException e) {
-            // couldn't unmute
-        }
+        WindowList.INSTANCE.moveToFront(frame);
     }
 
     public void windowDeactivated(WindowEvent evt) {
         
-        try {
-            if (!muted && ! frame.isFullScreen() 
-                && Preferences.getInstance().getBooleanValue(Preferences.PLAY_SOUND_IN_FRONTMOST_PLAYER_ONLY)) {
-                frame.mute();
-                muted = true;
-            }
-        }
-        catch (StdQTException e) {
-            
-        }
-        
     }
+
     public void windowClosed(WindowEvent evt) {
 
     }
