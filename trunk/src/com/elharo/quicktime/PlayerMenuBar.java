@@ -407,7 +407,23 @@ class PlayerMenuBar extends JMenuBar {
         viewMenu.add(loopBackAndForth);
         
         final JCheckBoxMenuItem keepOnTop = new JCheckBoxMenuItem("Keep on Top");
-        keepOnTop.setEnabled(false);
+        // XXX should I just not add the menu item if there's no Java 5?
+        if (isEarlierThanJava5) keepOnTop.setEnabled(false);
+        else {
+            keepOnTop.addActionListener(new ActionListener() {
+    
+                private boolean alwaysOnTop = false;
+                
+                public void actionPerformed(ActionEvent event) {
+    
+                    alwaysOnTop = ! alwaysOnTop;
+                    // this requires Java 5
+                    frame.setAlwaysOnTop(alwaysOnTop);
+                    keepOnTop.setState(alwaysOnTop);
+                }
+                
+            });
+        }
         viewMenu.add(keepOnTop);
         
         final JCheckBoxMenuItem playSelectionOnly = new JCheckBoxMenuItem("Play Selection Only");
@@ -440,7 +456,8 @@ class PlayerMenuBar extends JMenuBar {
                 try {
                     if (playAllFrames.isSelected()) {
                         // Setting this mutes the sound. This appears to be the normal
-                        // and expected behavior. See http://lists.apple.com/archives/quicktime-users/2003/Dec/msg00061.html
+                        // and expected behavior. 
+                        // See http://lists.apple.com/archives/quicktime-users/2003/Dec/msg00061.html
                         controller.setPlayEveryFrame(true);
                     }
                     else {
@@ -470,6 +487,26 @@ class PlayerMenuBar extends JMenuBar {
         viewMenu.add(chooseLanguage);
 
         add(viewMenu);
+    }
+
+    
+    private static boolean isEarlierThanJava5;
+    
+    static {
+        
+        // cache this result; don't 
+        // need to recalculate it for every menu bar created
+        String version = System.getProperty("java.version");
+        try {
+            String versionString = version.substring(0, 3);
+            double x = Double.valueOf(versionString).doubleValue();
+            isEarlierThanJava5 = x <= 1.4;
+        }
+        catch (Exception ex) {
+            // The version string format changed so presumably it's
+            // 1.6 or later
+            isEarlierThanJava5 = false;
+        }        
     }
 
     
