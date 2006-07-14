@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2006 Elliotte Rusty Harold
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -54,6 +54,8 @@ final class AVControlsPalette extends JDialog {
         
         this.getContentPane().setLayout(new BorderLayout());
         
+        // XXX need to align labels with left edges of sliders
+        
         JPanel audioControls = new JPanel();
         Border border = BorderFactory.createLineBorder(Color.GRAY);
         audioControls.setBorder(BorderFactory.createTitledBorder(border, "Audio", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
@@ -70,8 +72,18 @@ final class AVControlsPalette extends JDialog {
         volume.setPaintTicks( true );
         volume.setMajorTickSpacing( 5 );
         audioControls.add(volume);
-        audioControls.add(new JSeparator());
 
+        JLabel balanceLabel = new JLabel("Balance");
+        balanceLabel.setFont(labelFont);
+        audioControls.add(balanceLabel);
+        JSlider balance = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        balance.setPaintTicks( true );
+        balance.setMajorTickSpacing( 5 );
+        
+        // XXX need an L label on left and R label on right
+        
+        audioControls.add(balance);
+        
         JLabel bassLabel = new JLabel("Bass");
         bassLabel.setFont(labelFont);
         audioControls.add(bassLabel);
@@ -88,15 +100,16 @@ final class AVControlsPalette extends JDialog {
         treble.setMajorTickSpacing( 5 );
         audioControls.add(treble);
         
-        audioControls.add(new JSeparator());
+        // XXX add pitch shift
+        JLabel pitchShiftLabel = new JLabel("Pitch Shift");
+        pitchShiftLabel.setFont(labelFont);
+        audioControls.add(pitchShiftLabel);
+        JSlider pitchShift = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        pitchShift.setPaintTicks( true );
+        pitchShift.setMajorTickSpacing( 1 );
+        audioControls.add(pitchShift);
+        
 
-        JLabel balanceLabel = new JLabel("Balance");
-        balanceLabel.setFont(labelFont);
-        audioControls.add(balanceLabel);
-        JSlider balance = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
-        balance.setPaintTicks( true );
-        balance.setMajorTickSpacing( 5 );
-        audioControls.add(balance);
         
         westPanel.add(BorderLayout.SOUTH, audioControls);  
         
