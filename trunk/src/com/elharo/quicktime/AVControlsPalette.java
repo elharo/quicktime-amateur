@@ -198,6 +198,7 @@ final class AVControlsPalette extends JDialog {
         JSlider pitchShift = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         pitchShift.setPaintTicks( true );
         pitchShift.setMajorTickSpacing( 1 );
+        pitchShift.setEnabled(false); // XXX
         audioControls.add(pitchShift);
         
         westPanel.add(BorderLayout.SOUTH, audioControls);  
@@ -213,6 +214,7 @@ final class AVControlsPalette extends JDialog {
         JSlider brightness = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         brightness.setPaintTicks( true );
         brightness.setMajorTickSpacing( 5 );
+        brightness.setEnabled(false); // XXX
         videoControls.add(brightness);
 
         JLabel colorLabel = new JLabel("Color");
@@ -221,6 +223,7 @@ final class AVControlsPalette extends JDialog {
         JSlider color = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         color.setPaintTicks( true );
         color.setMajorTickSpacing( 5 );
+        color.setEnabled(false); // XXX
         videoControls.add(color);
 
         JLabel contrastLabel = new JLabel("Contrast");
@@ -229,6 +232,7 @@ final class AVControlsPalette extends JDialog {
         JSlider contrast = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         contrast.setPaintTicks( true );
         contrast.setMajorTickSpacing( 5 );
+        contrast.setEnabled(false); // XXX
         videoControls.add(contrast);
         
         JLabel tintLabel = new JLabel("Tint");
@@ -237,6 +241,7 @@ final class AVControlsPalette extends JDialog {
         JSlider tint = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         tint.setPaintTicks( true );
         tint.setMajorTickSpacing( 5 );
+        tint.setEnabled(false); // XXX
         videoControls.add(tint);
 
         JPanel tPanel = new JPanel();
@@ -273,6 +278,7 @@ final class AVControlsPalette extends JDialog {
         jogLabels.put(new Integer(max), forward);
         jogShuttle.setLabelTable(jogLabels);
         jogShuttle.setPaintLabels(true);
+        jogShuttle.setEnabled(false); // XXX
         playbackControls.add(jog);
         
         playbackControls.add(new JSeparator(SwingConstants.VERTICAL));
