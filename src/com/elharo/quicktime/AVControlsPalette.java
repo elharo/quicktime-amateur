@@ -50,14 +50,14 @@ final class AVControlsPalette extends JDialog {
         Font labelFont = new Font("Helvetica", Font.BOLD, 11);
         Font boxFont = new Font("Helvetica", Font.PLAIN, 12);
         
-        Color bgcolor = new Color(225, 225, 225);
+        Color bgColor = new Color(225, 225, 225);
         
         this.getContentPane().setLayout(new BorderLayout());
         
         JPanel audioControls = new JPanel();
         Border border = BorderFactory.createLineBorder(Color.GRAY);
         audioControls.setBorder(BorderFactory.createTitledBorder(border, "Audio", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
-        audioControls.setBackground(bgcolor);
+        audioControls.setBackground(bgColor);
         audioControls.setLayout(new GridLayout(10, 1));
         
         int min = 0;
@@ -102,7 +102,7 @@ final class AVControlsPalette extends JDialog {
         
         JPanel videoControls = new JPanel();
         videoControls.setBorder(BorderFactory.createTitledBorder(border, "Video", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
-        videoControls.setBackground(bgcolor);
+        videoControls.setBackground(bgColor);
         videoControls.setLayout(new GridLayout(10, 1));
 
         JLabel brightnessLabel = new JLabel("Brightness");
@@ -137,14 +137,20 @@ final class AVControlsPalette extends JDialog {
         tint.setMajorTickSpacing( 5 );
         videoControls.add(tint);
 
-        videoControls.add(new JButton("Reset"));
+        JPanel tPanel = new JPanel();
+        tPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        tPanel.setBackground(bgColor);
+        JButton reset = new JButton("Reset");
+        reset.setBackground(bgColor);
+        tPanel.add(reset);
+        videoControls.add(tPanel);
         
         eastPanel.add(BorderLayout.SOUTH, videoControls);         
         
         JPanel playbackControls = new JPanel();
         playbackControls.setBorder(BorderFactory.createTitledBorder(border, 
           "Playback", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
-        playbackControls.setBackground(bgcolor);
+        playbackControls.setBackground(bgColor);
         
         
         Font sliderLabelFont = new Font("Helvetica", Font.PLAIN, 11);
@@ -158,7 +164,7 @@ final class AVControlsPalette extends JDialog {
         jogShuttle.setPaintTicks( true );
         jogShuttle.setMajorTickSpacing( 5 );
         jog.add(jogShuttle);
-        jog.setBackground(bgcolor);
+        jog.setBackground(bgColor);
         Dictionary jogLabels = new Hashtable();
         JLabel reverse = new JLabel("Reverse");
         reverse.setFont(sliderLabelFont);
@@ -182,7 +188,7 @@ final class AVControlsPalette extends JDialog {
         playbackSpeed.setMajorTickSpacing( 2 );
         playbackSpeed.setMinorTickSpacing( 1 );
         speed.add(playbackSpeed);
-        speed.setBackground(bgcolor);
+        speed.setBackground(bgColor);
 
         Dictionary speedLabels = new Hashtable();
         JLabel half = new JLabel("1/2x");
