@@ -62,10 +62,8 @@ final class AVControlsPalette extends JDialog {
         // this.setAlwaysOnTop(true); only in 1.5 and this only works in *all* apps
         // we need an always on top just when player is in front
         
-        Font labelFont = new Font("Helvetica", Font.BOLD, 11);
-        Font sliderLabelFont = new Font("Helvetica", Font.PLAIN, 11);
-        
-        Color bgColor = new Color(225, 225, 225);
+        Font labelFont = new Font("Lucida Grande", Font.PLAIN, 10);
+        Color bgColor = new Color(232, 232, 232);
         
         this.getContentPane().setLayout(new BorderLayout());
         
@@ -119,10 +117,10 @@ final class AVControlsPalette extends JDialog {
         // An L label on left and R label on right
         Dictionary balanceLabels = new Hashtable();
         JLabel left = new JLabel("L");
-        left.setFont(sliderLabelFont);
+        left.setFont(labelFont);
         balanceLabels.put(new Integer(min), left);
         JLabel right = new JLabel("R");
-        right.setFont(sliderLabelFont);
+        right.setFont(labelFont);
         balanceLabels.put(new Integer(max), right);
         balance.setLabelTable(balanceLabels);
         balance.setPaintLabels(true);
@@ -271,10 +269,10 @@ final class AVControlsPalette extends JDialog {
         jog.setBackground(bgColor);
         Dictionary jogLabels = new Hashtable();
         JLabel reverse = new JLabel("Reverse");
-        reverse.setFont(sliderLabelFont);
+        reverse.setFont(labelFont);
         jogLabels.put(new Integer(min), reverse);
         JLabel forward = new JLabel("Forward");
-        forward.setFont(sliderLabelFont);
+        forward.setFont(labelFont);
         jogLabels.put(new Integer(max), forward);
         jogShuttle.setLabelTable(jogLabels);
         jogShuttle.setPaintLabels(true);
@@ -297,16 +295,16 @@ final class AVControlsPalette extends JDialog {
 
         Dictionary speedLabels = new Hashtable();
         JLabel half = new JLabel("1/2x");
-        half.setFont(sliderLabelFont);
+        half.setFont(labelFont);
         speedLabels.put(new Integer(1), half);
         JLabel one = new JLabel("1x");
-        one.setFont(sliderLabelFont);
+        one.setFont(labelFont);
         speedLabels.put(new Integer(2), one);
         JLabel two = new JLabel("2x");
-        two.setFont(sliderLabelFont);
+        two.setFont(labelFont);
         speedLabels.put(new Integer(4), two);
         JLabel three = new JLabel("3x");
-        three.setFont(sliderLabelFont);
+        three.setFont(labelFont);
         speedLabels.put(new Integer(6), three);
         playbackSpeed.setLabelTable(speedLabels);
         playbackSpeed.setPaintLabels(true);
