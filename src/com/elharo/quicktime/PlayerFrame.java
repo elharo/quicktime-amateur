@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2006 Elliotte Rusty Harold
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -224,16 +224,23 @@ public final class PlayerFrame extends JFrame implements Printable {
         GraphicsEnvironment.getLocalGraphicsEnvironment().
           getDefaultScreenDevice().setFullScreenWindow(null);
         fullScreenFrame.setVisible(false);
-        fullScreenFrame.remove(c);
-        this.getContentPane().add(c);
+        fullScreenFrame.dispose();
         fullScreenFrame = null;
         this.fullScreen = false;
         this.setVisible(true);
         this.toFront();
+        try {
+            movie.start();
+        }
+        catch (StdQTException e) {
+            // ???? Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     
     private void enterFullScreen() {
+        
         try {
             GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
             Rectangle bounds = device.getDefaultConfiguration().getBounds();
@@ -261,7 +268,6 @@ public final class PlayerFrame extends JFrame implements Printable {
             this.setVisible(false);
             fullScreenFrame = makeFullScreenFrame();
             device.setFullScreenWindow(fullScreenFrame);
-            this.remove(c);
             QTComponent qc = QTFactory.makeQTComponent(movie);
             fullScreenFrame.getContentPane().add(qc.asComponent());
             fullScreenFrame.setLocation(fullScreenX, fullScreenY);
