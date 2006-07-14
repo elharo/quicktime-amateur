@@ -53,6 +53,7 @@ class PreferencesDialog extends JDialog {
         sound.add(getCheckbox(Preferences.PLAY_SOUND_IN_FRONTMOST_PLAYER_ONLY));
         sound.add(getCheckbox(Preferences.PLAY_SOUND_WHEN_APPLICATION_IS_IN_BACKGROUND));
         sound.add(getCheckbox(Preferences.SHOW_EQUALIZER));
+        
         this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
         this.getContentPane().add(sound);
         
@@ -60,6 +61,8 @@ class PreferencesDialog extends JDialog {
         other.add(getCheckbox(Preferences.SHOW_CONTENT_GUIDE_AUTOMATICALLY));
         other.add(getCheckbox(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_PLAYERS));
         other.add(getNumberOfRecentItems());
+
+        this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
         this.getContentPane().add(other);        
         
         // XXX There's extra space at the bottom of the dialog I need to get rid of
@@ -92,7 +95,8 @@ class PreferencesDialog extends JDialog {
     private JPanel getCheckbox(final String label) {
 
         JPanel p1 = new JPanel();
-        p1.setLayout(new FlowLayout(FlowLayout.LEFT));
+        BoxLayout layout = new BoxLayout(p1, BoxLayout.PAGE_AXIS);
+        p1.setLayout(layout);
         final JCheckBox checkbox = new JCheckBox(label);
         checkbox.setSelected(Preferences.getInstance().getBooleanValue(label));
         checkbox.addItemListener(new ItemListener() {
