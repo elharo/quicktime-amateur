@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2006 Elliotte Rusty Harold
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -106,11 +106,11 @@ class AboutDialog extends JDialog {
         JLabel title = new JLabel("Amateur");
         panel.add(title);
         
-        JLabel copyright = new JLabel("Copyright 2005 Elliotte Rusty Harold");
+        JLabel copyright = new JLabel("Copyright 2005, 2006 Elliotte Rusty Harold");
         copyright.setFont(font);
         panel.add(copyright);
         
-        JLabel version = new JLabel("Version: 1.0d4");
+        JLabel version = new JLabel("Version: 1.0d5");
         version.setFont(font);
         panel.add(version);
         
