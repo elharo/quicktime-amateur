@@ -48,14 +48,14 @@ final class AVControlsPalette extends JDialog {
         // this.setAlwaysOnTop(true); only in 1.5
         
         Font labelFont = new Font("Helvetica", Font.BOLD, 11);
-        Font boxFont = new Font("Helvetica", Font.PLAIN, 12);
+        Font sliderLabelFont = new Font("Helvetica", Font.PLAIN, 11);
         
         Color bgColor = new Color(225, 225, 225);
         
         this.getContentPane().setLayout(new BorderLayout());
         
         // XXX need to align labels with left edges of sliders
-        
+        // XXX need to make two vertical panels same size
         JPanel audioControls = new JPanel();
         Border border = BorderFactory.createLineBorder(Color.GRAY);
         audioControls.setBorder(BorderFactory.createTitledBorder(border, "Audio", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
@@ -81,6 +81,16 @@ final class AVControlsPalette extends JDialog {
         balance.setMajorTickSpacing( 5 );
         
         // XXX need an L label on left and R label on right
+        Dictionary balanceLabels = new Hashtable();
+        JLabel left = new JLabel("L");
+        left.setFont(sliderLabelFont);
+        balanceLabels.put(new Integer(min), left);
+        JLabel right = new JLabel("R");
+        right.setFont(sliderLabelFont);
+        balanceLabels.put(new Integer(max), right);
+        balance.setLabelTable(balanceLabels);
+        balance.setPaintLabels(true);
+        
         
         audioControls.add(balance);
         
@@ -164,10 +174,7 @@ final class AVControlsPalette extends JDialog {
         playbackControls.setBorder(BorderFactory.createTitledBorder(border, 
           "Playback", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
         playbackControls.setBackground(bgColor);
-        
-        
-        Font sliderLabelFont = new Font("Helvetica", Font.PLAIN, 11);
-
+               
         JPanel jog = new JPanel();
         jog.setLayout(new GridLayout(2, 1));
         JLabel jogLabel = new JLabel("Jog Shuttle");
