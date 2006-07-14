@@ -61,7 +61,11 @@ import quicktime.std.image.GraphicsImporter;
 import quicktime.std.movies.Movie;
 import quicktime.std.movies.MovieController;
 import quicktime.std.movies.MovieEditState;
+import quicktime.std.movies.Track;
+import quicktime.std.movies.media.AudioMediaHandler;
 import quicktime.std.movies.media.DataRef;
+import quicktime.std.movies.media.Media;
+import quicktime.std.movies.media.MediaHandler;
 
 // XXX Use Pageable instead of Printable
 // XXX Move Pageable impl to a separate class
@@ -518,8 +522,26 @@ public final class PlayerFrame extends JFrame implements Printable {
     }
 
     public void setSpeed(float value) throws StdQTException {
-
         this.movie.setRate(value);
+    }
+    
+    public void setBalance(float value) throws QTException {
+        AudioMediaHandler handler = getAudioMediaHandler();
+        handler.setBalance(value);
+    }
+
+    // should I cache this result????
+    private AudioMediaHandler getAudioMediaHandler() throws QTException {
+
+        for (int i=1; i <= movie.getTrackCount(); i++) {
+            Track track = movie.getTrack(i);
+            Media media = track.getMedia();
+            MediaHandler handler = media.getHandler();
+            if (handler instanceof AudioMediaHandler) {
+                return (AudioMediaHandler) handler;
+            }
+        }
+        return null;
         
     }
     

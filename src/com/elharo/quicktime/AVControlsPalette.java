@@ -30,6 +30,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import quicktime.QTException;
 import quicktime.std.StdQTException;
 
 /** 
@@ -40,6 +41,11 @@ import quicktime.std.StdQTException;
 final class AVControlsPalette extends JDialog {
 
     // XXX make control-w and close work with this dialog
+    // requires showing menubar; perhaps we can even hack this
+    // by using this as the null window and just hiding it off the screen
+    
+    // need to disable controls when there's no front window
+    
     private JPanel eastPanel = new JPanel();
     private JPanel westPanel = new JPanel();
     private JPanel southPanel = new JPanel();
@@ -68,7 +74,8 @@ final class AVControlsPalette extends JDialog {
         
         JPanel audioControls = new JPanel();
         Border border = BorderFactory.createLineBorder(Color.GRAY);
-        audioControls.setBorder(BorderFactory.createTitledBorder(border, "Audio", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
+        audioControls.setBorder(BorderFactory.createTitledBorder(
+          border, "Audio", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
         audioControls.setBackground(bgColor);
         audioControls.setLayout(new GridLayout(10, 1));
         
@@ -103,11 +110,11 @@ final class AVControlsPalette extends JDialog {
         JLabel balanceLabel = new JLabel("Balance");
         balanceLabel.setFont(labelFont);
         audioControls.add(balanceLabel);
-        JSlider balance = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        final JSlider balance = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         balance.setPaintTicks( true );
         balance.setMajorTickSpacing( 5 );
         
-        // XXX need an L label on left and R label on right
+        // An L label on left and R label on right
         Dictionary balanceLabels = new Hashtable();
         JLabel left = new JLabel("L");
         left.setFont(sliderLabelFont);
@@ -117,8 +124,23 @@ final class AVControlsPalette extends JDialog {
         balanceLabels.put(new Integer(max), right);
         balance.setLabelTable(balanceLabels);
         balance.setPaintLabels(true);
-        
-        
+        balance.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent evt) {
+                float value = (balance.getValue() - 5)/ 10.0F;
+                PlayerFrame front = WindowList.INSTANCE.getFrontmostWindow();
+                if (front != null) {
+                    try {
+                        front.setBalance(value);
+                    }
+                    catch (QTException e) {
+                        // ???? Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+            
+        });      
         audioControls.add(balance);
         
         JLabel bassLabel = new JLabel("Bass");
@@ -267,7 +289,6 @@ final class AVControlsPalette extends JDialog {
             }
             
         });
-        audioControls.add(volume);
         
         playbackControls.add(speed);
         
