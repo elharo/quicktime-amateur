@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2006 Elliotte Rusty Harold
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -92,6 +92,19 @@ class WindowList {
             nextX = 0;
             nextY = MENU_BAR_HEIGHT;;
         }
+        
+        try {
+            PlayerFrame newFront = (PlayerFrame) windows.getLast();
+            newFront.unmute();
+        }
+        catch (StdQTException e) {
+            // ???? Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (NoSuchElementException ex) {
+            // first window
+        }
+        
     }
     
     static int getTotal() {
