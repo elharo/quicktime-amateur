@@ -59,7 +59,7 @@ class PreferencesDialog extends JDialog {
         
         JPanel other = getPanel("Other:");
         other.add(getCheckbox(Preferences.SHOW_CONTENT_GUIDE_AUTOMATICALLY));
-        other.add(getCheckbox(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_PLAYERS));
+        other.add(getCheckbox(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_USERS));
         other.add(getNumberOfRecentItems());
 
         this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));

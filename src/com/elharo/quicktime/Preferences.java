@@ -16,12 +16,12 @@ public class Preferences {
     public final static String AUTOMATICALLY_PLAY_MOVIES_WHEN_OPENED = "Automatically play movies when opened";
     public final static String OPEN_MOVIES_IN_NEW_PLAYERS = "Open movies in new players";
     public final static String NUMBER_OF_RECENT_ITEMS = "Number Of recent items";
-    public final static String PAUSE_MOVIES_BEFORE_SWITCHING_PLAYERS = "Pause movies before switching players";
-    public final static String SHOW_CONTENT_GUIDE_AUTOMATICALLY = "Show content guide automatically";
+    public final static String PAUSE_MOVIES_BEFORE_SWITCHING_USERS = "Pause movies before switching users";
+    public final static String SHOW_CONTENT_GUIDE_AUTOMATICALLY = "Show Content Guide automatically";
     public final static String SHOW_EQUALIZER = "Show equalizer";
     public final static String PLAY_SOUND_WHEN_APPLICATION_IS_IN_BACKGROUND = "Play sound when application is in background";
     public final static String PLAY_SOUND_IN_FRONTMOST_PLAYER_ONLY = "Play sound in frontmost player only";
-    public final static String USE_HIGH_QUALITY_VIDEO = "Use high quality video";
+    public final static String USE_HIGH_QUALITY_VIDEO = "Use high quality video setting when available";
     
     
     
@@ -33,7 +33,7 @@ public class Preferences {
         prefs.put(SHOW_EQUALIZER, Boolean.TRUE);
         prefs.put(PLAY_SOUND_WHEN_APPLICATION_IS_IN_BACKGROUND, Boolean.TRUE);
         prefs.put(SHOW_CONTENT_GUIDE_AUTOMATICALLY, Boolean.FALSE);
-        prefs.put(PAUSE_MOVIES_BEFORE_SWITCHING_PLAYERS, Boolean.TRUE);
+        prefs.put(PAUSE_MOVIES_BEFORE_SWITCHING_USERS, Boolean.TRUE);
         prefs.put(NUMBER_OF_RECENT_ITEMS, new Integer(10));
         prefs.put(AUTOMATICALLY_PLAY_MOVIES_WHEN_OPENED, Boolean.FALSE);
         
