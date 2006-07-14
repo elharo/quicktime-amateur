@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2006 Elliotte Rusty Harold
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -252,7 +252,14 @@ class PlayerMenuBar extends JMenuBar {
         showMovieProperties.setEnabled(false);
         windowMenu.add(showMovieProperties);                
         
-        windowMenu.add(new AVControlsAction(frame));                
+        
+        // This is a little different than QuickTime Player.
+        // We're disabling the menu item. They disable the
+        // individual controls.
+        Action avControls = new AVControlsAction(frame);
+        windowMenu.add(avControls); 
+        if (frame == null) avControls.setEnabled(false);
+        
         windowMenu.add(new ShowContentGuideAction());    
         
         windowMenu.addSeparator();
@@ -298,16 +305,18 @@ class PlayerMenuBar extends JMenuBar {
         );
         
         // Open the default web browser pointed to the java.net bug report form
-        helpMenu.add(new OpenURLAction("Report Bug", "https://amateur.dev.java.net/issues/enter_bug.cgi?issue_type=DEFECT"));
+        helpMenu.add(new OpenURLAction("Report Bug", 
+          "https://amateur.dev.java.net/issues/enter_bug.cgi?issue_type=DEFECT"));
 
         
         // Open the user's default web browser pointed to the 
         // java.net RFE form
-        helpMenu.add(new OpenURLAction("Request Feature", "https://amateur.dev.java.net/issues/enter_bug.cgi?issue_type=FEATURE"));
+        helpMenu.add(new OpenURLAction("Request Feature", 
+          "https://amateur.dev.java.net/issues/enter_bug.cgi?issue_type=FEATURE"));
 
-        // XXX Cyberduck puts this in the Apple menu; should it go there?
         // XXX Should I just send all donations to MSF?
-        helpMenu.add(new OpenURLAction("Donate", "https://www.paypal.com/xclick/business=elharo%40macfaq.com&item_name=Amateur&no_shipping=1&return=https%3A//amateur.dev.java.net/thankyou.html&currency_code=USD"));
+        helpMenu.add(new OpenURLAction("Donate", 
+          "https://www.paypal.com/xclick/business=elharo%40macfaq.com&item_name=Amateur&no_shipping=1&return=https%3A//amateur.dev.java.net/thankyou.html&currency_code=USD"));
 
         this.add(helpMenu);
     }
