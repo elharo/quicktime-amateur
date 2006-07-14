@@ -50,13 +50,13 @@ final class AVControlsPalette extends JDialog {
     private JPanel westPanel = new JPanel();
     private JPanel southPanel = new JPanel();
     
-    final static AVControlsPalette INSTANCE = new AVControlsPalette();
-    
     // XXX move initial location to center of screen
     
     // this method is vastly too long. It needs some serious refactoring; 
     // probably at least one method or class
-    private AVControlsPalette() {
+    AVControlsPalette(Frame parent) {
+        
+        super(parent);
         
         this.setTitle("A/V Controls");
         // this.setAlwaysOnTop(true); only in 1.5 and this only works in *all* apps

@@ -24,20 +24,26 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JDialog;
 import javax.swing.KeyStroke;
 
 class AVControlsAction extends AbstractAction {
     
-    AVControlsAction() {
+    private PlayerFrame frame;
+    
+    AVControlsAction(PlayerFrame frame) {
+        this.frame = frame;
         putValue(Action.NAME, "Show A/V Controls");  
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('K', PlayerFrame.menuShortcutKeyMask));  
     } 
     
     
-    public void actionPerformed(ActionEvent event) {
+    public void actionPerformed(ActionEvent event) {        
         
+        // cache this in the frame????
+        JDialog dialog = new AVControlsPalette(frame);
         // use eventqueue????
-        AVControlsPalette.INSTANCE.setVisible(true);
+        dialog.setVisible(true);
     }
 
 }
