@@ -63,14 +63,14 @@ class PreferencesDialog extends JDialog {
         this.getContentPane().add(other);        
         
         // XXX There's extra space at the bottom of the dialog I need to get rid of
-        // XXX The items are nto packed closely enough together
-        
+        // XXX The items are not packed closely enough together
+        // XXX position should be remembered if user moves it; could handle by
+        // not disposing and recreating dialog; just hide and show
         
         this.pack();
         
-        Dimension screenSize = getToolkit().getScreenSize();
-        int xPosition = (screenSize.width - this.getSize().width)/2;
-        this.setLocation(xPosition, 92);
+        Utilities.centerOnScreen(this);
+
         this.setResizable(false);
         
     }
