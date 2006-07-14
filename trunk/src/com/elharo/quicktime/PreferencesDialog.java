@@ -35,6 +35,7 @@ import javax.swing.*;
  */
 class PreferencesDialog extends JDialog {
 
+     // XXX File/Close needs to work with this dialog
     
     PreferencesDialog(PlayerFrame frame) {
         
@@ -65,33 +66,32 @@ class PreferencesDialog extends JDialog {
         this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
         this.getContentPane().add(other);        
         
-        // XXX There's extra space at the bottom of the dialog I need to get rid of
-        // XXX The items are not packed closely enough together
         // XXX position should be remembered if user moves it; could handle by
         // not disposing and recreating dialog; just hide and show
         
         this.pack();
-        
         Utilities.centerOnScreen(this);
-
         this.setResizable(false);
         
     }
 
     private JPanel getPanel(String label) {
 
-        JPanel movies = new JPanel();
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
-        movies.setLayout(new BoxLayout(movies, BoxLayout.Y_AXIS));
         labelPanel.add(Box.createRigidArea(new Dimension(15, 0)));
         JLabel m = new JLabel(label);
         labelPanel.add(m);
         labelPanel.add(Box.createHorizontalGlue());
-        movies.add(labelPanel);
-        return movies;
+        panel.add(labelPanel);
+        return panel;
+        
     }
 
+    
     private JPanel getCheckbox(final String label) {
 
         JPanel p1 = new JPanel();
@@ -116,19 +116,21 @@ class PreferencesDialog extends JDialog {
 
         JPanel p1 = new JPanel();
         p1.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JPopupMenu choice = new JPopupMenu(Preferences.NUMBER_OF_RECENT_ITEMS);
-        choice.add("None");
-        choice.add("5");
-        choice.add("10");
-        choice.add("15");
-        choice.add("20");
-        choice.add("30");
-        choice.add("50");
+        
+        p1.add(Box.createRigidArea(new Dimension(25, 0)));
+        p1.add(new JLabel("Number of recent items: "));
+        JComboBox choice = new JComboBox();
+        choice.addItem("None");
+        choice.addItem("5");
+        choice.addItem("10");
+        choice.addItem("15");
+        choice.addItem("20");
+        choice.addItem("30");
+        choice.addItem("50");
 // XXX        choice.setSelected();
         
 // XXX need an itemListener
         
-        p1.add(Box.createRigidArea(new Dimension(25, 0)));
         p1.add(choice);
         return p1;
     }
