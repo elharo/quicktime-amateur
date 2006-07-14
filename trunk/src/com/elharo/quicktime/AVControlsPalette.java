@@ -27,6 +27,10 @@ import java.util.Hashtable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import quicktime.std.StdQTException;
 
 /** 
  * 
@@ -42,10 +46,13 @@ final class AVControlsPalette extends JDialog {
     
     final static AVControlsPalette INSTANCE = new AVControlsPalette();
     
+    // XXX move initial location to center of screen
+    
     private AVControlsPalette() {
         
         this.setTitle("A/V Controls");
-        // this.setAlwaysOnTop(true); only in 1.5
+        // this.setAlwaysOnTop(true); only in 1.5 and this only works in *all* apps
+        // we need an always on top just when player is in front
         
         Font labelFont = new Font("Helvetica", Font.BOLD, 11);
         Font sliderLabelFont = new Font("Helvetica", Font.PLAIN, 11);
@@ -56,6 +63,9 @@ final class AVControlsPalette extends JDialog {
         
         // XXX need to align labels with left edges of sliders
         // XXX need to make two vertical panels same size
+        // XXX need to set initial values to current movie's volume
+        // XXX need to watch for window changes; MVC
+        
         JPanel audioControls = new JPanel();
         Border border = BorderFactory.createLineBorder(Color.GRAY);
         audioControls.setBorder(BorderFactory.createTitledBorder(border, "Audio", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
@@ -64,13 +74,30 @@ final class AVControlsPalette extends JDialog {
         
         int min = 0;
         int max = 10;
-
+        
         JLabel volumeLabel = new JLabel("Volume");
         volumeLabel.setFont(labelFont);
         audioControls.add(volumeLabel);
-        JSlider volume = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        final JSlider volume = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         volume.setPaintTicks( true );
         volume.setMajorTickSpacing( 5 );
+        volume.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent evt) {
+                float value = volume.getValue() / 10.0F;
+                PlayerFrame front = WindowList.INSTANCE.getFrontmostWindow();
+                if (front != null) {
+                    try {
+                        front.setVolume(value);
+                    }
+                    catch (StdQTException e) {
+                        // ???? Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+            
+        });
         audioControls.add(volume);
 
         JLabel balanceLabel = new JLabel("Balance");
