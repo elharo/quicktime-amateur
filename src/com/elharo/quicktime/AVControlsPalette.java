@@ -137,7 +137,6 @@ final class AVControlsPalette extends JDialog {
         treble.setMajorTickSpacing( 5 );
         audioControls.add(treble);
         
-        // XXX add pitch shift
         JLabel pitchShiftLabel = new JLabel("Pitch Shift");
         pitchShiftLabel.setFont(labelFont);
         audioControls.add(pitchShiftLabel);
@@ -145,8 +144,6 @@ final class AVControlsPalette extends JDialog {
         pitchShift.setPaintTicks( true );
         pitchShift.setMajorTickSpacing( 1 );
         audioControls.add(pitchShift);
-        
-
         
         westPanel.add(BorderLayout.SOUTH, audioControls);  
         
@@ -230,7 +227,7 @@ final class AVControlsPalette extends JDialog {
         JLabel speedLabel = new JLabel("Playback Speed");
         speedLabel.setFont(labelFont);
         speed.add(speedLabel);
-        JSlider playbackSpeed = new JSlider(JSlider.HORIZONTAL, 1, 6, 2 );
+        final JSlider playbackSpeed = new JSlider(JSlider.HORIZONTAL, 1, 6, 2 );
         playbackSpeed.setPaintTicks( true );
         playbackSpeed.setMajorTickSpacing( 2 );
         playbackSpeed.setMinorTickSpacing( 1 );
@@ -252,6 +249,25 @@ final class AVControlsPalette extends JDialog {
         speedLabels.put(new Integer(6), three);
         playbackSpeed.setLabelTable(speedLabels);
         playbackSpeed.setPaintLabels(true);
+        
+        playbackSpeed.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent evt) {
+                float value = playbackSpeed.getValue() / 2.0F;
+                PlayerFrame front = WindowList.INSTANCE.getFrontmostWindow();
+                if (front != null) {
+                    try {
+                        front.setSpeed(value);
+                    }
+                    catch (StdQTException e) {
+                        // ???? Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+            
+        });
+        audioControls.add(volume);
         
         playbackControls.add(speed);
         

@@ -512,5 +512,15 @@ public final class PlayerFrame extends JFrame implements Printable {
     MovieController getController() {
         return this.controller;
     }
+
+    public void setVolume(float value) throws StdQTException {
+        this.movie.setVolume(value);
+    }
+
+    public void setSpeed(float value) throws StdQTException {
+
+        this.movie.setRate(value);
+        
+    }
     
 }
