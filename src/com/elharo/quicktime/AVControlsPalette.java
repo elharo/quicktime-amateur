@@ -54,7 +54,6 @@ final class AVControlsPalette extends JDialog {
     
     // XXX move initial location to center of screen
     
-    
     // this method is vastly too long. It needs some serious refactoring; 
     // probably at least one method or class
     private AVControlsPalette() {
@@ -336,6 +335,9 @@ final class AVControlsPalette extends JDialog {
         
         this.pack();
         this.setResizable(false);
+        
+        Utilities.centerOnScreen(this);
+        
     }
 
 
