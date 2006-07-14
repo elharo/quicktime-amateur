@@ -544,5 +544,17 @@ public final class PlayerFrame extends JFrame implements Printable {
         return null;
         
     }
+
+    public void setTreble(int value) throws QTException {
+        AudioMediaHandler handler = getAudioMediaHandler();
+        int[] bassAndTreble = handler.getSoundBassAndTreble();
+        handler.setSoundBassAndTreble(bassAndTreble[0], value);        
+    }
+    
+    public void setBass(int value) throws QTException {
+        AudioMediaHandler handler = getAudioMediaHandler();
+        int[] bassAndTreble = handler.getSoundBassAndTreble();
+        handler.setSoundBassAndTreble(value, bassAndTreble[1]);        
+    }
     
 }

@@ -54,6 +54,9 @@ final class AVControlsPalette extends JDialog {
     
     // XXX move initial location to center of screen
     
+    
+    // this method is vastly too long. It needs some serious refactoring; 
+    // probably at least one method or class
     private AVControlsPalette() {
         
         this.setTitle("A/V Controls");
@@ -146,17 +149,48 @@ final class AVControlsPalette extends JDialog {
         JLabel bassLabel = new JLabel("Bass");
         bassLabel.setFont(labelFont);
         audioControls.add(bassLabel);
-        JSlider bass = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        final JSlider bass = new JSlider(JSlider.HORIZONTAL, -256, 256, 0 );
         bass.setPaintTicks( true );
-        bass.setMajorTickSpacing( 5 );
-        audioControls.add(bass);
+        bass.setMajorTickSpacing( 256 );
+        bass.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent evt) {
+                PlayerFrame front = WindowList.INSTANCE.getFrontmostWindow();
+                if (front != null) {
+                    try {
+                        front.setBass(bass.getValue());
+                    }
+                    catch (QTException e) {
+                        // ???? Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+            
+        });           audioControls.add(bass);
         
         JLabel trebleLabel = new JLabel("Treble");
         trebleLabel.setFont(labelFont);
         audioControls.add(trebleLabel);
-        JSlider treble = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
+        final JSlider treble = new JSlider(JSlider.HORIZONTAL, -256, 256, 0 );
         treble.setPaintTicks( true );
-        treble.setMajorTickSpacing( 5 );
+        treble.setMajorTickSpacing( 256 );
+        treble.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent evt) {
+                PlayerFrame front = WindowList.INSTANCE.getFrontmostWindow();
+                if (front != null) {
+                    try {
+                        front.setTreble(treble.getValue());
+                    }
+                    catch (QTException e) {
+                        // ???? Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+            
+        });   
         audioControls.add(treble);
         
         JLabel pitchShiftLabel = new JLabel("Pitch Shift");
