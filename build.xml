@@ -95,6 +95,7 @@
                     screenmenu="true"
                     signature="QTAM"
                     bundleid="com.elharo.quicktime"
+                    icon="Amateur.icns"
         />
     </target>
     
