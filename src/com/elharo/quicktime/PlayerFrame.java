@@ -277,6 +277,7 @@ public final class PlayerFrame extends JFrame implements Printable {
             fullScreenFrame.setLocation(fullScreenX, fullScreenY);
             fullScreenFrame.setSize(fullScreenWidth, fullScreenHeight);
             fullScreenFrame.setVisible(true);
+            unmute();
             movie.start();
         }
         catch (Exception ex) {
