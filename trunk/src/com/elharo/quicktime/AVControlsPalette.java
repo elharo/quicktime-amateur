@@ -75,7 +75,7 @@ final class AVControlsPalette extends JDialog {
         JPanel audioControls = new JPanel();
         Border border = BorderFactory.createLineBorder(Color.GRAY);
         audioControls.setBorder(BorderFactory.createTitledBorder(
-          border, "Audio", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
+          border, "Audio", TitledBorder.LEFT, TitledBorder.ABOVE_TOP, labelFont));
         audioControls.setBackground(bgColor);
         // XXX this needs to go. We need a better layout manager.
         audioControls.setLayout(new BoxLayout(audioControls, BoxLayout.PAGE_AXIS));
@@ -203,7 +203,8 @@ final class AVControlsPalette extends JDialog {
         westPanel.add(BorderLayout.SOUTH, audioControls);  
         
         JPanel videoControls = new JPanel();
-        videoControls.setBorder(BorderFactory.createTitledBorder(border, "Video", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
+        videoControls.setBorder(BorderFactory.createTitledBorder(border, "Video", 
+          TitledBorder.LEFT, TitledBorder.ABOVE_TOP, labelFont));
         videoControls.setBackground(bgColor);
         videoControls.setLayout(new BoxLayout(videoControls, BoxLayout.PAGE_AXIS));
 
@@ -255,7 +256,7 @@ final class AVControlsPalette extends JDialog {
         
         JPanel playbackControls = new JPanel();
         playbackControls.setBorder(BorderFactory.createTitledBorder(border, 
-          "Playback", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
+          "Playback", TitledBorder.LEFT, TitledBorder.ABOVE_TOP, labelFont));
         playbackControls.setBackground(bgColor);
                
         JPanel jog = new JPanel();
