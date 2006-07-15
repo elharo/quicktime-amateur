@@ -248,6 +248,7 @@ final class AVControlsPalette extends JDialog {
         tPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         tPanel.setBackground(bgColor);
         JButton reset = new JButton("Reset");
+        reset.setFont(labelFont);
         reset.setBackground(bgColor);
         tPanel.add(reset);
         videoControls.add(tPanel);
