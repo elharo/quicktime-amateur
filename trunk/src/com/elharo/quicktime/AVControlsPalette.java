@@ -77,7 +77,8 @@ final class AVControlsPalette extends JDialog {
         audioControls.setBorder(BorderFactory.createTitledBorder(
           border, "Audio", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
         audioControls.setBackground(bgColor);
-        audioControls.setLayout(new GridLayout(10, 1));
+        // XXX this needs to go. We need a better layout manager.
+        audioControls.setLayout(new BoxLayout(audioControls, BoxLayout.PAGE_AXIS));
         
         int min = 0;
         int max = 10;
@@ -204,7 +205,7 @@ final class AVControlsPalette extends JDialog {
         JPanel videoControls = new JPanel();
         videoControls.setBorder(BorderFactory.createTitledBorder(border, "Video", TitledBorder.LEFT, TitledBorder.ABOVE_TOP));
         videoControls.setBackground(bgColor);
-        videoControls.setLayout(new GridLayout(10, 1));
+        videoControls.setLayout(new BoxLayout(videoControls, BoxLayout.PAGE_AXIS));
 
         JLabel brightnessLabel = new JLabel("Brightness");
         brightnessLabel.setFont(labelFont);
@@ -258,7 +259,7 @@ final class AVControlsPalette extends JDialog {
         playbackControls.setBackground(bgColor);
                
         JPanel jog = new JPanel();
-        jog.setLayout(new GridLayout(2, 1));
+        jog.setLayout(new BoxLayout(jog, BoxLayout.PAGE_AXIS));
         JLabel jogLabel = new JLabel("Jog Shuttle");
         jogLabel.setFont(labelFont);
         jog.add(jogLabel);
@@ -282,7 +283,7 @@ final class AVControlsPalette extends JDialog {
         playbackControls.add(new JSeparator(SwingConstants.VERTICAL));
         
         JPanel speed = new JPanel();
-        speed.setLayout(new GridLayout(2, 1));
+        speed.setLayout(new BoxLayout(speed, BoxLayout.PAGE_AXIS));
         JLabel speedLabel = new JLabel("Playback Speed");
         speedLabel.setFont(labelFont);
         speed.add(speedLabel);
@@ -344,5 +345,10 @@ final class AVControlsPalette extends JDialog {
         
     }
 
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        
+    }
+    
 
 }
