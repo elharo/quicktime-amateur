@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2006 Elliotte Rusty Harold
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,11 @@ import javax.swing.KeyStroke;
 
 class AVControlsAction extends AbstractAction {
     
+    
+    // XXX implement change from Show A/V controls to Hide A/V controls in all windows'
+    // menubars when the A/V controls are shown
+    
+    // XXX this is flaky because we don't really use separate dialogs for each frame
     private PlayerFrame frame;
     
     AVControlsAction(PlayerFrame frame) {
@@ -39,11 +44,12 @@ class AVControlsAction extends AbstractAction {
     
     
     public void actionPerformed(ActionEvent event) {        
-        
+       
         // cache this in the frame????
         JDialog dialog = new AVControlsPalette(frame);
-        // use eventqueue????
+        // use event queue????
         dialog.setVisible(true);
+        
     }
 
 }
