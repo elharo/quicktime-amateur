@@ -33,6 +33,7 @@ public class Main {
         System.setProperty("com.apple.eawt.CocoaComponent.CompatibilityMode", "false"); 
         QuicktimeInit.setup();
         final PlayerFrame hidden = new PlayerFrame(true);
+        
         // first frame is just for menu bar
         EventQueue.invokeLater(new Runnable() {
             public void run() {
