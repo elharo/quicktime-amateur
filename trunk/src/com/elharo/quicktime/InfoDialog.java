@@ -54,10 +54,13 @@ class InfoDialog extends JDialog {
         titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         String title = frame.getTitle();
         titlePanel.add(new JLabel(title));
-        titlePanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
         
-        this.getContentPane().add(BorderLayout.NORTH, titlePanel);
-        this.getContentPane().add(BorderLayout.CENTER, new JSeparator());
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.PAGE_AXIS));
+        topPanel.add(titlePanel);
+        topPanel.add(BorderLayout.CENTER, new JSeparator());
+        
+        this.getContentPane().add(BorderLayout.NORTH, topPanel);
         
         eastPanel.setLayout(new GridLayout(10, 1));
         westPanel.setLayout(new GridLayout(10, 1));
