@@ -44,7 +44,6 @@ public class FileOpener implements ActionListener {
         try {
             QTFile file = QTFile.standardGetFilePreview(QTFile.kStandardQTFileTypes);
             title = openFile(file);
-            RecentFileList.INSTANCE.add(file);
         }
         catch (QTIOException ex) {
            ex.printStackTrace();
@@ -70,6 +69,7 @@ public class FileOpener implements ActionListener {
         PlayerFrame f = new PlayerFrame(file.getName(), m);
         f.setFile(file);
         FrameDisplayer.display(f);
+        RecentFileList.INSTANCE.add(file);
         return title;
     }
 
