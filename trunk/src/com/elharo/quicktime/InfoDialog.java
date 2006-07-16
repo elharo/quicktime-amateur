@@ -127,9 +127,10 @@ class InfoDialog extends JDialog {
         }
 
         try {
-            double length = movie.getTime() / (double) movie.getTimeScale();
-            String time = formatTime(length);
-            this.addInfo("Current Time", time);
+            int duration = movie.getDuration();
+            double dataSizeInKiloBits = 8 * movie.getDataSize(1, duration) / 1024;
+            String dataRate = format.format(movie.getTimeScale() * dataSizeInKiloBits / duration) + " kbits/sec";
+            this.addInfo("Data Rate", dataRate);
         }
         catch (StdQTException e) {
             // ???? Auto-generated catch block
@@ -137,10 +138,9 @@ class InfoDialog extends JDialog {
         }
 
         try {
-            int duration = movie.getDuration();
-            double dataSizeInKiloBits = 8 * movie.getDataSize(1, duration) / 1024;
-            String dataRate = format.format(movie.getTimeScale() * dataSizeInKiloBits / duration) + " kbits/sec";
-            this.addInfo("Data Rate", dataRate);
+            double length = movie.getTime() / (double) movie.getTimeScale();
+            String time = formatTime(length);
+            this.addInfo("Current Time", time);
         }
         catch (StdQTException e) {
             // ???? Auto-generated catch block
