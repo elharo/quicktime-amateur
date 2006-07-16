@@ -41,8 +41,8 @@ import quicktime.util.QTUtils;
  */
 class InfoDialog extends JDialog {
 
-    private JPanel eastPanel = new JPanel();
-    private JPanel westPanel = new JPanel();
+    private JPanel centerPanel = new JPanel();
+    private StringBuffer html = new StringBuffer("<html> <body> <table>");
 
     InfoDialog(PlayerFrame frame) {
         
@@ -59,13 +59,9 @@ class InfoDialog extends JDialog {
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.PAGE_AXIS));
         topPanel.add(titlePanel);
         topPanel.add(BorderLayout.CENTER, new JSeparator());
-        
         this.getContentPane().add(BorderLayout.NORTH, topPanel);
         
-        eastPanel.setLayout(new GridLayout(10, 1));
-        westPanel.setLayout(new GridLayout(10, 1));
-        this.getContentPane().add(BorderLayout.EAST, eastPanel);
-        this.getContentPane().add(BorderLayout.WEST, westPanel);
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
         
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(2);
@@ -185,6 +181,14 @@ class InfoDialog extends JDialog {
             e.printStackTrace();
         }
         
+        
+        html.append("</table> </body> </html>");
+        JLabel info = new JLabel(html.toString());
+        info.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        this.getContentPane().add(BorderLayout.CENTER, info);
+
+        
+        
         // move to right hand of screen????
         
         this.pack();
@@ -219,21 +223,8 @@ class InfoDialog extends JDialog {
     private final static Font nameFont = new Font("Lucida Grande", Font.BOLD, 11);
     
     void addInfo(String name, String value) {
-        
-        JPanel namePanel = new JPanel();
-        namePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        JLabel nameLabel = new JLabel(name + ": ");
-        nameLabel.setFont(nameFont);
-        namePanel.add(nameLabel);
-        westPanel.add(namePanel);
-        
-        JPanel valuePanel = new JPanel();
-        valuePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JLabel valueLabel = new JLabel(value);
-        valueLabel.setFont(labelFont);
-        valuePanel.add(valueLabel);
-        eastPanel.add(valuePanel);
-        
+        html.append("<tr><td align='right'><b>" + name + "</b>" + ":</td>");
+        html.append("<td>" + value + "</td></tr>");
     }
 
 }
