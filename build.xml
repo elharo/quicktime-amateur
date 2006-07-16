@@ -7,8 +7,8 @@
     <property name="QTJava" value="/System/Library/Java/Extensions/QTJava.zip"/>
 
     <taskdef name="jarbundler"
-             classpath="lib/jarbundler-1.4.jar"
-             classname="com.loomcom.ant.tasks.jarbundler.JarBundler" /> 
+             classpath="lib/jarbundler-1.8.1.jar"
+             classname="net.sourceforge.jarbundler.JarBundler" /> 
     
     <path id="project.classpath">
         <pathelement location="bin"/>
@@ -24,8 +24,8 @@
         <tstamp/>
         <property name="Name"    value="Amateur"/>
         <property name="name"    value="amateur"/>
-        <property name="version" value="1.0d4"/>
-        <property name="year"    value="2005"/>
+        <property name="version" value="1.0d6"/>
+        <property name="year"    value="2006"/>
         <mkdir dir="bin"/>
         <mkdir dir="dist"/>
     </target>
@@ -96,7 +96,16 @@
                     signature="QTAM"
                     bundleid="com.elharo.quicktime"
                     icon="Amateur.icns"
-        />
+        >
+          <documenttype name="Amateur Media"
+                    mimetypes="image/jpeg image/png image/gif video/mpeg video/quicktime audio/mpeg" 
+                    role="Viewer"/>
+
+          <documenttype name="Amateur Media"
+                    extensions="jpg mov mpg mp3 gif png pdf" 
+                    role="Viewer"/>
+
+        </jarbundler>
     </target>
     
     <target name="image" depends="app">
