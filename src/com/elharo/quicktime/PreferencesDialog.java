@@ -61,10 +61,10 @@ class PreferencesDialog extends JDialog {
         JPanel other = getPanel("Other:");
         other.add(getCheckbox(Preferences.SHOW_CONTENT_GUIDE_AUTOMATICALLY));
         other.add(getCheckbox(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_USERS));
-        other.add(getNumberOfRecentItems());
 
         this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
         this.getContentPane().add(other);        
+        this.getContentPane().add(getNumberOfRecentItems());
         
         // XXX position should be remembered if user moves it; could handle by
         // not disposing and recreating dialog; just hide and show
@@ -127,7 +127,7 @@ class PreferencesDialog extends JDialog {
         choice.addItem("20");
         choice.addItem("30");
         choice.addItem("50");
-// XXX        choice.setSelected();
+        choice.setSelectedIndex(2);
         
 // XXX need an itemListener
         
