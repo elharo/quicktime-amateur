@@ -43,7 +43,7 @@ class InfoDialog extends JDialog {
 
     private JPanel eastPanel = new JPanel();
     private JPanel westPanel = new JPanel();
-    
+
     InfoDialog(PlayerFrame frame) {
         
         super(frame, "Movie Info");
@@ -99,7 +99,7 @@ class InfoDialog extends JDialog {
             this.addInfo("FPS", fps);
             String playingFPS = "????";
             double rate = movie.getRate();
-            if (rate == 0.0) playingFPS = "(Available while movie is playing.)";
+            if (rate == 0.0) playingFPS = "(Available while playing.)";
             else {
                 playingFPS = format.format(rate * expectedRate);
             }
@@ -188,6 +188,7 @@ class InfoDialog extends JDialog {
 
 
     private String formatTime(double length) {
+        
         int hours = (int) (length / 3600);
         int minutes = (int) (length / 60) - hours*60;
         int seconds = (int) Math.floor(length % 60);
@@ -206,22 +207,25 @@ class InfoDialog extends JDialog {
         
         String time = h + ":" + m + ":" + s + "." + f;
         return time;
+        
     }
     
+    private final static Font labelFont = new Font("Lucida Grande", Font.PLAIN, 11);
+    private final static Font nameFont = new Font("Lucida Grande", Font.BOLD, 11);
     
     void addInfo(String name, String value) {
         
         JPanel namePanel = new JPanel();
         namePanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         JLabel nameLabel = new JLabel(name + ": ");
-        Font f = nameLabel.getFont();
-        nameLabel.setFont(new Font(f.getName(), Font.BOLD, f.getSize()));
+        nameLabel.setFont(nameFont);
         namePanel.add(nameLabel);
         westPanel.add(namePanel);
         
         JPanel valuePanel = new JPanel();
         valuePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel valueLabel = new JLabel(value);
+        valueLabel.setFont(labelFont);
         valuePanel.add(valueLabel);
         eastPanel.add(valuePanel);
         
