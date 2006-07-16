@@ -53,6 +53,7 @@ class PlayerMenuBar extends JMenuBar {
     private Action cutAction;
     private Action clearAction;
     private Action trimToSelectionAction;
+    private Action avControls;
     
     PlayerMenuBar(PlayerFrame frame) {
         this.frame = frame;
@@ -256,7 +257,7 @@ class PlayerMenuBar extends JMenuBar {
         // This is a little different than QuickTime Player.
         // We're disabling the menu item. They disable the
         // individual controls.
-        Action avControls = new AVControlsAction(frame);
+        avControls = new AVControlsAction(frame);
         windowMenu.add(avControls); 
         if (frame == null) avControls.setEnabled(false);
         
