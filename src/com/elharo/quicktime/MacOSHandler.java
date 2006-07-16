@@ -25,6 +25,11 @@ import java.awt.EventQueue;
 import java.awt.Frame;
 import java.util.Iterator;
 
+import javax.swing.JOptionPane;
+
+import quicktime.QTException;
+import quicktime.io.QTFile;
+
 import com.apple.eawt.ApplicationAdapter;
 import com.apple.eawt.ApplicationEvent;
 import com.apple.eawt.Application;
@@ -85,7 +90,19 @@ public class MacOSHandler extends Application {
             event.setHandled(true);
         }
         
-        
+        public void handleOpenFile(ApplicationEvent event) {
+
+            String fileName = event.getFilename();
+            QTFile file = new QTFile(fileName);
+            try {
+                FileOpener.openFile(file);
+            }
+            catch (QTException e) {
+                // ???? Auto-generated catch block
+                e.printStackTrace();
+            }
+            event.setHandled(true);
+        }
         
     }
 
