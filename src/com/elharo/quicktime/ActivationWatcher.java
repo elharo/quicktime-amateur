@@ -2,9 +2,6 @@ package com.elharo.quicktime;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.Frame;
-
-import quicktime.std.StdQTException;
 
 /**
  * This class manages the activation and deactivation of windows, 
@@ -17,8 +14,6 @@ class ActivationWatcher implements WindowListener {
     ActivationWatcher(PlayerFrame frame) {
         this.frame = frame;
     }
-
-    private boolean muted = false;
     
     // XXX also need to check focused?
     public void windowActivated(WindowEvent evt) {
