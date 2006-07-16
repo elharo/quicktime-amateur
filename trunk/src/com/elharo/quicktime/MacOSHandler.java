@@ -36,6 +36,7 @@ import com.apple.eawt.Application;
 public class MacOSHandler extends Application {
 
     private Dialog about;
+    // should the preferences dialog be a singleton connected to a singleton preferences????
     private Dialog preferences;
     
     public MacOSHandler(PlayerFrame frame) {
@@ -45,7 +46,6 @@ public class MacOSHandler extends Application {
         // should this be elsewhere to do just once per application????
         // is it possible to bring up two preferences dialogs at the same time
         // by repeated invocation????
-        // what about the about dialog????
         this.setEnabledPreferencesMenu(true);
     }
 
