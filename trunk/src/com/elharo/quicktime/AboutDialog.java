@@ -110,7 +110,7 @@ class AboutDialog extends JDialog {
         copyright.setFont(font);
         panel.add(copyright);
         
-        JLabel version = new JLabel("Version: 1.0d5");
+        JLabel version = new JLabel("Version: 1.0d6");
         version.setFont(font);
         panel.add(version);
         
