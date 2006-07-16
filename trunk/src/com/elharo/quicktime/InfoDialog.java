@@ -54,6 +54,8 @@ class InfoDialog extends JDialog {
         titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         String title = frame.getTitle();
         titlePanel.add(new JLabel(title));
+        titlePanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        
         this.getContentPane().add(BorderLayout.NORTH, titlePanel);
         this.getContentPane().add(BorderLayout.CENTER, new JSeparator());
         
@@ -66,7 +68,7 @@ class InfoDialog extends JDialog {
         format.setMaximumFractionDigits(2);
         // can be null????
         try {
-            this.addInfo("Source", "<html><body><p>" + frame.getFile().getPath() + "</p></body></html>");
+            this.addInfo("Source", frame.getFile().getPath());
         }
         catch (NullPointerException ex) {
             
