@@ -133,6 +133,11 @@ class WindowList {
             e.printStackTrace();
         }
     }
+
+    public PlayerFrame getFrontmostWindow() {
+        if (windows.isEmpty()) return null;
+        return (PlayerFrame) windows.getLast();
+    }
     
     
 }
