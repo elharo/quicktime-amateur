@@ -269,7 +269,6 @@ public final class PlayerFrame extends JFrame implements Printable {
             
             this.fullScreen = true;
             
-            this.setVisible(false);
             fullScreenFrame = makeFullScreenFrame();
             device.setFullScreenWindow(fullScreenFrame);
             QTComponent qc = QTFactory.makeQTComponent(movie);
@@ -277,7 +276,7 @@ public final class PlayerFrame extends JFrame implements Printable {
             fullScreenFrame.setLocation(fullScreenX, fullScreenY);
             fullScreenFrame.setSize(fullScreenWidth, fullScreenHeight);
             fullScreenFrame.setVisible(true);
-            unmute();
+            this.setVisible(false);
             movie.start();
         }
         catch (Exception ex) {
