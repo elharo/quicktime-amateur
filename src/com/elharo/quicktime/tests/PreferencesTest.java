@@ -43,7 +43,7 @@ public class PreferencesTest extends TestCase {
     }
     
      public void testPauseMoviesBeforeSwitchingPlayers() {
-        assertTrue(preferences.getBooleanValue(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_PLAYERS));
+        assertTrue(preferences.getBooleanValue(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_USERS));
     }
     
      public void testGetNumberOfRecentItems() {
@@ -81,8 +81,8 @@ public class PreferencesTest extends TestCase {
     }
     
      public void testSetPauseMoviesBeforeSwitchingPlayers() {
-        preferences.setValue(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_PLAYERS, true);
-        assertTrue(preferences.getBooleanValue(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_PLAYERS));
+        preferences.setValue(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_USERS, true);
+        assertTrue(preferences.getBooleanValue(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_USERS));
     }
     
      public void testSetNumberOfRecentItems() {
