@@ -40,6 +40,8 @@ import quicktime.std.StdQTException;
  */
 final class AVControlsPalette extends JDialog {
 
+    private final static Font labelFont = new Font("Lucida Grande", Font.PLAIN, 10);
+        
     // XXX make control-w and close work with this dialog
     // requires showing menubar; perhaps we can even hack this
     // by using this as the null window and just hiding it off the screen
@@ -62,7 +64,6 @@ final class AVControlsPalette extends JDialog {
         // this.setAlwaysOnTop(true); only in 1.5 and this only works in *all* apps
         // we need an always on top just when player is in front
         
-        Font labelFont = new Font("Lucida Grande", Font.PLAIN, 10);
         Color bgColor = new Color(232, 232, 232);
         
         this.getContentPane().setLayout(new BorderLayout());
@@ -83,9 +84,8 @@ final class AVControlsPalette extends JDialog {
         int min = 0;
         int max = 10;
         
-        JLabel volumeLabel = new JLabel("Volume");
-        volumeLabel.setFont(labelFont);
-        audioControls.add(volumeLabel);
+        audioControls.add(makeSliderLabel("Volume"));
+        
         final JSlider volume = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         volume.setPaintTicks( true );
         volume.setMajorTickSpacing( 5 );
@@ -108,9 +108,7 @@ final class AVControlsPalette extends JDialog {
         });
         audioControls.add(volume);
 
-        JLabel balanceLabel = new JLabel("Balance");
-        balanceLabel.setFont(labelFont);
-        audioControls.add(balanceLabel);
+        audioControls.add(makeSliderLabel("Balance"));
         final JSlider balance = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         balance.setPaintTicks( true );
         balance.setMajorTickSpacing( 5 );
@@ -144,9 +142,7 @@ final class AVControlsPalette extends JDialog {
         });      
         audioControls.add(balance);
         
-        JLabel bassLabel = new JLabel("Bass");
-        bassLabel.setFont(labelFont);
-        audioControls.add(bassLabel);
+        audioControls.add(makeSliderLabel("Bass"));
         final JSlider bass = new JSlider(JSlider.HORIZONTAL, -256, 256, 0 );
         bass.setPaintTicks( true );
         bass.setMajorTickSpacing( 256 );
@@ -167,9 +163,7 @@ final class AVControlsPalette extends JDialog {
             
         });           audioControls.add(bass);
         
-        JLabel trebleLabel = new JLabel("Treble");
-        trebleLabel.setFont(labelFont);
-        audioControls.add(trebleLabel);
+        audioControls.add(makeSliderLabel("Treble"));
         final JSlider treble = new JSlider(JSlider.HORIZONTAL, -256, 256, 0 );
         treble.setPaintTicks( true );
         treble.setMajorTickSpacing( 256 );
@@ -191,9 +185,7 @@ final class AVControlsPalette extends JDialog {
         });   
         audioControls.add(treble);
         
-        JLabel pitchShiftLabel = new JLabel("Pitch Shift");
-        pitchShiftLabel.setFont(labelFont);
-        audioControls.add(pitchShiftLabel);
+        audioControls.add(makeSliderLabel("Pitch Shift"));
         JSlider pitchShift = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         pitchShift.setPaintTicks( true );
         pitchShift.setMajorTickSpacing( 1 );
@@ -208,36 +200,28 @@ final class AVControlsPalette extends JDialog {
         videoControls.setBackground(bgColor);
         videoControls.setLayout(new BoxLayout(videoControls, BoxLayout.PAGE_AXIS));
 
-        JLabel brightnessLabel = new JLabel("Brightness");
-        brightnessLabel.setFont(labelFont);
-        videoControls.add(brightnessLabel);
+        videoControls.add(makeSliderLabel("Brightness"));
         JSlider brightness = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         brightness.setPaintTicks( true );
         brightness.setMajorTickSpacing( 5 );
         brightness.setEnabled(false); // XXX
         videoControls.add(brightness);
 
-        JLabel colorLabel = new JLabel("Color");
-        colorLabel.setFont(labelFont);
-        videoControls.add(colorLabel);
+        videoControls.add(makeSliderLabel("Color"));
         JSlider color = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         color.setPaintTicks( true );
         color.setMajorTickSpacing( 5 );
         color.setEnabled(false); // XXX
         videoControls.add(color);
 
-        JLabel contrastLabel = new JLabel("Contrast");
-        contrastLabel.setFont(labelFont);
-        videoControls.add(contrastLabel);
+        videoControls.add(makeSliderLabel("Contrast"));
         JSlider contrast = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         contrast.setPaintTicks( true );
         contrast.setMajorTickSpacing( 5 );
         contrast.setEnabled(false); // XXX
         videoControls.add(contrast);
         
-        JLabel tintLabel = new JLabel("Tint");
-        tintLabel.setFont(labelFont);
-        videoControls.add(tintLabel);
+        videoControls.add(makeSliderLabel("Tint"));
         JSlider tint = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         tint.setPaintTicks( true );
         tint.setMajorTickSpacing( 5 );
@@ -262,9 +246,7 @@ final class AVControlsPalette extends JDialog {
                
         JPanel jog = new JPanel();
         jog.setLayout(new BoxLayout(jog, BoxLayout.PAGE_AXIS));
-        JLabel jogLabel = new JLabel("Jog Shuttle");
-        jogLabel.setFont(labelFont);
-        jog.add(jogLabel);
+        jog.add(makeSliderLabel("Jog Shuttle"));
         JSlider jogShuttle = new JSlider(JSlider.HORIZONTAL, min, max, 5 );
         jogShuttle.setPaintTicks( true );
         jogShuttle.setMajorTickSpacing( 5 );
@@ -286,9 +268,7 @@ final class AVControlsPalette extends JDialog {
         
         JPanel speed = new JPanel();
         speed.setLayout(new BoxLayout(speed, BoxLayout.PAGE_AXIS));
-        JLabel speedLabel = new JLabel("Playback Speed");
-        speedLabel.setFont(labelFont);
-        speed.add(speedLabel);
+        speed.add(makeSliderLabel("Playback Speed"));
         final JSlider playbackSpeed = new JSlider(JSlider.HORIZONTAL, 1, 6, 2 );
         playbackSpeed.setPaintTicks( true );
         playbackSpeed.setMajorTickSpacing( 2 );
@@ -344,6 +324,17 @@ final class AVControlsPalette extends JDialog {
         this.setResizable(false);
         
         Utilities.centerOnScreen(this);
+        
+    }
+
+    private JPanel makeSliderLabel(String text) {
+
+        JLabel label = new JLabel(text);
+        label.setFont(labelFont);
+        JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        labelPanel.add(label);
+        return labelPanel;
         
     }
 
