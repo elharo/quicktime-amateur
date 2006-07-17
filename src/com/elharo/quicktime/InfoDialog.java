@@ -33,6 +33,8 @@ import quicktime.std.movies.Movie;
 import quicktime.std.movies.Track;
 import quicktime.std.movies.media.HandlerInfo;
 import quicktime.std.movies.media.Media;
+import quicktime.std.movies.media.SoundDescription;
+import quicktime.std.movies.media.SoundMedia;
 import quicktime.util.QTUtils;
 
 /** 
@@ -94,7 +96,7 @@ class InfoDialog extends JDialog {
             if (videoTrack != null) {
                 HandlerInfo hi = videoTrack.getMedia().getHandlerDescription(); 
                 int code = hi.subType;
-                System.err.println("0x" + Integer.toHexString(code));
+                // System.err.println("0x" + Integer.toHexString(code));
                 
                 // XXX convert code to format string
                 formatString = QTUtils.fromOSType(code);
@@ -109,7 +111,12 @@ class InfoDialog extends JDialog {
             }
             
             if (audioTrack != null) {
-                formatString += ", audio";            
+                // XXX Can this ever be anything else?
+                SoundMedia media = (SoundMedia) audioTrack.getMedia();
+                SoundDescription description = media.getSoundDescription(1);
+                float rate = description.getSampleRate();
+                if (videoTrack != null) formatString += ", ";
+                formatString += rate/1000 + " kHz";
             }
             
             
