@@ -25,8 +25,6 @@ import java.awt.EventQueue;
 import java.awt.Frame;
 import java.util.Iterator;
 
-import javax.swing.JOptionPane;
-
 import quicktime.QTException;
 import quicktime.io.QTFile;
 
@@ -102,12 +100,9 @@ public class MacOSHandler extends Application {
                 e.printStackTrace();
             }
             event.setHandled(true);
+            
         }
         
     }
-
-
-        
-    
     
 }
