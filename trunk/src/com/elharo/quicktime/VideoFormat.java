@@ -20,6 +20,7 @@ public class VideoFormat {
         addType("pdf ", "Portable Document Format", "PDF");
         addType("gif ", "Graphics Interchange Format", "GIF");
         addType("qdrw", "PICT", "PICT");
+        addType("8BPS", "Adobe Photoshop", "Photoshop");
         codes.put(new Integer(0x61766331), new VideoFormat(0x61766331, "H.264 Decoder", "H.264 Decoder"));
         codes.put(new Integer(0x53565133), new VideoFormat(0x53565133, "", "Sorenson Video 3 Decompressor"));
         codes.put(new Integer(0x6d703476), new VideoFormat(0x6d703476, "Apple MPEG4 Decompressor", "Apple MPEG 4 Decompressor"));
