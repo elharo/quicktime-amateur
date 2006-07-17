@@ -20,9 +20,9 @@ public class SoundFormat {
       "8-bit binary");
     public final static SoundFormat _16BitBigEndianFormat = new SoundFormat("twos", 
        "Samples are stored uncompressed, in two’s-complement format (sample values range from -128 to 127 for 8-bit audio, and -32768 to 32767 for 1- bit audio; 0 is always silence). These samples are stored in 16-bit big-endian format.", 
-        "16-bit Integer (Big-endian)");
-    public final static SoundFormat _16BitLittleEndianFormat = new SoundFormat("sowt", "16-bit little-endian, twos-complement",
-        "16-bit Integer (Little-endian)");
+        "16-bit Integer (Big Endian)");
+    public final static SoundFormat _16BitLittleEndianFormat = new SoundFormat("sowt", "16-bit little-endian, two's-complement",
+        "16-bit Integer (Little Endian)");
     public final static SoundFormat MACE3Compression = new SoundFormat("MAC3 ", "Samples have been compressed using MACE 3:1. (Obsolete.)", "MACE 3:1");
     public final static SoundFormat MACE6Compression = new SoundFormat("MAC6 ", "Samples have been compressed using MACE 6:1. (Obsolete.)", "MACE 6:1");
     public final static SoundFormat IMACompression = new SoundFormat("ima4 ", "Samples have been compressed using IMA 4:1.", "IMA 4:1");
@@ -30,6 +30,7 @@ public class SoundFormat {
     public final static SoundFormat Float64Format = new SoundFormat("fl64", "64-bit floating point", "64-bit Floating Point");
     public final static SoundFormat _24BitFormat = new SoundFormat("in24", "24-bit integer", "24-bit Integer");
     public final static SoundFormat _32BitFormat = new SoundFormat("in32", "32-bit integer", "32-bit integer");
+    // XXX change to muLaw with greek mu
     public final static SoundFormat ULawCompression = new SoundFormat("ulaw", "uLaw 2:1", "uLaw 2:1");
     public final static SoundFormat ALawCompression = new SoundFormat("alaw", "uLaw 2:1", "ulaw 2:1");
     public final static SoundFormat MicrosoftADPCMFormat= new SoundFormat(0x6D730002, "Microsoft ADPCM-ACM code 2", "Microsoft ADPCM-ACM code 2");
