@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2006 Elliotte Rusty Harold
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@ import quicktime.util.QTUtils;
  */
 class InfoDialog extends JDialog {
 
+    // XXX needs to autoupdate as windows move in and out of focus
     private JPanel centerPanel = new JPanel();
     private StringBuffer html = new StringBuffer("<html> <body> <table>");
 
@@ -98,12 +99,9 @@ class InfoDialog extends JDialog {
                 HandlerInfo hi = media.getHandlerDescription(); 
                 int code = hi.subType;
                 
-                // convert code to format string
-                formatString = QTUtils.fromOSType(code);
                 if (code == 1297106247) formatString = "MPEG1 Muxed";
                 else if (code == 1831958048) formatString = "MPEG1 Video";
                 else if (code == 1986618469) {
-                    formatString = "QuickTime, ";
                     int dataFormat = media.getSampleDescription(1).getDataFormat();
                     formatString += VideoFormat.getShortDescription(dataFormat);
                 }
@@ -159,6 +157,7 @@ class InfoDialog extends JDialog {
 
         try {
             if (videoTrack != null) {
+                // for some reason this fails on the Serenity internationla movie trailer
                 double units = videoTrack.getMedia().getDuration();
                 double frames = videoTrack.getMedia().getSampleCount();
                 double unitsPerSecond = videoTrack.getMedia().getTimeScale();
