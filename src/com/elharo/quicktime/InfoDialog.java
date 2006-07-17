@@ -35,6 +35,7 @@ import quicktime.std.movies.media.HandlerInfo;
 import quicktime.std.movies.media.Media;
 import quicktime.std.movies.media.SoundDescription;
 import quicktime.std.movies.media.SoundMedia;
+import quicktime.std.movies.media.VideoMedia;
 import quicktime.util.QTUtils;
 
 /** 
@@ -92,7 +93,9 @@ class InfoDialog extends JDialog {
             // Need to handle case where there's no video media
             String formatString = "";
             if (videoTrack != null) {
-                HandlerInfo hi = videoTrack.getMedia().getHandlerDescription(); 
+                Media media = videoTrack.getMedia(); // can be a GenericMedia or a VideoMedia
+                System.err.println(media.getClass().getName());
+                HandlerInfo hi = media.getHandlerDescription(); 
                 int code = hi.subType;
                 
                 // convert code to format string
@@ -101,14 +104,23 @@ class InfoDialog extends JDialog {
                 else if (code == 1831958048) formatString = "MPEG1 Video";
                 else if (code == 1986618469) {
                     formatString = "QuickTime, ";
-                    int dataFormat = videoTrack.getMedia().getSampleDescription(1).getDataFormat();
+                    int dataFormat = media.getSampleDescription(1).getDataFormat();
                     formatString += VideoFormat.getShortDescription(dataFormat);
                 }
                 
                 QDRect size = movie.getNaturalBoundsRect();
                 int movieHeight = size.getHeight();
                 int movieWidth = size.getWidth();
-                formatString += ", " + movieWidth + " x " + movieHeight;            
+                formatString += ", " + movieWidth + " x " + movieHeight;  
+                
+                if (media instanceof VideoMedia) {
+                    VideoMedia vMedia = (VideoMedia) media;
+                    int depth = vMedia.getImageDescription(1).getDepth();
+                    if (depth > 16) formatString += ", Millions";
+                    else if (depth > 8) formatString += ", Thousands";
+                    else /*XXX what to put here? check the sample movie for LOC*/ ;
+                }
+                
             }
             
             Track audioTrack = movie.getIndTrackType(1, 
@@ -120,7 +132,9 @@ class InfoDialog extends JDialog {
                 if (media instanceof SoundMedia) {
                     SoundDescription description = ((SoundMedia) media).getSoundDescription(1);
                     
-                    if (videoTrack != null) formatString += ", ";
+                    // XXX should I just separate video and sound formats into two completely
+                    // separate items?
+                    if (videoTrack != null) formatString += ",<br>";
                     
                     int formatID = description.getDataFormat();
                     formatString += SoundFormat.getShortDescription(formatID) + ", ";
