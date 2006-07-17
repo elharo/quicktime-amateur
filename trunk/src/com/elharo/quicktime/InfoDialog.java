@@ -35,6 +35,7 @@ import quicktime.std.movies.media.HandlerInfo;
 import quicktime.std.movies.media.Media;
 import quicktime.std.movies.media.SoundDescription;
 import quicktime.std.movies.media.SoundMedia;
+import quicktime.util.EndianDescriptor;
 import quicktime.util.QTUtils;
 
 /** 
@@ -116,6 +117,24 @@ class InfoDialog extends JDialog {
                 SoundDescription description = media.getSoundDescription(1);
                 
                 if (videoTrack != null) formatString += ", ";
+                
+                // System.err.println("0x" + Integer.toHexString(description.getDataFormat()));
+                
+                // XXX I'm not at all sure this is correct. See
+                // https://developer.apple.com/documentation/QuickTime/QTFF/QTFFChap3/chapter_4_section_3.html
+                int compressionID = description.getCompressionID();
+                int formatID = description.getDataFormat();
+                System.err.println(QTUtils.fromOSType(formatID));
+                if (formatID == 0x6d703461 ) formatString += "AAC, ";
+                else if (formatID == 0x6d730055) formatString += "MP3, ";
+                else if (formatID == 0x2e6d7033) formatString += "MP3 Variable Bit Rate, ";
+                else if (formatID == 0x74776f73) {
+                    formatString += "AIFF, ";
+                    int sampleSize = description.getSampleSize();
+                    formatString += sampleSize + "-bit Integer, ";
+                    // how to determine endianness????
+                }
+                else formatString += "Unrecognized audio format 0x" + Integer.toHexString(formatID) + ", ";
                 
                 int numChannels = description.getNumberOfChannels();
                 if (numChannels <= 1) formatString += "Mono, ";
