@@ -88,8 +88,6 @@ class InfoDialog extends JDialog {
         try {
             videoTrack = movie.getIndTrackType(1, 
                     StdQTConstants.visualMediaCharacteristic, StdQTConstants.movieTrackCharacteristic);
-            Track audioTrack = movie.getIndTrackType(1, 
-                    StdQTConstants.audioMediaCharacteristic, StdQTConstants.movieTrackCharacteristic);
             
             // XXX get appledatacompressorsubtype
             // Need to handle case where there's no video media
@@ -103,7 +101,12 @@ class InfoDialog extends JDialog {
                 formatString = QTUtils.fromOSType(code);
                 if (code == 1297106247) formatString = "MPEG1 Muxed";
                 else if (code == 1831958048) formatString = "MPEG1 Video";
-                else if (code == 1986618469) formatString = "QuickTime";
+                else if (code == 1986618469) {
+                    formatString = "QuickTime, ";
+                    int dataFormat = videoTrack.getMedia().getSampleDescription(1).getDataFormat();
+                    System.err.println(Integer.toHexString(dataFormat));
+                    formatString += VideoFormat.getShortDescription(dataFormat);
+                }
                 
                 QDRect size = movie.getNaturalBoundsRect();
                 int movieHeight = size.getHeight();
@@ -111,33 +114,28 @@ class InfoDialog extends JDialog {
                 formatString += ", " + movieWidth + " x " + movieHeight;            
             }
             
+            Track audioTrack = movie.getIndTrackType(1, 
+              StdQTConstants.audioMediaCharacteristic, StdQTConstants.movieTrackCharacteristic);
             if (audioTrack != null) {
-                // XXX Can this ever be anything else?
-                SoundMedia media = (SoundMedia) audioTrack.getMedia();
-                SoundDescription description = media.getSoundDescription(1);
-                
-                if (videoTrack != null) formatString += ", ";
-                
-                int formatID = description.getDataFormat();
-                // System.err.println(QTUtils.fromOSType(formatID));
-                formatString += SoundFormat.getShortDescription(formatID) + ", ";
-                
-                int numChannels = description.getNumberOfChannels();
-                if (numChannels <= 1) formatString += "Mono, ";
-                else formatString += "Stereo, ";
-                
-                float rate = description.getSampleRate();
-                formatString += rate/1000 + " kHz";
+                // Can this ever be anything other than a SoundMedia? 
+                // Yes, it can be an MPEGMedia
+                Media media = audioTrack.getMedia();
+                if (media instanceof SoundMedia) {
+                    SoundDescription description = ((SoundMedia) media).getSoundDescription(1);
+                    
+                    if (videoTrack != null) formatString += ", ";
+                    
+                    int formatID = description.getDataFormat();
+                    formatString += SoundFormat.getShortDescription(formatID) + ", ";
+                    
+                    int numChannels = description.getNumberOfChannels();
+                    if (numChannels <= 1) formatString += "Mono, ";
+                    else formatString += "Stereo, ";
+                    
+                    float rate = description.getSampleRate();
+                    formatString += rate/1000 + " kHz";
+                }
             }
-            
-            
-            
-            /* Media media = videoTrack.getMedia();
-            int count = media.getSampleDescriptionCount();
-            for (int i = 1; i <= count; i++) {
-                System.err.println(i);
-                System.err.println(media.getSampleDescription(i));
-            } */
             
             this.addInfo("Format", formatString);
             // XXX see CodecName and CodecInfo classes
