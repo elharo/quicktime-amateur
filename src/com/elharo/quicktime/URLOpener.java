@@ -1,4 +1,4 @@
-/* Copyright 2005 Elliotte Rusty Harold
+/* Copyright 2005, 2006 Elliotte Rusty Harold
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ class URLOpener extends AbstractAction {
         String url = JOptionPane.showInputDialog(parent, "Movie URL:", "Open URL", JOptionPane.PLAIN_MESSAGE);
         if (url == null) return; // User cancelled
         openURL(url);
-    } 
+    }
 
     static void openURL(String url) {
 
@@ -59,7 +59,7 @@ class URLOpener extends AbstractAction {
             Movie m = Movie.fromDataRef(ref, StdQTConstants.newMovieActive);
             PlayerFrame f = new PlayerFrame("Amateur Player", m);
             f.pack();
-            f.show();
+            FrameDisplayer.display(f);
             m.start();
         }
         catch (QTException ex) {
