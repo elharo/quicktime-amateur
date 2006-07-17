@@ -35,7 +35,6 @@ import quicktime.std.movies.media.HandlerInfo;
 import quicktime.std.movies.media.Media;
 import quicktime.std.movies.media.SoundDescription;
 import quicktime.std.movies.media.SoundMedia;
-import quicktime.util.EndianDescriptor;
 import quicktime.util.QTUtils;
 
 /** 
@@ -95,16 +94,14 @@ class InfoDialog extends JDialog {
             if (videoTrack != null) {
                 HandlerInfo hi = videoTrack.getMedia().getHandlerDescription(); 
                 int code = hi.subType;
-                // System.err.println("0x" + Integer.toHexString(code));
                 
-                // XXX convert code to format string
+                // convert code to format string
                 formatString = QTUtils.fromOSType(code);
                 if (code == 1297106247) formatString = "MPEG1 Muxed";
                 else if (code == 1831958048) formatString = "MPEG1 Video";
                 else if (code == 1986618469) {
                     formatString = "QuickTime, ";
                     int dataFormat = videoTrack.getMedia().getSampleDescription(1).getDataFormat();
-                    System.err.println(Integer.toHexString(dataFormat));
                     formatString += VideoFormat.getShortDescription(dataFormat);
                 }
                 
