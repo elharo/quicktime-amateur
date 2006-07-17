@@ -48,6 +48,10 @@ class InfoDialog extends JDialog {
     // XXX needs to autoupdate as windows move in and out of focus
     private JPanel centerPanel = new JPanel();
     private StringBuffer html = new StringBuffer("<html> <body> <table>");
+    
+    // XXX make suire these are onscreen
+    private int initialLeft = 485;
+    private int initialTop  = 210;
 
     InfoDialog(PlayerFrame frame) {
         
@@ -90,8 +94,8 @@ class InfoDialog extends JDialog {
             videoTrack = movie.getIndTrackType(1, 
                     StdQTConstants.visualMediaCharacteristic, StdQTConstants.movieTrackCharacteristic);
             
-            // XXX get appledatacompressorsubtype
-            // Need to handle case where there's no video media
+            // XXX Put all this in a for loop that adds one line for each audio and
+            // video media per track.
             String formatString = "";
             if (videoTrack != null) {
                 Media media = videoTrack.getMedia(); // can be a GenericMedia or a VideoMedia
@@ -255,10 +259,10 @@ class InfoDialog extends JDialog {
         info.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
         this.getContentPane().add(BorderLayout.CENTER, info);
 
-        
-        
-        // move to right hand of screen????
         this.pack();
+        this.setLocation(initialLeft, initialTop);
+        // XXX remember location between starts????
+        
         this.setResizable(false);
     }
 
