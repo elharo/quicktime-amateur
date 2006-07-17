@@ -32,6 +32,7 @@ import quicktime.std.StdQTException;
 import quicktime.std.movies.Movie;
 import quicktime.std.movies.Track;
 import quicktime.std.movies.media.HandlerInfo;
+import quicktime.std.movies.media.Media;
 import quicktime.util.QTUtils;
 
 /** 
@@ -53,10 +54,17 @@ class InfoDialog extends JDialog {
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         String title = frame.getTitle();
-        titlePanel.add(new JLabel(title));
+        JLabel titleLabel = new JLabel(title);
+        titlePanel.add(titleLabel);
+        
+        int width = 350;
+        if (titleLabel.getWidth() > 300) width = 50 + titleLabel.getWidth();
+        // XXX use this width; see
+        // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4348815
         
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.PAGE_AXIS));
+        topPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         topPanel.add(titlePanel);
         topPanel.add(BorderLayout.CENTER, new JSeparator());
         this.getContentPane().add(BorderLayout.NORTH, topPanel);
@@ -73,13 +81,46 @@ class InfoDialog extends JDialog {
             
         }
         Movie movie = frame.getMovie();
+        Track videoTrack = null;
         try {
-            Track videoTrack = movie.getIndTrackType(1, 
+            videoTrack = movie.getIndTrackType(1, 
                     StdQTConstants.visualMediaCharacteristic, StdQTConstants.movieTrackCharacteristic);
-            HandlerInfo hi = videoTrack.getMedia().getHandlerDescription(); 
-            int code = hi.subType;
-            // XXX convert code to format string
-            String formatString = QTUtils.fromOSType(code);
+            Track audioTrack = movie.getIndTrackType(1, 
+                    StdQTConstants.audioMediaCharacteristic, StdQTConstants.movieTrackCharacteristic);
+            
+            // XXX get appledatacompressorsubtype
+            // Need to handle case where there's no video media
+            String formatString = "";
+            if (videoTrack != null) {
+                HandlerInfo hi = videoTrack.getMedia().getHandlerDescription(); 
+                int code = hi.subType;
+                System.err.println("0x" + Integer.toHexString(code));
+                
+                // XXX convert code to format string
+                formatString = QTUtils.fromOSType(code);
+                if (code == 1297106247) formatString = "MPEG1 Muxed";
+                else if (code == 1831958048) formatString = "MPEG1 Video";
+                else if (code == 1986618469) formatString = "QuickTime";
+                
+                QDRect size = movie.getNaturalBoundsRect();
+                int movieHeight = size.getHeight();
+                int movieWidth = size.getWidth();
+                formatString += ", " + movieWidth + " x " + movieHeight;            
+            }
+            
+            if (audioTrack != null) {
+                formatString += ", audio";            
+            }
+            
+            
+            
+            /* Media media = videoTrack.getMedia();
+            int count = media.getSampleDescriptionCount();
+            for (int i = 1; i <= count; i++) {
+                System.err.println(i);
+                System.err.println(media.getSampleDescription(i));
+            } */
+            
             this.addInfo("Format", formatString);
             // XXX see CodecName and CodecInfo classes
             // can we get one of these from a movie?
@@ -90,21 +131,21 @@ class InfoDialog extends JDialog {
         }
 
         try {
-            Track videoTrack = movie.getIndTrackType(1, 
-              StdQTConstants.visualMediaCharacteristic, StdQTConstants.movieTrackCharacteristic);
-            double units = videoTrack.getMedia().getDuration();
-            double frames = videoTrack.getMedia().getSampleCount();
-            double unitsPerSecond = videoTrack.getMedia().getTimeScale();
-            double expectedRate = unitsPerSecond * frames / units;
-            String fps = format.format(expectedRate);
-            this.addInfo("FPS", fps);
-            String playingFPS = "????";
-            double rate = movie.getRate();
-            if (rate == 0.0) playingFPS = "(Available while playing.)";
-            else {
-                playingFPS = format.format(rate * expectedRate);
+            if (videoTrack != null) {
+                double units = videoTrack.getMedia().getDuration();
+                double frames = videoTrack.getMedia().getSampleCount();
+                double unitsPerSecond = videoTrack.getMedia().getTimeScale();
+                double expectedRate = unitsPerSecond * frames / units;
+                String fps = format.format(expectedRate);
+                this.addInfo("FPS", fps);
+                String playingFPS = "????";
+                double rate = movie.getRate();
+                if (rate == 0.0) playingFPS = "(Available while playing.)";
+                else {
+                    playingFPS = format.format(rate * expectedRate);
+                }
+                this.addInfo("Playing FPS", playingFPS);
             }
-            this.addInfo("Playing FPS", playingFPS);
         }
         catch (StdQTException e) {
             // ???? Auto-generated catch block
@@ -159,28 +200,29 @@ class InfoDialog extends JDialog {
         }
 
         
-        try {
-            QDRect size = movie.getNaturalBoundsRect();
-            int movieHeight = size.getHeight();
-            int movieWidth = size.getWidth();
-            this.addInfo("Normal Size", movieWidth + " x " + movieHeight + " pixels");
+        if (videoTrack != null) {
+            try {
+                QDRect size = movie.getNaturalBoundsRect();
+                int movieHeight = size.getHeight();
+                int movieWidth = size.getWidth();
+                this.addInfo("Normal Size", movieWidth + " x " + movieHeight + " pixels");
+            }
+            catch (StdQTException e) {
+                // ???? Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+            try {
+                QDRect size = movie.getBox();
+                int movieHeight = size.getHeight();
+                int movieWidth = size.getWidth();
+                this.addInfo("Current Size", movieWidth + " x " + movieHeight + " pixels");
+            }
+            catch (StdQTException e) {
+                // ???? Auto-generated catch block
+                e.printStackTrace();
+            }
         }
-        catch (StdQTException e) {
-            // ???? Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        try {
-            QDRect size = movie.getBox();
-            int movieHeight = size.getHeight();
-            int movieWidth = size.getWidth();
-            this.addInfo("Current Size", movieWidth + " x " + movieHeight + " pixels");
-        }
-        catch (StdQTException e) {
-            // ???? Auto-generated catch block
-            e.printStackTrace();
-        }
-        
         
         html.append("</table> </body> </html>");
         JLabel info = new JLabel(html.toString());
@@ -190,7 +232,6 @@ class InfoDialog extends JDialog {
         
         
         // move to right hand of screen????
-        
         this.pack();
         this.setResizable(false);
     }
@@ -219,11 +260,8 @@ class InfoDialog extends JDialog {
         
     }
     
-    private final static Font labelFont = new Font("Lucida Grande", Font.PLAIN, 11);
-    private final static Font nameFont = new Font("Lucida Grande", Font.BOLD, 11);
-    
     void addInfo(String name, String value) {
-        html.append("<tr><td align='right'><b>" + name + "</b>" + ":</td>");
+        html.append("<tr><td valign='top' align='right'><b>" + name + "</b>" + ":</td>");
         html.append("<td>" + value + "</td></tr>");
     }
 
