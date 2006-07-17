@@ -114,8 +114,14 @@ class InfoDialog extends JDialog {
                 // XXX Can this ever be anything else?
                 SoundMedia media = (SoundMedia) audioTrack.getMedia();
                 SoundDescription description = media.getSoundDescription(1);
-                float rate = description.getSampleRate();
+                
                 if (videoTrack != null) formatString += ", ";
+                
+                int numChannels = description.getNumberOfChannels();
+                if (numChannels <= 1) formatString += "Mono, ";
+                else formatString += "Stereo, ";
+                
+                float rate = description.getSampleRate();
                 formatString += rate/1000 + " kHz";
             }
             
