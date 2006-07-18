@@ -12,6 +12,15 @@ import quicktime.util.QTUtils;
 public class SoundFormat {
 
     private static HashMap codes = new HashMap();
+
+    // XXX Use singleton instead
+    // XXX duplicates VideoFormat, refactor
+    static {
+        addType("samr", "AMR Narrowband", "AMR");
+        addType("alac", "Apple Lossless", "Apple Lossless");
+        addType("vdva", "DVC", "DVC");
+        addType("qclq", "3GP QCELP", "QCELP");
+   }    
     
     public final static SoundFormat AAC = new SoundFormat(0x6d703461, "AAC", "AAC");
     public final static SoundFormat SoundNotCompressed = new SoundFormat("NONE", "Sound is not compressed", "Uncompressed");
@@ -21,7 +30,7 @@ public class SoundFormat {
     public final static SoundFormat _16BitBigEndianFormat = new SoundFormat("twos", 
        "Samples are stored uncompressed, in two’s-complement format (sample values range from -128 to 127 for 8-bit audio, and -32768 to 32767 for 1- bit audio; 0 is always silence). These samples are stored in 16-bit big-endian format.", 
         "16-bit Integer (Big Endian)");
-    public final static SoundFormat _16BitLittleEndianFormat = new SoundFormat("sowt", "16-bit little-endian, two's-complement",
+    public final static SoundFormat _16BitLittleEndianFormat = new SoundFormat("sowt", "16-bit little-endian, two's-complement, AVI uncompressed",
         "16-bit Integer (Little Endian)");
     public final static SoundFormat MACE3Compression = new SoundFormat("MAC3 ", "Samples have been compressed using MACE 3:1. (Obsolete.)", "MACE 3:1");
     public final static SoundFormat MACE6Compression = new SoundFormat("MAC6 ", "Samples have been compressed using MACE 6:1. (Obsolete.)", "MACE 6:1");
@@ -61,5 +70,9 @@ public class SoundFormat {
         if (format == null) return "Unrecognized format + 0x" + Integer.toHexString(code);
         return format.shortDescription;
     }
+
+    private static void addType(String code, String description, String shortDescription) {
+        codes.put(new Integer(QTUtils.toOSType(code)), new SoundFormat(code, description, shortDescription));
+    }    
     
 }
