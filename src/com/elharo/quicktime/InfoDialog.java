@@ -169,7 +169,7 @@ class InfoDialog extends JDialog {
                     // XXX This isn't perfectly accurate. It's off by a little
                     // less than a frame a second
                     // XXX may not work while movie is playing? ight even hang?
-                    long frameCount = 0;
+                    /*long frameCount = 0;
                     TimeInfo timeInfo = new TimeInfo(0, 0);
                     int timeScale = media.getTimeScale();
                     // only count first few seconds
@@ -180,7 +180,17 @@ class InfoDialog extends JDialog {
                         frameCount++;
                     }
                     frameCount--;
-                    expectedRate = frameCount / sampleLength;
+                    expectedRate = frameCount / sampleLength;*/
+                    
+                    // XXX constant bit rate assumed; is that OK?
+                    // This is more accurate than the other approach though still imperfect.
+                    // Could manually round
+                    TimeInfo timeInfo = new TimeInfo(0, 0);
+                    int timeScale = media.getTimeScale();
+                    timeInfo = movie.getNextInterestingTime(StdQTConstants.nextTimeStep, null, timeInfo.time, 1.0f);
+                    
+                    expectedRate = (double) timeScale / (double) timeInfo.time;
+                    
                     String fps = format.format(expectedRate);
                     this.addInfo("FPS", fps);
                 }
