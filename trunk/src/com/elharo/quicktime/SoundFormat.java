@@ -30,9 +30,8 @@ public class SoundFormat {
     public final static SoundFormat Float64Format = new SoundFormat("fl64", "64-bit floating point", "64-bit Floating Point");
     public final static SoundFormat _24BitFormat = new SoundFormat("in24", "24-bit integer", "24-bit Integer");
     public final static SoundFormat _32BitFormat = new SoundFormat("in32", "32-bit integer", "32-bit integer");
-    // XXX change to muLaw with greek mu
-    public final static SoundFormat ULawCompression = new SoundFormat("ulaw", "uLaw 2:1", "uLaw 2:1");
-    public final static SoundFormat ALawCompression = new SoundFormat("alaw", "uLaw 2:1", "ulaw 2:1");
+    public final static SoundFormat ULawCompression = new SoundFormat("ulaw", "μLaw 2:1", "μLaw 2:1");
+    public final static SoundFormat ALawCompression = new SoundFormat("alaw", "μLaw 2:1", "μlaw 2:1");
     public final static SoundFormat MicrosoftADPCMFormat= new SoundFormat(0x6D730002, "Microsoft ADPCM-ACM code 2", "Microsoft ADPCM-ACM code 2");
     public final static SoundFormat DVIIntelIMAFormat= new SoundFormat(0x6D730011, "DVI/Intel IMAADPCM-ACM code 17", "DVI/Intel IMAADPCM-ACM code 17");
     public final static SoundFormat DVAudioFormat = new SoundFormat("dvca", "DV Audio", "DV Audio");
