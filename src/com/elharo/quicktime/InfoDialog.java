@@ -30,13 +30,14 @@ import quicktime.qd.QDRect;
 import quicktime.std.StdQTConstants;
 import quicktime.std.StdQTException;
 import quicktime.std.movies.Movie;
+import quicktime.std.movies.TimeInfo;
 import quicktime.std.movies.Track;
 import quicktime.std.movies.media.HandlerInfo;
+import quicktime.std.movies.media.MPEGMedia;
 import quicktime.std.movies.media.Media;
 import quicktime.std.movies.media.SoundDescription;
 import quicktime.std.movies.media.SoundMedia;
 import quicktime.std.movies.media.VideoMedia;
-import quicktime.util.QTUtils;
 
 /** 
  * 
@@ -81,6 +82,7 @@ class InfoDialog extends JDialog {
         
         DecimalFormat format = new DecimalFormat();
         format.setMaximumFractionDigits(2);
+        // format.setMinimumFractionDigits(2);
         // can be null????
         try {
             this.addInfo("Source", frame.getFile().getPath());
@@ -99,7 +101,6 @@ class InfoDialog extends JDialog {
             String formatString = "";
             if (videoTrack != null) {
                 Media media = videoTrack.getMedia(); // can be a GenericMedia or a VideoMedia
-                System.err.println(media.getClass().getName());
                 HandlerInfo hi = media.getHandlerDescription(); 
                 int code = hi.subType;
                 
@@ -161,13 +162,38 @@ class InfoDialog extends JDialog {
 
         try {
             if (videoTrack != null) {
-                // for some reason this fails on the Serenity internationla movie trailer
-                double units = videoTrack.getMedia().getDuration();
-                double frames = videoTrack.getMedia().getSampleCount();
-                double unitsPerSecond = videoTrack.getMedia().getTimeScale();
-                double expectedRate = unitsPerSecond * frames / units;
-                String fps = format.format(expectedRate);
-                this.addInfo("FPS", fps);
+                double expectedRate = 0.0;
+                Media media = videoTrack.getMedia();
+                if (media instanceof MPEGMedia) {
+                    
+                    // XXX This isn't perfectly accurate. It's off by a little
+                    // less than a frame a second
+                    // XXX may not work while movie is playing? ight even hang?
+                    long frameCount = 0;
+                    TimeInfo timeInfo = new TimeInfo(0, 0);
+                    int timeScale = media.getTimeScale();
+                    // only count first few seconds
+                    double sampleLength = 12; // seconds
+                    // XXX can probably use technique this to find exportable frames
+                    while ((timeInfo.time >= 0) && (timeInfo.time / timeScale) < sampleLength) {
+                        timeInfo = movie.getNextInterestingTime(StdQTConstants.nextTimeStep, null, timeInfo.time, 1.0f);
+                        frameCount++;
+                    }
+                    frameCount--;
+                    expectedRate = frameCount / sampleLength;
+                    String fps = format.format(expectedRate);
+                    this.addInfo("FPS", fps);
+                }
+                else {
+                    // for some reason this fails on the Serenity international movie trailer
+                    double units = media.getDuration();
+                    double frames = media.getSampleCount();
+                    double unitsPerSecond = videoTrack.getMedia().getTimeScale();
+                    expectedRate = unitsPerSecond * frames / units;
+                    String fps = format.format(expectedRate);
+                    this.addInfo("FPS", fps);
+                }
+                // doesn't really work for MPEGS????
                 String playingFPS = "????";
                 double rate = movie.getRate();
                 if (rate == 0.0) playingFPS = "(Available while playing.)";
