@@ -50,7 +50,7 @@ class InfoDialog extends JDialog {
     private JPanel centerPanel = new JPanel();
     private StringBuffer html = new StringBuffer("<html> <body> <table>");
     
-    // XXX make suire these are onscreen
+    // XXX make sure these are onscreen
     private int initialLeft = 485;
     private int initialTop  = 210;
 
@@ -168,7 +168,7 @@ class InfoDialog extends JDialog {
                     
                     // XXX This isn't perfectly accurate. It's off by a little
                     // less than a frame a second
-                    // XXX may not work while movie is playing? ight even hang?
+                    // XXX may not work while movie is playing? might even hang?
                     /*long frameCount = 0;
                     TimeInfo timeInfo = new TimeInfo(0, 0);
                     int timeScale = media.getTimeScale();
@@ -185,11 +185,15 @@ class InfoDialog extends JDialog {
                     // XXX constant bit rate assumed; is that OK?
                     // This is more accurate than the other approach though still imperfect.
                     // Could manually round
+                    // still seems to have hanging problem when calculating while playing
                     TimeInfo timeInfo = new TimeInfo(0, 0);
                     int timeScale = media.getTimeScale();
                     timeInfo = movie.getNextInterestingTime(StdQTConstants.nextTimeStep, null, timeInfo.time, 1.0f);
                     
                     expectedRate = (double) timeScale / (double) timeInfo.time;
+                    // fudge factor seems to be necessary to account for systematic error
+                    // in this calculation
+                    expectedRate += .007; 
                     
                     String fps = format.format(expectedRate);
                     this.addInfo("FPS", fps);
