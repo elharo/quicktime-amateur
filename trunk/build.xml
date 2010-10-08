@@ -101,9 +101,9 @@
 			 classname="net.sourceforge.jarbundler.JarBundler" /> 
 
 	<target name="app" depends="jar">
-		<delete dir="${distDir}/${Name}.app"/>
+		<mkdir dir="${distDir}/${Name}" />
 
-		<jarbundler dir="${distDir}" jars="${distDir}/${amateurJar}" 
+		<jarbundler dir="${distDir}/${Name}" jars="${distDir}/${amateurJar}" 
 					name="${Name}" 
 					mainclass="com.elharo.quicktime.Main" 
 					infostring="${version}"
@@ -121,7 +121,6 @@
 		  <documenttype name="Amateur Media"
 					extensions="jpg mov mpg mp3 gif png pdf" 
 					role="Viewer"/>
-
 		</jarbundler>
 
 		<!-- QT4J does not support the x86_64 architecture, so we need to remove it.
@@ -131,21 +130,17 @@
 		<exec executable="lipo" os="Mac OS X">
 			<arg value="-remove"/>
 			<arg value="x86_64"/>
-			<arg value="${distDir}/${Name}.app/Contents/MacOS/JavaApplicationStub"/>
+			<arg value="${distDir}/${Name}/${Name}.app/Contents/MacOS/JavaApplicationStub"/>
 			<arg value="-output"/>
-			<arg value="${distDir}/${Name}.app/Contents/MacOS/JavaApplicationStub"/>
+			<arg value="${distDir}/${Name}/${Name}.app/Contents/MacOS/JavaApplicationStub"/>
 		</exec>
 	</target>
  
  	<!-- Create a disk image and ZIP file for distribution -->
 	<target name="dist" depends="app">
 
-		<mkdir dir="${distDir}/${Name}" />
 		<copy todir="${distDir}/${Name}" includeEmptyDirs="no">
 			<fileset dir="." includes="WHATS-NEW.txt" />
-		</copy>
-		<copy todir="${distDir}/${Name}">
-			<fileset dir="${distDir}" excludes="${Name}/**"/>
 		</copy>
 
 		<exec executable="hdiutil" os="Mac OS X">
