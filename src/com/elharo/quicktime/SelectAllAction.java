@@ -35,23 +35,20 @@ class SelectAllAction extends AbstractAction {
 
     SelectAllAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Select All"); 
+        putValue(Action.NAME, "Select All");
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('A', PlayerFrame.menuShortcutKeyMask));
         if (frame == null) this.setEnabled(false);
-    } 
-    
-    
+    }
+
     public void actionPerformed(ActionEvent event) {
         try {
             Movie movie = frame.getMovie();
             movie.setSelection(0, movie.getDuration());
             PlayerMenuBar mb = (PlayerMenuBar) (frame.getJMenuBar());
             mb.selection();
-        }
-        catch (QTException e) {
+        } catch (QTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }
     }
-
 }

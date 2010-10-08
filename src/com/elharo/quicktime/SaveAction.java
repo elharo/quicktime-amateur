@@ -26,26 +26,27 @@ import java.awt.event.InputEvent;
 import javax.swing.*;
 
 import quicktime.io.QTFile;
+import quicktime.std.StdQTConstants;
 
 class SaveAction extends AbstractAction {
 
     private PlayerFrame frame;
-    
-    SaveAction(PlayerFrame frame) {
+
+    SaveAction (PlayerFrame frame) {
         this.frame = frame;
-        if (frame == null) this.setEnabled(false);
-        putValue(Action.NAME, "Save");  
-        putValue(Action.ACCELERATOR_KEY, 
-                 KeyStroke.getKeyStroke('S', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));  
-    } 
-    
-    
-    public void actionPerformed(ActionEvent event) { 
-        QTFile currentFile = frame.getFile();
-        if (currentFile == null) SaveAsAction.saveFrameAs(frame);
-        // XXX fBsyErr problem saving into this file when existing file is open; how to save an Open file?
-        else SaveAsAction.saveMovieIntoFile(frame, currentFile);
+        if (frame == null)
+			this.setEnabled(false);
+        putValue(Action.NAME, "Save");
+        putValue(Action.ACCELERATOR_KEY,
+                 KeyStroke.getKeyStroke('S', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));
     }
 
-        
+    public void actionPerformed (ActionEvent event) {
+        QTFile currentFile = frame.getFile();
+        if (currentFile == null)
+			SaveAsAction.saveFrameAs(frame);
+        // XXX fBsyErr problem saving into this file when existing file is open; how to save an Open file?
+        else
+			SaveAsAction.saveMovieIntoFile(frame, currentFile, StdQTConstants.kQTFileTypeMovie);
+    }
 }

@@ -37,9 +37,8 @@ class CopyCurrentFrameAction extends AbstractAction {
         this.frame = frame;
         putValue(Action.NAME, "Copy Current Frame");
         if (frame == null) this.setEnabled(false);
-    } 
-    
-    
+    }
+
     public void actionPerformed(ActionEvent event) {
         try {
             Image image = frame.getStill();
@@ -51,5 +50,4 @@ class CopyCurrentFrameAction extends AbstractAction {
             e.printStackTrace();
         }
     }
-
 }

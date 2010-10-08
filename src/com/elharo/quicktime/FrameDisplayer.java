@@ -22,31 +22,29 @@ package com.elharo.quicktime;
 
 import java.awt.EventQueue;
 
-
 /**
  * For an explanation of this class see John Zukowski's article at
  * http://java.sun.com/developer/JDCTechTips/2003/tt1208.html
  */
 public class FrameDisplayer implements Runnable {
-    
+
     private final PlayerFrame frame;
-    
+
     private FrameDisplayer(PlayerFrame frame) {
         this.frame = frame;
     }
-    
+
     public void run() {
         int xPosition = WindowList.getX();
         int yPosition = WindowList.getY();
-        
+
         frame.setLocation(xPosition, yPosition);
         WindowList.INSTANCE.add(frame);
-        frame.show();
+        frame.setVisible(true);
     }
-    
+
     public static void display(PlayerFrame frame) {
         Runnable runner = new FrameDisplayer(frame);
         EventQueue.invokeLater(runner);
     }
-    
 }

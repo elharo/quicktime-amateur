@@ -1,53 +1,63 @@
-/* Copyright 2005 Elliotte Rusty Harold
 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
+/**
+ * <b>Bare Bones Browser Launch for Java</b><br>
+ * Utility class to open a web page from a Swing application in the user's default browser.<br>
+ * Supports: Mac OS X, GNU/Linux, Unix, Windows XP/Vista<br>
+ * Example Usage:<code><br> &nbsp; &nbsp;
+ *	 String url = "http://www.google.com/";<br> &nbsp; &nbsp;
+ *	 BareBonesBrowserLaunch.openURL(url);<br></code>
+ * Latest Version: <a href="http://www.centerkey.com/java/browser/">www.centerkey.com/java/browser</a><br>
+ * Author: Dem Pilafian<br>
+ * Public Domain Software -- Free to Use as You Like
+ * @version 2.0, May 26, 2009
+ */
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-You can contact Elliotte Rusty Harold by sending e-mail to
-elharo@metalab.unc.edu. Please include the word "Amateur" in the
-subject line. The Amateur home page is located at http://www.elharo.com/amateur/
-*/
 package com.elharo.quicktime;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-
-import com.apple.eio.FileManager;
+import javax.swing.JOptionPane;
 
 class OpenURLAction extends AbstractAction {
 
-    private String url;
+	static final String[] browsers = { "firefox", "opera", "konqueror", "epiphany",
+					"seamonkey", "galeon", "kazehakase", "mozilla", "netscape" };
 
-    OpenURLAction(String name, String url) {
-        this.url = url;  
-        putValue(Action.NAME, name);  
-    }
-    
-    public void actionPerformed(ActionEvent event) {
-        try {
-            // ???? This is Mac specific. What to do on Windows?
-            FileManager.openURL(url);
-        }
-        catch (IOException e) {
-            // ???? should put up a dialog, JOptionPane
-            // warning user
-            // ???? should probbaly catch classnotfoundexception too
-            e.printStackTrace();
-        }
-    }
+	private String url;
 
+	OpenURLAction (String name, String url) {
+		this.url = url;
+		putValue(Action.NAME, name);
+	}
+
+	public void actionPerformed (ActionEvent event) {
+		String osName = System.getProperty("os.name");
+		try {
+			if (osName.startsWith("Mac OS")) {
+				Class fileMgr = Class.forName("com.apple.eio.FileManager");
+				Method openURL = fileMgr.getDeclaredMethod("openURL", new Class[] {String.class});
+				openURL.invoke(null, new Object[] {url});
+			} else if (osName.startsWith("Windows")) {
+				Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
+			} else { //assume Unix or Linux
+				boolean found = false;
+				for (String browser : browsers) {
+					if (!found) {
+						found = Runtime.getRuntime().exec(new String[] {"which", browser}).waitFor() == 0;
+						if (found)
+							Runtime.getRuntime().exec(new String[] {browser, url});
+					}
+					if (!found)
+						throw new Exception(Arrays.toString(browsers));
+				}
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Error attempting to launch web browser:\n" + e.getLocalizedMessage());
+		}
+	}
 }
+

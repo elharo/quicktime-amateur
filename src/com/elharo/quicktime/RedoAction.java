@@ -30,18 +30,16 @@ import javax.swing.KeyStroke;
 class RedoAction extends AbstractAction {
 
     private PlayerFrame frame;
-    
+
     RedoAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Redo");  
-        putValue(Action.ACCELERATOR_KEY, 
-          KeyStroke.getKeyStroke('Z', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK)); 
+        putValue(Action.NAME, "Redo");
+        putValue(Action.ACCELERATOR_KEY,
+          KeyStroke.getKeyStroke('Z', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));
         if (frame == null) this.setEnabled(false);
-    } 
-    
-    
+    }
+
     public void actionPerformed(ActionEvent event) {
         frame.redo();
     }
-
 }

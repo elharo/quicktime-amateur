@@ -32,21 +32,20 @@ import javax.swing.KeyStroke;
 class PrintAction extends AbstractAction {
 
     private PrinterJob job;
-    
+
     PrintAction(PrinterJob job, Printable printable) {
         this.job = job;
         job.setPrintable(printable);
-        putValue(Action.NAME, "Print...");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('P', PlayerFrame.menuShortcutKeyMask));  
-    } 
-    
+        putValue(Action.NAME, "Print...");
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('P', PlayerFrame.menuShortcutKeyMask));
+    }
+
     public void actionPerformed(ActionEvent event) {
         boolean doPrint = job.printDialog();
         if (doPrint) {
             try {
                 job.print();
-            }
-            catch (PrinterException e) {
+            } catch (PrinterException e) {
                 // ???? Auto-generated catch block
                 e.printStackTrace();
             }

@@ -36,14 +36,14 @@ import quicktime.std.movies.Movie;
 import quicktime.std.movies.media.DataRef;
 
 class URLOpener extends AbstractAction {
-    
+
     // Test with http://www.vids-c.co.uk/vids/jem/jem002.mov
-    
+
     URLOpener() {
-        putValue(Action.NAME, "Open URL...");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('U', PlayerFrame.menuShortcutKeyMask));  
-    } 
-    
+        putValue(Action.NAME, "Open URL...");
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('U', PlayerFrame.menuShortcutKeyMask));
+    }
+
     public void actionPerformed(ActionEvent event) {
         Component source = (JMenuItem) event.getSource();
         Container parent = source.getParent();
@@ -53,7 +53,6 @@ class URLOpener extends AbstractAction {
     }
 
     static void openURL(String url) {
-
         try {
             DataRef ref = new DataRef(url);
             Movie m = Movie.fromDataRef(ref, StdQTConstants.newMovieActive);
@@ -61,8 +60,7 @@ class URLOpener extends AbstractAction {
             f.pack();
             FrameDisplayer.display(f);
             m.start();
-        }
-        catch (QTException ex) {
+        } catch (QTException ex) {
             // ???? do better
             ex.printStackTrace();
         }

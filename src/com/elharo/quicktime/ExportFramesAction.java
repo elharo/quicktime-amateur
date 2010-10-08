@@ -45,9 +45,10 @@ import quicktime.std.movies.media.DataRef;
 import quicktime.std.movies.media.Media;
 
 public class ExportFramesAction extends AbstractAction {
-    
-    private static class ExportFormat {
 
+    private PlayerFrame frame;
+
+    private static class ExportFormat {
         String name;
         int code;
 
@@ -55,47 +56,42 @@ public class ExportFramesAction extends AbstractAction {
             this.name = name;
             this.code = code;
         }
-        
+
         public String toString() { return this.name; }
-        
+
         String getExtension() {
             return this.name.toLowerCase(Locale.ENGLISH);
         }
-
     }
 
-    private PlayerFrame frame;
-
-    ExportFramesAction(PlayerFrame frame) {
+    ExportFramesAction (PlayerFrame frame) {
         this.frame = frame;
         if (frame == null) this.setEnabled(false);
-        putValue(Action.NAME, "Export Frames...");    
-    } 
-    
-    
-    public void actionPerformed(ActionEvent event) {
-        
+        putValue(Action.NAME, "Export Frames...");
+    }
+
+    public void actionPerformed (ActionEvent event) {
         boolean wasPlaying = false;
         try {
             Movie movie = frame.getMovie();
-            
+
             if (movie.getRate() > 0) {
                 movie.stop();
                 wasPlaying = true;
             }
             // ask user for folder????
             File framesFolder = new File("frames");
-            framesFolder.mkdir();
+            if (!framesFolder.mkdir())
+				throw new QTException("Could not create folder 'frames'.");
 
-            
-            Vector choices = new Vector();
+            Vector<ExportFormat> choices = new Vector<ExportFormat>();
             ComponentDescription description = new ComponentDescription(StdQTConstants.graphicsExporterComponentType);
-            for (ComponentIdentifier identifier = ComponentIdentifier.find(null, description); 
-                 identifier != null; 
+            for (ComponentIdentifier identifier = ComponentIdentifier.find(null, description);
+                 identifier != null;
                  identifier = ComponentIdentifier.find(identifier, description)) {
                 choices.add(new ExportFormat(identifier.getInfo().getName(), identifier.getInfo().getSubType()));
             }
-            
+
             JComboBox exportCombo = new JComboBox(choices);
             JOptionPane.showMessageDialog(frame, exportCombo, "Choose export format", JOptionPane.PLAIN_MESSAGE);
             ExportFormat format = (ExportFormat) exportCombo.getSelectedItem();
@@ -108,23 +104,22 @@ public class ExportFramesAction extends AbstractAction {
             /* if CallComponentCanDo ( myGraphicsExporter , kGraphicsExportRequestSettingsSelect ) {
                 exporter.requestSettings();
             } */
-            
+
             try {
                 exporter.requestSettings();
+            } catch (QTException ex) {
+                // no settings for this format
             }
-            catch (QTException ex) {
-                // no settings for this format 
-            }
-            
+
             /* for (int i = 1; i <= movie.getTrackCount(); i++) {
                 Track track = movie.getTrack(i);
                 System.out.println(track.getClass());
             } */
-            
-            Track videoTrack = movie.getIndTrackType(1, 
+
+            Track videoTrack = movie.getIndTrackType(1,
               StdQTConstants.visualMediaCharacteristic, StdQTConstants.movieTrackCharacteristic);
             GraphicsImporter importer = new GraphicsImporter(StdQTConstants.kQTFileTypePicture);
-            
+
             // setup a progress bar????
             Media media = videoTrack.getMedia();
             int sampleCount = media.getSampleCount();
@@ -143,13 +138,14 @@ public class ExportFramesAction extends AbstractAction {
                 QTFile file = new QTFile(new File(framesFolder, frame.getTitle() + time + "." + format.getExtension()));
                 System.out.println(file.getAbsolutePath());
                 exporter.setOutputFile(file);
-                /* if (exporter.canTranscode()) exporter.doExport();
-                else {
+                /* if (exporter.canTranscode()) {
+					exporter.doExport();
+                } else {
                     JOptionPane.showMessageDialog(frame, "Can't transcode this one");
                     break;
                 } */
             }
-            
+
             if (wasPlaying) movie.start();
         }
         catch (QTException ex) {
@@ -157,5 +153,4 @@ public class ExportFramesAction extends AbstractAction {
             ex.printStackTrace();
         }
     }
-
 }

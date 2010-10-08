@@ -25,13 +25,13 @@ import java.io.FileFilter;
 
 public class ImageFileFilter implements FileFilter {
 
+    public static final ImageFileFilter INSTANCE = new ImageFileFilter();
+
     private ImageFileFilter() {}
-    
-    public static ImageFileFilter INSTANCE = new ImageFileFilter();
-    
+
     public boolean accept(File file) {
         // ???? check Mac types?
-        
+
         String name = file.getName();
         if (name.endsWith(".jpg")) return true;
         if (name.endsWith(".gif")) return true;
@@ -41,7 +41,5 @@ public class ImageFileFilter implements FileFilter {
         if (name.endsWith(".pict")) return true;
         if (name.endsWith(".psd")) return true;
         return false;
-        
     }
-
 }

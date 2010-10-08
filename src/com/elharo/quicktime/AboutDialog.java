@@ -38,13 +38,13 @@ import javax.swing.text.JTextComponent;
 
 /**
  * @author Elliotte Rusty Harold
- * @version 1.0d4
  */
+
 class AboutDialog extends JDialog {
 
-    AboutDialog(JFrame parent) {
+    AboutDialog (JFrame parent) {
         super(parent, "About Amateur");
-        
+
         this.getContentPane().setLayout(new BorderLayout());
         this.getContentPane().add(BorderLayout.CENTER, makeMainPane());
         this.getContentPane().add(BorderLayout.WEST, new JPanel());
@@ -54,17 +54,13 @@ class AboutDialog extends JDialog {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
     }
-    
+
     private static Font font = new Font("Dialog", Font.PLAIN, 12);
-    
-    
+
     private JPanel makeMainPane() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.add(
-          BorderLayout.NORTH, 
-          makeTopPane()
-        );
+        panel.add(BorderLayout.NORTH, makeTopPane());
         JTextComponent information = new JTextArea();
         information.setText("Amateur is free software; you can redistribute it and/or modify\n" +
                 "it under the terms of the GNU General Public License as published \n" +
@@ -81,7 +77,7 @@ class AboutDialog extends JDialog {
                 "Boston, MA  02111-1307\nUSA");
         information.setEditable(false);
         information.setBackground(this.getBackground());
-        panel.add(BorderLayout.CENTER, information);        
+        panel.add(BorderLayout.CENTER, information);
         JPanel okPanel = new JPanel();
         okPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         JButton ok = new JButton("OK");
@@ -94,10 +90,10 @@ class AboutDialog extends JDialog {
         okPanel.add(ok);
         getRootPane().setDefaultButton(ok);
         panel.add(BorderLayout.SOUTH, okPanel);
-        
+
         return panel;
     }
-    
+
     private JPanel makeTopPane() {
         JPanel panel = new JPanel();
         LayoutManager layout = new GridLayout(5, 1);
@@ -105,16 +101,15 @@ class AboutDialog extends JDialog {
         panel.add(new JLabel());
         JLabel title = new JLabel("Amateur");
         panel.add(title);
-        
-        JLabel copyright = new JLabel("Copyright 2005, 2006 Elliotte Rusty Harold");
+
+        JLabel copyright = new JLabel("Copyright 2005-2010 Elliotte Rusty Harold, Ulf Dittmer");
         copyright.setFont(font);
         panel.add(copyright);
-        
-        JLabel version = new JLabel("Version: 1.0d6");
+
+        JLabel version = new JLabel("Version: 1.1");
         version.setFont(font);
         panel.add(version);
-        
-        return panel;  
-    }
 
+        return panel;
+    }
 }

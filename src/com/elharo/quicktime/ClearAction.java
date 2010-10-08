@@ -33,18 +33,15 @@ class ClearAction extends AbstractAction {
 
     ClearAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Delete");   
-    } 
-    
-    
+        putValue(Action.NAME, "Delete");
+    }
+
     public void actionPerformed(ActionEvent event) {
         try {
             frame.undoableClear();
-        }
-        catch (QTException ex) {
+        } catch (QTException ex) {
             // ???? Auto-generated catch block
             ex.printStackTrace();
         }
     }
-
 }

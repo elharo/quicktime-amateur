@@ -11,7 +11,7 @@ import quicktime.util.QTUtils;
  */
 public class SoundFormat {
 
-    private static HashMap codes = new HashMap();
+    private static HashMap<Integer, SoundFormat> codes = new HashMap<Integer, SoundFormat>();
 
     // XXX Use singleton instead
     // XXX duplicates VideoFormat, refactor
@@ -20,15 +20,15 @@ public class SoundFormat {
         addType("alac", "Apple Lossless", "Apple Lossless");
         addType("vdva", "DVC", "DVC");
         addType("qclq", "3GP QCELP", "QCELP");
-   }    
-    
+   }
+
     public final static SoundFormat AAC = new SoundFormat(0x6d703461, "AAC", "AAC");
     public final static SoundFormat SoundNotCompressed = new SoundFormat("NONE", "Sound is not compressed", "Uncompressed");
-    public final static SoundFormat _8BitOffsetBinaryFormat = new SoundFormat("raw ", 
+    public final static SoundFormat _8BitOffsetBinaryFormat = new SoundFormat("raw ",
       "Samples are stored uncompressed, in offset-binary format (values range from 0 to 255; 128 is silence). These are stored as 8-bit offset binaries.",
       "8-bit binary");
-    public final static SoundFormat _16BitBigEndianFormat = new SoundFormat("twos", 
-       "Samples are stored uncompressed, in two’s-complement format (sample values range from -128 to 127 for 8-bit audio, and -32768 to 32767 for 1- bit audio; 0 is always silence). These samples are stored in 16-bit big-endian format.", 
+    public final static SoundFormat _16BitBigEndianFormat = new SoundFormat("twos",
+       "Samples are stored uncompressed, in two’s-complement format (sample values range from -128 to 127 for 8-bit audio, and -32768 to 32767 for 1- bit audio; 0 is always silence). These samples are stored in 16-bit big-endian format.",
         "16-bit Integer (Big Endian)");
     public final static SoundFormat _16BitLittleEndianFormat = new SoundFormat("sowt", "16-bit little-endian, two's-complement, AVI uncompressed",
         "16-bit Integer (Little Endian)");
@@ -49,11 +49,11 @@ public class SoundFormat {
     public final static SoundFormat QUALCOMMCompression = new SoundFormat("Qclp", "QUALCOMM PureVoice", "QUALCOMM PureVoice");
     public final static SoundFormat MPEGLayer3Format = new SoundFormat(0x6D730055, "MPEG layer 3, CBR only (pre- QT4.1)", "MP3 Constant Bit Rate");
     public final static SoundFormat FullMPEGLay3Format = new SoundFormat(".mp3", "MPEG layer 3, CBR & VBR (QT4.1 and later)", "MP3 Variable Bit Rate");
-    
+
     private int code;
     private String description;
     private String shortDescription;
-    
+
     private SoundFormat(String code, String description, String shortDescription) {
         this(QTUtils.toOSType(code), description, shortDescription);
     }
@@ -62,17 +62,16 @@ public class SoundFormat {
         this.code = code;
         this.description = description;
         this.shortDescription = shortDescription;
-        codes.put(new Integer(code), this);
+        codes.put(Integer.valueOf(code), this);
     }
 
     public static String getShortDescription(int code) {
-        SoundFormat format = (SoundFormat) codes.get(new Integer(code));
+        SoundFormat format = codes.get(Integer.valueOf(code));
         if (format == null) return "Unrecognized format + 0x" + Integer.toHexString(code);
         return format.shortDescription;
     }
 
     private static void addType(String code, String description, String shortDescription) {
-        codes.put(new Integer(QTUtils.toOSType(code)), new SoundFormat(code, description, shortDescription));
-    }    
-    
+        codes.put(Integer.valueOf(QTUtils.toOSType(code)), new SoundFormat(code, description, shortDescription));
+    }
 }

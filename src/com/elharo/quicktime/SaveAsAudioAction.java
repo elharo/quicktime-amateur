@@ -25,30 +25,37 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.io.File;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JFileChooser;
 
 import quicktime.QTException;
 import quicktime.io.*;
 import quicktime.std.*;
 import quicktime.std.movies.Movie;
 
-class SaveAsAction extends AbstractAction {
+class SaveAsAudioAction extends AbstractAction {
+
+	public static final int AIFF = 		1;
+	public static final int WAV = 		2;
 
     private PlayerFrame frame;
+	private int format;
 
-    SaveAsAction (PlayerFrame frame) {
+    SaveAsAudioAction (PlayerFrame frame, int format) {
         this.frame = frame;
-        if (frame == null) this.setEnabled(false);
-        putValue(Action.NAME, "Save As...");
-        putValue(Action.ACCELERATOR_KEY,
-                 KeyStroke.getKeyStroke('S', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK));
+        this.format = format;
+        if (frame == null)
+			this.setEnabled(false);
+		if (format == AIFF)
+			putValue(Action.NAME, "Save As AIFF...");
+		else if (format == WAV)
+			putValue(Action.NAME, "Save As WAV...");
+		else
+			throw new RuntimeException("SaveAsAudioAction: unsupported filr format: "+format);
     }
 
     public void actionPerformed (ActionEvent event) {
-        saveFrameAs(frame);
-    }
-
-    static void saveFrameAs (PlayerFrame frame) {
         // TODO: need to provide means to choose output format
         // and various other QuickTimeSettings
 
@@ -82,45 +89,9 @@ class SaveAsAction extends AbstractAction {
 		Preferences.setValue(Preferences.CURRENT_DIRECTORY, currentDir);
 
         QTFile file = new QTFile(input);
-        saveMovieIntoFile(frame, file, StdQTConstants.kQTFileTypeMovie);
+		if (format == AIFF)
+			SaveAsAction.saveMovieIntoFile(frame, file, StdQTConstants.kQTFileTypeAIFF);
+		else if (format == WAV)
+			SaveAsAction.saveMovieIntoFile(frame, file, StdQTConstants.kQTFileTypeWave);
 	}
-
-	// "fileType" better be something out of StdQTConstants.kQTFileType..., or else
-
-    static void saveMovieIntoFile(PlayerFrame frame, QTFile file, int fileType) {
-        Movie movie = frame.getMovie();
-        // XXX is null?
-
-        int flags =
-          StdQTConstants.createMovieFileDontCreateResFile |
-          StdQTConstants.createMovieFileDeleteCurFile;
-        try {
-            movie.setProgressProc();
-            movie.convertToFile(file,
-				fileType, // adjust according to type????
-				AmateurConstants.CREATOR_CODE,
-				IOConstants.smSystemScript,
-				flags);
-            // ???? why does this lose sound when converting an MPEG?
-            frame.setFile(file);
-        } catch (StdQTException ex) {
-            if (ex.errorCode() == -2019) {
-                // user cancelled
-                return;
-            }
-            if (ex.errorCode() == -5000) {
-                // filename may be too long
-				JOptionPane.showMessageDialog(null,
-							"Please choose a shorter file name.",
-							"Problem",
-							JOptionPane.INFORMATION_MESSAGE); 
-                return;
-            }
-			System.out.println("??? error code: "+ex.errorCode());
-			ex.printStackTrace();
-        } catch (QTException qte) {
-            // ???? Auto-generated catch block
-			qte.printStackTrace();
-        }
-    }
 }

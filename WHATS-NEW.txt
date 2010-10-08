@@ -1,0 +1,37 @@
+Amateur 1.1, 10/2010
+--------------------
+
+In contrast to earlier releases -which were prepared by Elliotte Harold-,
+this release is by Ulf Dittmer, so that's who you should contact with any questions.
+
+Features
+--------
+
+- added "Save As AIFF" and "Save as WAV" menus (AIFF can be imported into iTunes) 
+- user preferences, as well as the list of recent files, are now stored between app invocations
+  using the Preferences API
+- added option to use AWT FileDialog instead of Swing JFileChooser (works much better on OS X)
+- open info windows are updated with the current time, movie size and FPS during playback
+- support playback of non-editable movies like QTVR
+- works on Windows as well as OS X (other platforms are no-go because of the reliance on QT4J)
+
+Code maintenance
+----------------
+
+- phased out use of deprecated method, and incorporated a number of FindBugs suggestions
+- refactored the code to compile and run on Windows as well as OS X
+- Java 5 is now required; started adding @Override annotations and using generics
+- updated to newer version of browser launch code
+- x86_64 architecture code is removed at build time, since QT4J doesn't support it
+
+Running on Windows
+------------------
+
+If double-clicking the jar file does not work, try running the application from the command line like so:
+
+java -cp Amateur-1.1.jar -Djava.security.manager -Djava.security.policy==AllPermission.policy com.elharo.quicktime.Main
+
+or execute the Amateur.bat file by typing "Amateur" on the command line.
+
+Although a desktop application should have all the permissions it needs, QT4J apparently needs them given explicitly.
+

@@ -1,158 +1,185 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="Amateur" default="compile" basedir=".">
-    
-    <!-- ???? need a help target -->
-    
-    <property name="JUNIT_HOME" value="/Applications/eclipse/plugins/org.junit_3.8.1"/>
-    <property name="QTJava" value="/System/Library/Java/Extensions/QTJava.zip"/>
+<?xml version="1.0" ?>
 
-    <taskdef name="jarbundler"
-             classpath="lib/jarbundler-1.8.1.jar"
-             classname="net.sourceforge.jarbundler.JarBundler" /> 
-    
-    <path id="project.classpath">
-        <pathelement location="bin"/>
-        <pathelement location="${QTJava}"/>
-    </path>
-    
-    <path id="test.classpath">
-        <path refid="project.classpath"/>
-        <pathelement location="${JUNIT_HOME}/junit.jar"/>
-    </path>
-    
-    <target name="init">
-        <tstamp/>
-        <property name="Name"    value="Amateur"/>
-        <property name="name"    value="amateur"/>
-        <property name="version" value="1.0d6"/>
-        <property name="year"    value="2006"/>
-        <mkdir dir="bin"/>
-        <mkdir dir="dist"/>
-    </target>
-    
-    <target name="clean">
-        <delete dir="bin"/>
-        <delete dir="dist"/>
-    </target>
-    
-    <target name="compile" depends="init">
-        <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac destdir="bin">
-            <src path="src"/>
-            <classpath refid="project.classpath"/>
-        </javac>
-    </target>
-    
-    <target name="test">
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="plain"/>
-            <test name="com.elharo.quicktime.tests.AmateurTests"/>
-            <classpath refid="test.classpath"/>
-        </junit>
-    </target>
-    
-    <target name="run">
-        <java fork="yes" classname="com.elharo.quicktime.Main" failonerror="true">
-            <classpath refid="project.classpath"/>
-        </java>
-    </target>
-    
-    <target name="jar" depends="compile">
-       <jar jarfile="dist/${name}-${version}.jar"
-             basedir="bin"
-             index="no"
-             compress="yes"
-             includes="com/elharo/quicktime/*"
-             excludes="com/elharo/quicktime/tests/* com/elharo/quicktime/pantry/*">
+<!--
+   Ant buildfile for the Amateur application
+  -->
 
-          <manifest>
-            <attribute name="Built-By" value="${user.name}"/>
-            <attribute name="Specification-Title"    value="Amateur"/>
-            <attribute name="Specification-Version"  value="${version}"/>
-            <attribute name="Specification-Vendor"   value="Elliotte Rusty Harold"/>
-            <attribute name="Implementation-Title"   value="Amateur"/>
-            <attribute name="Implementation-Version" value="${version}"/>
-            <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
-            <attribute name="Main-Class" value="com.elharo.quicktime.Main"/>
-            <section name="com/elharo/quicktime/">
-              <attribute name="Sealed" value="true"/>
-              <attribute name="Specification-Title"   value="Amateur core classes"/>
-              <attribute name="Implementation-Title"  value="com.elharo.quicktime"/>
-            <attribute name="Implementation-Version" value="${version}"/>
-            <attribute name="Implementation-Vendor"  value="Elliotte Rusty Harold"/>          
-           </section>
-          </manifest>
-        </jar>        
-    </target>
-    
-    <target name="app" depends="jar">
-    	<delete dir="dist/Amateur.app"/>
-        <jarbundler dir="dist" jars="dist/${name}-${version}.jar" 
-                    name="Amateur" 
-                    mainclass="com.elharo.quicktime.Main" 
-                    infostring=" ${version}"
-                    version=" ${version}"
-                    screenmenu="true"
-                    signature="QTAM"
-                    bundleid="com.elharo.quicktime"
-                    icon="Amateur.icns"
-        >
-          <documenttype name="Amateur Media"
-                    mimetypes="image/jpeg image/png image/gif video/mpeg video/quicktime audio/mpeg" 
-                    role="Viewer"/>
+<project name="Amateur" default="jar" basedir=".">
 
-          <documenttype name="Amateur Media"
-                    extensions="jpg mov mpg mp3 gif png pdf" 
-                    role="Viewer"/>
+  <!-- =================================================================== -->
+  <!-- properties                   -->
+  <!-- =================================================================== -->
 
-        </jarbundler>
-    </target>
-    
-    <target name="image" depends="app">
-    	<exec executable="hdiutil" os="Mac OS X">
-    	    <arg value="create"/>
-    	    <arg value="-srcfolder"/>
-    	    <arg value="dist/${Name}.app"/>
-	        <arg value="-ov"/>
-    	    <arg value="dist/${Name}-${version}.dmg"/>
-    	</exec>
-    </target>
+	<property name="Name"		value="Amateur" />
+	<property name="version"	value="1.1" />
+	<property name="amateurJar"	value="${Name}-${version}.jar" />
+	<property name="srcDir"		value="src" />
+	<property name="classDir"	value="classes" />
+	<property name="distDir"	value="dist" />
+	<property name="distZip" 	value="${Name}-${version}.zip" />
+
+	<property name="jarBundlerLib"	value="lib/jarbundler-2.1.0.jar" />
+	<property name="junitLib"		value="lib/junit-3.8.2.jar" />
+
+	<!-- these need to be adapted if QT4J wasn't installed the default way -->
+	<property name="quicktimeLibMac"	value="/System/Library/Java/Extensions/QTJava.zip" />
+	<property name="quicktimeLibWin"	value="C:\Programme\QuickTime\QTSystem\QTJava.zip" />
 
 
-    <taskdef classpath="lib/cobertura.jar" resource="tasks.properties" />
-    
-    <target name="instrument">
-      <cobertura-instrument todir="bin/instrumented-classes">
-        <fileset dir="bin/classes">
-          <include name="**/*.class"/>
-        </fileset>
-      </cobertura-instrument>
-    </target>
-    
-    <target name="cover-test" depends="instrument">
-      <mkdir dir="${testreportdir}" />
-      <junit dir="./" failureproperty="test.failure" printSummary="yes" 
-             fork="true" haltonerror="true">
-        <!-- Normally you can create this task by copying your existing JUnit
-             target, changing its name, and adding these next two lines.
-             You may need to change the locations to point to wherever 
-             you've put the cobertura.jar file and the instrumented classes. -->
-        <classpath location="lib/cobertura.jar"/>
-        <classpath location="bin/instrumented-classes"/>
-        <classpath>
-          <fileset dir="${libdir}">
-            <include name="*.jar" />
-          </fileset>
-          <pathelement path="${testclassesdir}" />
-          <pathelement path="${classesdir}" />
-        </classpath>
-        <batchtest todir="${testreportdir}">
-          <fileset dir="src">
-            <include name="**/*Test.java" />
-          </fileset>
-        </batchtest>
-      </junit>
-    </target>
+  <!-- =================================================================== -->
+  <!-- Define the basic classpath                                          -->
+  <!-- =================================================================== -->
+	<path id="basic.classpath">
+		<pathelement path="${quicktimeLibMac}" />
+		<pathelement path="${quicktimeLibWin}" />
+		<pathelement path="${junitLib}" />
+		<pathelement path="${classDir}" />
+	</path>
 
-    
+
+  <!-- =================================================================== -->
+  <!-- Undo the actions of compile, dist, and run targets                  -->
+  <!-- =================================================================== -->
+  <target name="clean" description="remove class files and distribution zip">
+	<delete dir="${classDir}" />
+	<delete dir="${distDir}" />
+  </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Convert carriage-returns/line-feeds for current OS type             -->
+  <!-- =================================================================== -->
+  <target name="fixcrlf" description="fix carriage returns for OS type">
+	<fixcrlf srcdir="${srcDir}" includes="**/*.java, *.txt, *.xml" />
+  </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Compile the framework, extras, examples, and tests                  -->
+  <!-- =================================================================== -->
+  <target name="compile">
+	<mkdir dir="${classDir}" />
+
+	<javac srcdir="${srcDir}"
+			includes="**/*.java"
+			destdir="${classDir}"
+			source="1.5"
+			target="1.5"
+			includeantruntime="false"
+			debug="on">
+		<classpath refid="basic.classpath" />
+		<!--
+		<compilerarg value="-Xlint"/>
+		-->
+	</javac>
+  </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Jar the framework, extras, examples, tests                          -->
+  <!-- =================================================================== -->
+
+  <target name="jar" depends="compile" description="generate the basic jar file">
+
+	<mkdir dir="${distDir}" />
+
+	<jar jarfile="${distDir}/${amateurJar}" basedir="${classDir}">
+		<manifest>
+			<attribute name="Built-By" value="${user.name}"/>
+			<attribute name="Main-Class" value="com.elharo.quicktime.Main"/>
+		</manifest>
+	</jar>
+  </target>
+ 
+
+  <!-- =================================================================== -->
+  <!--  create the OS X application										  -->
+  <!-- =================================================================== -->
+
+	<taskdef name="jarbundler"
+			 classpath="${jarBundlerLib}"
+			 classname="net.sourceforge.jarbundler.JarBundler" /> 
+
+	<target name="app" depends="jar">
+		<delete dir="${distDir}/${Name}.app"/>
+
+		<jarbundler dir="${distDir}" jars="${distDir}/${amateurJar}" 
+					name="${Name}" 
+					mainclass="com.elharo.quicktime.Main" 
+					infostring="${version}"
+					version=" ${version}"
+					jvmversion="1.5+"
+					screenmenu="true"
+					signature="QTAM"
+					bundleid="com.elharo.quicktime"
+					icon="Amateur.icns"
+		>
+		  <documenttype name="Amateur Media"
+					mimetypes="image/jpeg image/png image/gif video/mpeg video/quicktime audio/mpeg" 
+					role="Viewer"/>
+
+		  <documenttype name="Amateur Media"
+					extensions="jpg mov mpg mp3 gif png pdf" 
+					role="Viewer"/>
+
+		</jarbundler>
+
+		<!-- QT4J does not support the x86_64 architecture, so we need to remove it.
+
+			Use "lipo -info dist/Amateur.app/Contents/MacOS/JavaApplicationStub" to see the architectures in the stub.
+		-->
+		<exec executable="lipo" os="Mac OS X">
+			<arg value="-remove"/>
+			<arg value="x86_64"/>
+			<arg value="${distDir}/${Name}.app/Contents/MacOS/JavaApplicationStub"/>
+			<arg value="-output"/>
+			<arg value="${distDir}/${Name}.app/Contents/MacOS/JavaApplicationStub"/>
+		</exec>
+	</target>
+ 
+ 	<!-- Create a disk image and ZIP file for distribution -->
+	<target name="dist" depends="app">
+
+		<mkdir dir="${distDir}/${Name}" />
+		<copy todir="${distDir}/${Name}" includeEmptyDirs="no">
+			<fileset dir="." includes="WHATS-NEW.txt" />
+		</copy>
+		<copy todir="${distDir}/${Name}">
+			<fileset dir="${distDir}" excludes="${Name}/**"/>
+		</copy>
+
+		<exec executable="hdiutil" os="Mac OS X">
+			<arg value="create"/>
+			<arg value="-srcfolder"/>
+			<arg value="${distDir}/${Name}"/>
+			<arg value="-ov"/>
+			<arg value="${distDir}/${Name}-${version}.dmg"/>
+		</exec>
+
+		<delete dir="${distDir}/${Name}" />
+
+		<zip destfile="${distDir}/${distZip}">
+			<fileset dir="." includes="WHATS-NEW.txt"/>
+			<fileset dir="." includes="AllPermission.policy"/>
+			<fileset dir="." includes="${Name}.bat"/>
+			<fileset dir="${distDir}" includes="${amateurJar}"/>
+		</zip>
+	</target>
+
+
+  <!-- =================================================================== -->
+  <!-- run the application -->
+  <!-- =================================================================== -->
+
+	<target name="run">
+		<java fork="yes" classname="com.elharo.quicktime.Main" failonerror="true">
+			<classpath refid="basic.classpath"/>
+			<!-- Windows needs the AllPermission, I'm not sure why.
+				Desktop apps should be allowed to do everything anyway. -->
+			<jvmarg value="-Djava.security.manager" /> 
+			<jvmarg value="-Djava.security.policy==AllPermission.policy" />
+		</java>
+	</target>
+
 </project>
+

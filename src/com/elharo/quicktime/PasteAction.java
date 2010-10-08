@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import quicktime.QTException;
@@ -34,21 +35,22 @@ class PasteAction extends AbstractAction {
 
     PasteAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Paste");  
+        putValue(Action.NAME, "Paste");
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('V', PlayerFrame.menuShortcutKeyMask));
-        if (frame == null) this.setEnabled(false);
-    } 
-    
-    
+        if (frame == null)
+			this.setEnabled(false);
+    }
+
     public void actionPerformed(ActionEvent event) {
         try {
             frame.undoablePaste();
             frame.pack();
-        }
-        catch (QTException e) {
-            // ???? Auto-generated catch block
-            e.printStackTrace();
+        } catch (QTException qtex) {
+			if (qtex.errorCode() == -102) {
+				JOptionPane.showMessageDialog(null, "The contents of the clipboard can not be pasted into a movie.", "Error", JOptionPane.ERROR_MESSAGE); 
+			} else {
+				qtex.printStackTrace();
+			}
         }
     }
-
 }

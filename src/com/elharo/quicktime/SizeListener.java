@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 class SizeListener implements ActionListener {
-    
+
     private double ratio;
     private PlayerFrame frame;
 
@@ -16,6 +16,5 @@ class SizeListener implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         frame.resize(ratio);
     }
-
 }
-    
+

@@ -35,16 +35,16 @@ public class PresentMovieAction extends AbstractAction {
     PresentMovieAction(PlayerFrame frame) {
         putValue(Action.NAME, "Present Movie...");
         putValue(
-          Action.ACCELERATOR_KEY, 
+          Action.ACCELERATOR_KEY,
           KeyStroke.getKeyStroke('F', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK)
         );
-        if (frame == null) this.setEnabled(false);
-        else dialog = new PresentMovieDialog(frame);
-    } 
-    
-    
+        if (frame == null)
+			this.setEnabled(false);
+        else
+			dialog = new PresentMovieDialog(frame);
+    }
+
     public void actionPerformed(ActionEvent event) {
         dialog.setVisible(true);
     }
-
 }

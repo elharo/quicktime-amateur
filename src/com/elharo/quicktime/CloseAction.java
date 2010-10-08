@@ -31,32 +31,29 @@ import javax.swing.KeyStroke;
 class CloseAction extends AbstractAction {
 
     private Frame frame;
-    
+
     CloseAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Close");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('W', PlayerFrame.menuShortcutKeyMask));  
+        putValue(Action.NAME, "Close");
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('W', PlayerFrame.menuShortcutKeyMask));
         if (frame == null) this.setEnabled(false);
     }
 
     public void actionPerformed(ActionEvent event) {
         if (frame.isActive()) {
-            frame.hide();
+            frame.setVisible(false);
             frame.dispose();
             WindowList.INSTANCE.remove(frame);
-        }
-        else {
+        } else {
             // assume there's a dialog on top and close it
             Window[] dialogs = frame.getOwnedWindows();
             for (int i = 0; i < dialogs.length; i++) {
                 if (dialogs[i].isActive()) {
-                    dialogs[i].hide();
+                    dialogs[i].setVisible(false);
                     dialogs[i].dispose();
                     break;
                 }
             }
-            
         }
     }
-
 }
