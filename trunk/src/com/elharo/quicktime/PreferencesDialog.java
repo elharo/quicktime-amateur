@@ -22,61 +22,78 @@ package com.elharo.quicktime;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
+import java.awt.event.*;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
-
-/** 
- * 
+/**
  * @author Elliotte Rusty Harold
- *
  */
+
 class PreferencesDialog extends JDialog {
 
-     // XXX File/Close needs to work with this dialog
-    
-    PreferencesDialog(PlayerFrame frame) {
-        
+	private JTextField numberRecentItems;
+
+    PreferencesDialog (JFrame frame) {
         super(frame, "General");
         this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
-        
+
         JPanel movies = getPanel("Movies:");
         movies.add(getCheckbox(Preferences.OPEN_MOVIES_IN_NEW_PLAYERS));
         movies.add(getCheckbox(Preferences.AUTOMATICALLY_PLAY_MOVIES_WHEN_OPENED));
         movies.add(getCheckbox(Preferences.USE_HIGH_QUALITY_VIDEO));
-        
+
         this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
         this.getContentPane().add(movies);
-        
+
         JPanel sound = getPanel("Sound:");
         sound.add(getCheckbox(Preferences.PLAY_SOUND_IN_FRONTMOST_PLAYER_ONLY));
         sound.add(getCheckbox(Preferences.PLAY_SOUND_WHEN_APPLICATION_IS_IN_BACKGROUND));
         sound.add(getCheckbox(Preferences.SHOW_EQUALIZER));
-        
+
         this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
         this.getContentPane().add(sound);
-        
+
         JPanel other = getPanel("Other:");
         other.add(getCheckbox(Preferences.SHOW_CONTENT_GUIDE_AUTOMATICALLY));
         other.add(getCheckbox(Preferences.PAUSE_MOVIES_BEFORE_SWITCHING_USERS));
+        other.add(getCheckbox(Preferences.USE_AWT_FILE_DIALOG));
 
         this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
-        this.getContentPane().add(other);        
+        this.getContentPane().add(other);
         this.getContentPane().add(getNumberOfRecentItems());
-        
+
+        this.getContentPane().add(Box.createRigidArea(new Dimension(0, 20)));
+
+		JPanel btns = new JPanel();
+		btns.setLayout(new BoxLayout(btns, BoxLayout.X_AXIS));
+		JButton ok = new JButton("OK");
+		ok.addActionListener(new ActionListener() {
+			public void actionPerformed (ActionEvent e) { action(); } });
+		btns.add(Box.createHorizontalGlue());
+		btns.add(ok);
+		btns.add(Box.createHorizontalGlue());
+
+		getContentPane().add(btns);
+		getContentPane().add(Box.createRigidArea(new Dimension(0, 10)));
+
         // XXX position should be remembered if user moves it; could handle by
         // not disposing and recreating dialog; just hide and show
-        
+
         this.pack();
         Utilities.centerOnScreen(this);
         this.setResizable(false);
-        
     }
 
-    private JPanel getPanel(String label) {
+	private void action() {
+		try {
+			Preferences.setValue(Preferences.NUMBER_OF_RECENT_ITEMS,
+								Integer.parseInt(numberRecentItems.getText()));
+		} catch (NumberFormatException nfex) { }
+		dispose();
+	}
 
+    private JPanel getPanel (String label) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
@@ -88,53 +105,32 @@ class PreferencesDialog extends JDialog {
         labelPanel.add(Box.createHorizontalGlue());
         panel.add(labelPanel);
         return panel;
-        
     }
 
-    
-    private JPanel getCheckbox(final String label) {
-
+    private JPanel getCheckbox (final String label) {
         JPanel p1 = new JPanel();
         BoxLayout layout = new BoxLayout(p1, BoxLayout.PAGE_AXIS);
         p1.setLayout(layout);
         final JCheckBox checkbox = new JCheckBox(label);
-        checkbox.setSelected(Preferences.getInstance().getBooleanValue(label));
+        checkbox.setSelected(Preferences.getBooleanValue(label));
         checkbox.addItemListener(new ItemListener() {
-
             public void itemStateChanged(ItemEvent event) {
-                Preferences.getInstance().setValue(label, checkbox.isSelected());
+                Preferences.setValue(label, checkbox.isSelected());
             }
-            
         });
-        
         p1.add(Box.createRigidArea(new Dimension(25, 0)));
         p1.add(checkbox);
         return p1;
     }
 
     private JPanel getNumberOfRecentItems() {
-
         JPanel p1 = new JPanel();
         p1.setLayout(new FlowLayout(FlowLayout.LEFT));
-        
         p1.add(Box.createRigidArea(new Dimension(25, 0)));
         p1.add(new JLabel("Number of recent items: "));
-        JComboBox choice = new JComboBox();
-        choice.addItem("None");
-        choice.addItem("5");
-        choice.addItem("10");
-        choice.addItem("15");
-        choice.addItem("20");
-        choice.addItem("30");
-        choice.addItem("50");
-        choice.setSelectedIndex(2);
-        
-// XXX need an itemListener
-        
-        p1.add(choice);
+		numberRecentItems = new JTextField(4);
+		numberRecentItems.setText(""+Preferences.getIntValue(Preferences.NUMBER_OF_RECENT_ITEMS));
+        p1.add(numberRecentItems);
         return p1;
     }
-
-
-
 }

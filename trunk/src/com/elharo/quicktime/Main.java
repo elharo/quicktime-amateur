@@ -22,24 +22,43 @@ package com.elharo.quicktime;
 
 import java.awt.EventQueue;
 
-import quicktime.QTException;
+import quicktime.*;
 
 public class Main {
 
-    public static void main(String[] args) throws QTException {
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Amateur");
-        System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("apple.awt.showGrowBox", "true");
-        System.setProperty("com.apple.eawt.CocoaComponent.CompatibilityMode", "false"); 
-        QuicktimeInit.setup();
-        final PlayerFrame hidden = new PlayerFrame(true);
-        
-        // first frame is just for menu bar
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                hidden.show();
-            }
-        });
-    }    
-    
+	public final static String OS = System.getProperty("os.name");
+	public final static boolean isMac = (OS.indexOf("Mac") != -1);
+	public final static boolean isWin = (OS.indexOf("Win") != -1);
+
+    public static void main (String[] args) throws QTException {
+		if (isMac) {
+			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Amateur");
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+			System.setProperty("apple.awt.showGrowBox", "true");
+			System.setProperty("com.apple.eawt.CocoaComponent.CompatibilityMode", "false");
+		}
+
+		setupQuickTime();
+
+        // the first frame is just for the menu bar
+		PlayerFrame hidden = null;
+		if (isMac) {
+			hidden = new PlayerFrame(true);
+		} else {
+			hidden = new PlayerFrame();
+		}
+		hidden.setVisible(true);
+    }
+
+    private static void setupQuickTime() throws QTException {
+		QTSession.open();
+
+		Thread shutdownHook = new Thread() {
+			public void run() {
+				QTSession.close();
+			}
+		};
+		Runtime.getRuntime().addShutdownHook(shutdownHook);
+    }
 }
+

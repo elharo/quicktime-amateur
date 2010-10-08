@@ -28,28 +28,23 @@ import javax.swing.JDialog;
 import javax.swing.KeyStroke;
 
 class AVControlsAction extends AbstractAction {
-    
-    
+
     // XXX implement change from Show A/V controls to Hide A/V controls in all windows'
     // menubars when the A/V controls are shown
-    
+
     // XXX this is flaky because we don't really use separate dialogs for each frame
     private PlayerFrame frame;
-    
+
     AVControlsAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Show A/V Controls");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('K', PlayerFrame.menuShortcutKeyMask));  
-    } 
-    
-    
-    public void actionPerformed(ActionEvent event) {        
-       
+        putValue(Action.NAME, "Show A/V Controls");
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('K', PlayerFrame.menuShortcutKeyMask));
+    }
+
+    public void actionPerformed(ActionEvent event) {
         // cache this in the frame????
         JDialog dialog = new AVControlsPalette(frame);
         // use event queue????
         dialog.setVisible(true);
-        
     }
-
 }

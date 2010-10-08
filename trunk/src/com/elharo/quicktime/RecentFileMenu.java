@@ -11,7 +11,7 @@ import javax.swing.JMenu;
 class RecentFileMenu extends JMenu {
     
     // xxx synchronize this????
-    private static List instances = new ArrayList();
+    private static List<RecentFileMenu> instances = new ArrayList<RecentFileMenu>();
 
     RecentFileMenu() {
         super("Recent Files");
@@ -25,23 +25,16 @@ class RecentFileMenu extends JMenu {
 
     static void update() {
         // threading issues
-        Iterator iterator = instances.iterator();
-        while (iterator.hasNext()) {
-            RecentFileMenu menu = (RecentFileMenu) iterator.next();
+		for (RecentFileMenu menu : instances) {
             menu.removeAll();
             menu.updateMe();
         }
     }
     
-    
     private void updateMe() {
-        Iterator files = RecentFileList.INSTANCE.iterator();
-        while (files.hasNext()) {
-            File f = (File) files.next();
+		for (File f : RecentFileList.INSTANCE.values()) {
             insert(new RecentFileAction(f), 0);
         }
         // XXX add clear menu if necessary
     }
-    
-    
 }

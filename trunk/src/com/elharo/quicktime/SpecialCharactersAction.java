@@ -9,19 +9,16 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 class SpecialCharactersAction extends AbstractAction {
-    
-    private static String command = 
-      "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/CharPaletteServer.app/Contents/MacOS/CharPaletteServer";
-    
-    
-    SpecialCharactersAction() {
-        putValue(Action.NAME, "Special Characters...");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('T', PlayerFrame.menuShortcutKeyMask | InputEvent.ALT_MASK));
-    }    
-    
-    
-    public void actionPerformed(ActionEvent evt) {
 
+    private static String command =
+      "/System/Library/Components/CharacterPalette.component/Contents/SharedSupport/CharPaletteServer.app/Contents/MacOS/CharPaletteServer";
+
+    SpecialCharactersAction() {
+        putValue(Action.NAME, "Special Characters...");
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('T', PlayerFrame.menuShortcutKeyMask | InputEvent.ALT_MASK));
+    }
+
+    public void actionPerformed(ActionEvent evt) {
         try {
             Process process = Runtime.getRuntime().exec("ps -awwx");
             InputStream in = new BufferedInputStream(process.getInputStream());
@@ -31,13 +28,9 @@ class SpecialCharactersAction extends AbstractAction {
                 if (s.indexOf(command) != -1) return;
             }
             Runtime.getRuntime().exec(command);
-        } 
-        catch (Exception ex) {
+        } catch (Exception ex) {
             // TODO Auto-generated catch block
             ex.printStackTrace();
         }
-
     }
-
-    
 }

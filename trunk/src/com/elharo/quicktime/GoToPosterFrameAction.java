@@ -33,27 +33,25 @@ import quicktime.std.movies.MovieController;
 class GoToPosterFrameAction extends AbstractAction {
 
     private MovieController controller;
-    
+
     public GoToPosterFrameAction(PlayerFrame frame) {
-        if (frame == null) setEnabled(false);
-        else this.controller = frame.getController();
-        putValue(Action.NAME, "Go To Poster Frame");  
+        if (frame == null)
+			setEnabled(false);
+        else
+			this.controller = frame.getController();
+        putValue(Action.NAME, "Go To Poster Frame");
     }
 
     public void actionPerformed(ActionEvent event) {
-        
         try {
             Movie movie = controller.getMovie();
-            int posterTime = movie.getPosterTime(); 
+            int posterTime = movie.getPosterTime();
             TimeRecord tr = new TimeRecord(movie.getTimeScale(), posterTime);
             movie.setTime(tr);
             controller.movieChanged();
-        }
-        catch (QTException ex) {
+        } catch (QTException ex) {
             // ???? Auto-generated catch block
             ex.printStackTrace();
         }
-        
     }
-
 }

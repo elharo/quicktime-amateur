@@ -34,22 +34,19 @@ class SelectNoneAction extends AbstractAction {
 
     SelectNoneAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Select None"); 
+        putValue(Action.NAME, "Select None");
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('B', PlayerFrame.menuShortcutKeyMask));
         if (frame == null) this.setEnabled(false);
-    } 
-    
-    
+    }
+
     public void actionPerformed(ActionEvent event) {
         try {
             frame.getMovie().setSelection(0, 0);
             PlayerMenuBar mb = (PlayerMenuBar) (frame.getJMenuBar());
             mb.deselection();
-        }
-        catch (QTException e) {
+        } catch (QTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }
     }
-
 }

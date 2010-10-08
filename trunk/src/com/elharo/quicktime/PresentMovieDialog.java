@@ -20,23 +20,10 @@ subject line. The Amateur home page is located at http://www.elharo.com/amateur/
 */
 package com.elharo.quicktime;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.*;
 
 public class PresentMovieDialog extends JDialog {
 
@@ -44,11 +31,10 @@ public class PresentMovieDialog extends JDialog {
     private JButton playButton = new JButton("Play");
     private JButton cancelButton = new JButton("Cancel");
     private JComboBox size = new JComboBox();
-    
+
     PresentMovieDialog(PlayerFrame frame) {
-        
         super(frame, "Present Movie");
-        
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         JPanel buttons = new JPanel();
@@ -57,7 +43,7 @@ public class PresentMovieDialog extends JDialog {
         buttons.add(playButton);
         this.getRootPane().setDefaultButton(playButton);
         mainPanel.add(BorderLayout.SOUTH, buttons);
-        
+
         JPanel radios = new JPanel();
         ButtonGroup group = new ButtonGroup();
         JRadioButton movie = new JRadioButton("Movie", true);
@@ -68,11 +54,11 @@ public class PresentMovieDialog extends JDialog {
         radios.add(movie);
         radios.add(slideshow);
         radios.add(label);
-        
+
         radios.setLayout(new GridLayout(3, 1));
-        
+
         mainPanel.add(BorderLayout.CENTER, radios);
-        
+
         JPanel north = new JPanel();
         north.setLayout(new FlowLayout(FlowLayout.LEFT));
         north.add(new JLabel("Movie Size: "));
@@ -83,7 +69,7 @@ public class PresentMovieDialog extends JDialog {
         size.addItem("Current");
         north.add(size);
         mainPanel.add(BorderLayout.NORTH, north);
-        
+
         GridBagLayout layout = new GridBagLayout();
         this.getContentPane().setLayout(layout);
         GridBagConstraints constraints = new GridBagConstraints();
@@ -94,26 +80,19 @@ public class PresentMovieDialog extends JDialog {
         this.getContentPane().add(mainPanel);
         this.pack();
         this.center();
-        
-        cancelButton.addActionListener(new ActionListener() {
 
+        cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 setVisible(false);
             }
-            
         });
-        
     }
-    
-    
-    private void center() {
 
+    private void center() {
         Dimension screenSize = getToolkit().getScreenSize();
         Dimension dialogSize = this.getSize();
         int top = (screenSize.height - dialogSize.height)/2;
         int left = (screenSize.width - dialogSize.width)/2;
         this.setLocation(left, top);
-        
     }
-
 }

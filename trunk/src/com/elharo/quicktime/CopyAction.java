@@ -35,21 +35,18 @@ class CopyAction extends AbstractAction {
 
     CopyAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Copy");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('C', PlayerFrame.menuShortcutKeyMask));  
-    } 
-    
-    
+        putValue(Action.NAME, "Copy");
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('C', PlayerFrame.menuShortcutKeyMask));
+    }
+
     public void actionPerformed(ActionEvent event) {
         try {
             Movie original = frame.getMovie();
             Movie copy = original.copySelection();
             copy.putOnScrap(0);
-        }
-        catch (QTException e) {
+        } catch (QTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }
     }
-
 }

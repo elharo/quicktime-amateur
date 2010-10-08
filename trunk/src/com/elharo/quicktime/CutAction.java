@@ -34,19 +34,16 @@ class CutAction extends AbstractAction {
 
     CutAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Cut");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('X', PlayerFrame.menuShortcutKeyMask));  
-    } 
-    
-    
+        putValue(Action.NAME, "Cut");
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('X', PlayerFrame.menuShortcutKeyMask));
+    }
+
     public void actionPerformed(ActionEvent event) {
         try {
             frame.undoableCut();
-        }
-        catch (QTException e) {
+        } catch (QTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }
     }
-
 }

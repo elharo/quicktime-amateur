@@ -33,10 +33,9 @@ import quicktime.std.StdQTException;
 public class PlayAllMoviesAction extends AbstractAction {
 
     public PlayAllMoviesAction() {
-        putValue(Action.NAME, "Play All Movies");  
+        putValue(Action.NAME, "Play All Movies");
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, PlayerFrame.menuShortcutKeyMask));  
     }
-
 
     public void actionPerformed(ActionEvent arg0) {
         Iterator iterator = WindowList.INSTANCE.iterator();
@@ -44,12 +43,10 @@ public class PlayAllMoviesAction extends AbstractAction {
             PlayerFrame frame = (PlayerFrame) iterator.next();
             try {
                 frame.play();
-            }
-            catch (StdQTException e) {
+            } catch (StdQTException e) {
                 // ???? Auto-generated catch block
                 e.printStackTrace();
             }
         }
     }
-
 }

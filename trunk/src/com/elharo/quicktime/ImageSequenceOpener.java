@@ -49,32 +49,32 @@ import quicktime.util.QTUtils;
 import quicktime.util.RawEncodedImage;
 
 class ImageSequenceOpener extends AbstractAction {
-    
+
     private static int[] types = new int[4];
     private ImageSequenceDialog dialog;
-    private int unitsPerSecond = 30; // timeScale  
-    
+    private int unitsPerSecond = 30; // timeScale
+
     static {
         types[0] = QTUtils.toOSType("JPEG");
         types[1] = QTUtils.toOSType("GIFf");
         types[2] = QTUtils.toOSType("PICT");
         types[3] = QTUtils.toOSType("PNGf");
     }
-    
+
     ImageSequenceOpener(Frame frame) {
         dialog = new  ImageSequenceDialog(frame);
         putValue(Action.NAME, "Open Image Sequence...");
         putValue(
-          Action.ACCELERATOR_KEY, 
+          Action.ACCELERATOR_KEY,
           KeyStroke.getKeyStroke('O', PlayerFrame.menuShortcutKeyMask | InputEvent.SHIFT_MASK)
-        );  
-    } 
-    
+        );
+    }
+
     public void actionPerformed(ActionEvent event) {
 
         try {
             QTFile firstImage = QTFile.standardGetFilePreview(types);
-            
+
             String name = firstImage.getName();
             int extensionIndex = name.lastIndexOf('.');
             String extension = name.substring(name.lastIndexOf('.'));
@@ -84,16 +84,16 @@ class ImageSequenceOpener extends AbstractAction {
                     char c = name.charAt(i);
                     if (c >= '0' && c <= '9') s = c + s;
                 }
-                
+
             }
-            
+
             File[] chosen;
-            
+
             try {
                 int numberOfDigits = s.length();
                 int first = Integer.parseInt(s);
                 String prefix = name.substring(0, name.indexOf(s));
-                ArrayList list = new ArrayList();
+                ArrayList<File> list = new ArrayList<File>();
                 while (true) {
                     String number = String.valueOf(first);
                     while (number.length() < numberOfDigits) number = "0" + number;
@@ -105,14 +105,14 @@ class ImageSequenceOpener extends AbstractAction {
                 }
                 chosen = new File[list.size()];
                 for (int i = 0; i < chosen.length; i++) {
-                    chosen[i] = (File) list.get(i);
+                    chosen[i] = list.get(i);
                     System.err.println(chosen[i]);
                 }
             }
             catch (Exception ex) {
                 chosen = firstImage.getParentFile().listFiles(ImageFileFilter.INSTANCE);
             }
-            
+
             int delay = getDelay();
 
             // XXX should I delete the temp file later?
@@ -121,65 +121,63 @@ class ImageSequenceOpener extends AbstractAction {
               StdQTConstants.kMoviePlayer, // XXX change this to Amateur code
               StdQTConstants.createMovieFileDeleteCurFile |
               StdQTConstants.createMovieFileDontCreateResFile);
-            
+
             GraphicsImporter importer = new GraphicsImporter(firstImage);
-            
+
             int trackWidth  = importer.getBoundsRect().getWidth();
             int trackHeight = importer.getBoundsRect().getHeight();
             int volume = 0;
             QDRect bounds = new QDRect(0, 0, trackWidth, trackHeight);
-            
+
             Track videoTrack = movie.addTrack(trackWidth, trackHeight, volume);
             QDGraphics offscreen = new QDGraphics(bounds);
             importer.setGWorld(offscreen, null);
-            VideoMedia videoMedia = new VideoMedia(videoTrack, unitsPerSecond);            
+            VideoMedia videoMedia = new VideoMedia(videoTrack, unitsPerSecond);
             videoMedia.beginEdits();
-             
+
             int sorensonCODEC = QTUtils.toOSType("SVQ3");
-            int rawImageSize = QTImage.getMaxCompressionSize(offscreen, bounds, 
-              offscreen.getPixMap().getPixelSize(), StdQTConstants.codecHighQuality, 
+            int rawImageSize = QTImage.getMaxCompressionSize(offscreen, bounds,
+              offscreen.getPixMap().getPixelSize(), StdQTConstants.codecHighQuality,
               sorensonCODEC, CodecComponent.bestFidelityCodec);
             QTHandle imageHandle = new QTHandle(rawImageSize, true);
             imageHandle.lock(); // XXX Do I ever need to unlock this?
             RawEncodedImage rawImage = RawEncodedImage.fromQTHandle(imageHandle);
-             
+
             CSequence seq = new CSequence (offscreen, bounds, offscreen.getPixMap().getPixelSize( ),
               sorensonCODEC, CodecComponent.bestFidelityCodec,
-              StdQTConstants.codecHighQuality, 0, // no temporal compression 
+              StdQTConstants.codecHighQuality, 0, // no temporal compression
               0, null, StdQTConstants.codecFlagUpdatePrevious);
-             
+
             ImageDescription imgDesc = seq.getDescription();
 
             ProgressMonitor monitor = new ProgressMonitor(
               (Component) event.getSource(), "Building movie", "test", 0, chosen.length-1);
 
             Matrix matrix = new Matrix();
-            for (int i=0; i < chosen.length; i++) { 
+            for (int i=0; i < chosen.length; i++) {
                 QTFile imageFile = new QTFile(chosen[i]);
                 monitor.setNote("Processing " + imageFile.getName());
-                
-                // If a file does not match the original size we need to 
-                // resize it
+
+                // If a file does not match the original size we need to resize it
                 importer.setDataFile(imageFile);
                 QDRect newBounds = importer.getBoundsRect();
                 matrix.map(newBounds, bounds);
                 importer.setMatrix(matrix);
                 importer.setDestRect(bounds);
                 importer.draw();
-                CompressedFrameInfo cfInfo = seq.compressFrame(offscreen, bounds, 
+                CompressedFrameInfo cfInfo = seq.compressFrame(offscreen, bounds,
                   StdQTConstants.codecFlagUpdatePrevious, rawImage);
                 boolean syncSample = cfInfo.getSimilarity() == 0;
                 int flags = syncSample ? 0 : StdQTConstants.mediaSampleNotSync;
-                videoMedia.addSample(imageHandle, 0, cfInfo.getDataSize(), delay,
-                  imgDesc, 1, flags);
+                videoMedia.addSample(imageHandle, 0, cfInfo.getDataSize(), delay, imgDesc, 1, flags);
                 monitor.setProgress(i);
             }
-                   
+
             videoMedia.endEdits();
-            videoTrack.insertMedia(0,  0,  videoMedia.getDuration(),  1); 
-            
+            videoTrack.insertMedia(0,  0,  videoMedia.getDuration(),  1);
+
             PlayerFrame f = new PlayerFrame(movie);
-            f.show();
+            f.setVisible(true);
             // start playing????
         }
         catch (QTIOException ex) {
@@ -196,7 +194,6 @@ class ImageSequenceOpener extends AbstractAction {
             // ???? Could not create temp file
             ex.printStackTrace();
         }
-        
     }
 
     private int getDelay() {
@@ -204,6 +201,5 @@ class ImageSequenceOpener extends AbstractAction {
         double fps = dialog.getRate();
         // convert to current time scale
         return (int) (unitsPerSecond / fps);
-    } 
-
+    }
 }

@@ -29,17 +29,15 @@ import javax.swing.KeyStroke;
 class UndoAction extends AbstractAction {
 
     private PlayerFrame frame;
-    
+
     UndoAction(PlayerFrame frame) {
         this.frame = frame;
-        putValue(Action.NAME, "Undo");  
+        putValue(Action.NAME, "Undo");
         putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('Z', PlayerFrame.menuShortcutKeyMask));
         if (frame == null) this.setEnabled(false);
-    } 
-    
-    
+    }
+
     public void actionPerformed(ActionEvent event) {
         frame.undo();
     }
-
 }

@@ -30,13 +30,11 @@ import javax.swing.KeyStroke;
 class ShowContentGuideAction extends AbstractAction {
 
     ShowContentGuideAction() {
-        putValue(Action.NAME, "Show Content Guide");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('G', PlayerFrame.menuShortcutKeyMask | InputEvent.ALT_MASK));  
-    } 
-    
-    
+        putValue(Action.NAME, "Show Content Guide");
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('G', PlayerFrame.menuShortcutKeyMask | InputEvent.ALT_MASK));
+    }
+
     public void actionPerformed(ActionEvent event) {
         URLOpener.openURL("http://qtpix.apple.com/qtpix/qtpix.mov");
     }
-
 }

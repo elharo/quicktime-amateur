@@ -29,7 +29,6 @@ public class AmateurTests {
     public static Test suite() {
         
         TestSuite result = new TestSuite();
-        result.addTest(new TestSuite(PreferencesTest.class));
         result.addTest(new TestSuite(FrameDisplayerTest.class));
         result.addTest(new TestSuite(PlayerFrameTest.class));
         result.addTest(new TestSuite(PresentMovieTest.class));

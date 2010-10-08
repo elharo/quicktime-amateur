@@ -32,25 +32,23 @@ import quicktime.std.movies.MovieController;
 class SetPosterFrameAction extends AbstractAction {
 
     private MovieController controller;
-    
-    public SetPosterFrameAction(PlayerFrame frame) {
-        if (frame != null) this.controller = controller;
-        else setEnabled(false);
-        putValue(Action.NAME, "Set Poster Frame");  
+
+    public SetPosterFrameAction (PlayerFrame frame) {
+        if (frame != null)
+			controller = frame.getController();
+		else
+			setEnabled(false);
+        putValue(Action.NAME, "Set Poster Frame");
     }
 
     public void actionPerformed(ActionEvent event) {
-        
         try {
             Movie movie = controller.getMovie();
             int time = movie.getTime();
             movie.setPosterTime(time);
-        }
-        catch (StdQTException e) {
+        } catch (StdQTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }
-        
     }
-
 }

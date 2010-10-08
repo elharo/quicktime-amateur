@@ -30,10 +30,9 @@ import javax.swing.Action;
 class BringAllToFrontAction extends AbstractAction {
 
     BringAllToFrontAction() {
-        putValue(Action.NAME, "Bring All To Front");  
+        putValue(Action.NAME, "Bring All To Front");
     }
-    
-    
+
     public void actionPerformed(ActionEvent event) {
         Iterator windows = WindowList.INSTANCE.iterator();
         while (windows.hasNext()) {
@@ -41,5 +40,4 @@ class BringAllToFrontAction extends AbstractAction {
             w.toFront();
         }
     }
-
 }

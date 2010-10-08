@@ -29,23 +29,21 @@ import javax.swing.KeyStroke;
 import quicktime.QTException;
 
 class NewPlayerAction extends AbstractAction {
-    
+
     private static int untitledCount = 1;
 
     NewPlayerAction() {
-        putValue(Action.NAME, "New Player");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('N', PlayerFrame.menuShortcutKeyMask));  
+        putValue(Action.NAME, "New Player");
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('N', PlayerFrame.menuShortcutKeyMask));
     }
-    
+
     public void actionPerformed(ActionEvent event) {
         try {
             PlayerFrame f = new PlayerFrame("Untitled " + untitledCount++);
             FrameDisplayer.display(f);
-        }
-        catch (QTException ex) {
+        } catch (QTException ex) {
             // ???? Auto-generated catch block
             ex.printStackTrace();
         }
     }
-
 }

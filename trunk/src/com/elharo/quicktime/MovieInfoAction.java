@@ -29,20 +29,18 @@ import javax.swing.KeyStroke;
 class MovieInfoAction extends AbstractAction {
 
     private PlayerFrame frame;
-    
-    MovieInfoAction(PlayerFrame frame) {
-        if (frame == null) this.setEnabled(false);
-        else this.frame = frame;
-        putValue(Action.NAME, "Show Movie Info");  
-        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('I', PlayerFrame.menuShortcutKeyMask));  
-    } 
-    
-    
-    public void actionPerformed(ActionEvent event) {
-        InfoDialog info = new InfoDialog(frame);
-        
-        // use eventqueue????
-        info.show();
+
+    MovieInfoAction (PlayerFrame frame) {
+        if (frame == null)
+			this.setEnabled(false);
+        else
+			this.frame = frame;
+        putValue(Action.NAME, "Show Movie Info");
+        putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke('I', PlayerFrame.menuShortcutKeyMask));
     }
 
+    public void actionPerformed (ActionEvent event) {
+        // use eventqueue????
+        frame.showInfoDialog();
+    }
 }

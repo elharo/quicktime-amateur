@@ -29,7 +29,7 @@ import quicktime.std.StdQTException;
 
 class WindowList {
 
-    private LinkedList windows = new LinkedList();
+    private LinkedList<PlayerFrame> windows = new LinkedList<PlayerFrame>();
     // for keeping track of where to put windows
     private static int total = 0;
     // ???? There should be a way to get these values programmatically
@@ -38,20 +38,16 @@ class WindowList {
     private static int nextX = 0;
     private static int xStart = 0; // or just keep a column count????
     private static int nextY = MENU_BAR_HEIGHT;
-    
-    
-    void add(PlayerFrame frame) {
-        
+
+    void add (PlayerFrame frame) {
         try {
-            PlayerFrame oldFront = (PlayerFrame) windows.getLast();
+            PlayerFrame oldFront = windows.getLast();
             // XXX need to check preference
             oldFront.mute();
-        }
-        catch (StdQTException e) {
+        } catch (StdQTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
-        }
-        catch (NoSuchElementException ex) {
+        } catch (NoSuchElementException ex) {
             // first window
         }
 
@@ -65,54 +61,52 @@ class WindowList {
             nextY = MENU_BAR_HEIGHT + xStart;
             nextX = xStart;
         }
-        
     }
-    
+
     static int getX() {
         return nextX;
     }
-    
+
     static int getY() {
         return nextY;
     }
-    
+
     private WindowList() {}
-    
+
     static WindowList INSTANCE = new WindowList();
-    
-    
+
+
     Iterator iterator() {
         return windows.iterator();
     }
 
-    void remove(Frame frame) {
+    void remove (Frame frame) {
         windows.remove(frame);
         if (windows.size() == 0) {
             total = 0;
             nextX = 0;
             nextY = MENU_BAR_HEIGHT;;
         }
-        
+
         try {
-            PlayerFrame newFront = (PlayerFrame) windows.getLast();
+            PlayerFrame newFront = windows.getLast();
             newFront.unmute();
-        }
-        catch (StdQTException e) {
+        } catch (StdQTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
-        }
-        catch (NoSuchElementException ex) {
+        } catch (NoSuchElementException ex) {
             // first window
         }
-        
     }
-    
+
     static int getTotal() {
         return total;
     }
-    
-    void moveToFront(PlayerFrame frame) {
-        PlayerFrame oldFront = (PlayerFrame) windows.getLast();
+
+    void moveToFront (PlayerFrame frame) {
+        if (windows.isEmpty()) return;
+
+        PlayerFrame oldFront = windows.getLast();
         if (oldFront == frame) return;
         // move to head of list
         windows.remove(frame);
@@ -120,15 +114,13 @@ class WindowList {
         try {
             // need to check the preference????
             oldFront.mute();
-        }
-        catch (StdQTException e) {
+        } catch (StdQTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }
         try {
             frame.unmute();
-        }
-        catch (StdQTException e) {
+        } catch (StdQTException e) {
             // ???? Auto-generated catch block
             e.printStackTrace();
         }
@@ -136,8 +128,6 @@ class WindowList {
 
     public PlayerFrame getFrontmostWindow() {
         if (windows.isEmpty()) return null;
-        return (PlayerFrame) windows.getLast();
+        return windows.getLast();
     }
-    
-    
 }

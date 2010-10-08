@@ -39,21 +39,19 @@ public class FileOpener implements ActionListener {
     private static final int USER_CANCELLED = -128;
 
     public void actionPerformed(ActionEvent event) {
-        
-        String title = "The movie in the file";
         try {
             QTFile file = QTFile.standardGetFilePreview(QTFile.kStandardQTFileTypes);
-            title = openFile(file);
-        }
-        catch (QTIOException ex) {
-           ex.printStackTrace();
-           if (ex.errorCode() == USER_CANCELLED) return;
-        }
-        catch (QTException ex) {
+            openFile(file);
+        } catch (QTIOException ex) {
+			if (ex.errorCode() == USER_CANCELLED)
+				return;
+			else
+				ex.printStackTrace();
+        } catch (QTException ex) {
             int code = ex.errorCode();
             String errorMessage = ex.errorCodeToString();
             if (code == -2048) {
-                errorMessage = title + " is not encoded in a format QuickTime understands.";
+                errorMessage = "The movie in the file is not encoded in a format QuickTime understands.";
             }
             Component component = (Component) event.getSource();
             Container parent = component.getParent();
@@ -62,15 +60,14 @@ public class FileOpener implements ActionListener {
         }
     }
 
-    public static String openFile(QTFile file) throws QTException {
-        String title = file.getName();
+    public static PlayerFrame openFile (QTFile file) throws QTException {
+        // String title = file.getName();
         OpenMovieFile omFile = OpenMovieFile.asRead(file);
         Movie m = Movie.fromFile(omFile);
         PlayerFrame f = new PlayerFrame(file.getName(), m);
         f.setFile(file);
         FrameDisplayer.display(f);
-        RecentFileList.INSTANCE.add(file);
-        return title;
+        RecentFileList.add(file);
+        return f;
     }
-
 }
